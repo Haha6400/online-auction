@@ -21,7 +21,7 @@
                                  baseTableName="rel_auction_room__user"
                                  constraintName="fk_rel_auction_room__user__user_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="jhi_user"
+                                 referencedTableName="user"
                                  />
     </changeSet>
 </databaseChangeLog>
