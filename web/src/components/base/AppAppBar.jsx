@@ -14,6 +14,7 @@ import Dialog from '@mui/material/Dialog';
 import MenuIcon from '@mui/icons-material/Menu';
 import ToggleColorMode from './ToggleColorMode';
 import Login from '../common/Login'
+import Register from '../common/Register'
 
 const logoStyle = {
   width: '140px',
@@ -23,6 +24,24 @@ const logoStyle = {
 
 function AppAppBar({ mode, toggleColorMode }) {
   const [open, setOpen] = React.useState(false);
+  const [openLoginDialog, setOpenLoginDialog] = React.useState(false);
+  const [openRegisterDialog, setOpenRegisterDialog] = React.useState(false);
+
+  const handleLoginButtonClick = () => {
+    setOpenLoginDialog(true);
+  };
+
+  const handleRegisterButtonClick = () => {
+    setOpenRegisterDialog(true);
+  };
+
+  const handleLoginDialogClose = () => {
+    setOpenLoginDialog(false);
+  };
+
+  const handleRegisterDialogClose = () => {
+    setOpenRegisterDialog(false);
+  };
   const handleClickOpen = (scrollType) => () => {
     setOpen(true);
   };
@@ -74,10 +93,10 @@ function AppAppBar({ mode, toggleColorMode }) {
             >
               <img
                 src={
-                  'https://assets-global.website-files.com/61ed56ae9da9fd7e0ef0a967/61f12e6faf73568658154dae_SitemarkDefault.svg'
+                  ''
                 }
                 style={logoStyle}
-                alt="logo of sitemark"
+                alt="logo of Online Auction System"
               />
               <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                 <MenuItem
@@ -131,30 +150,37 @@ function AppAppBar({ mode, toggleColorMode }) {
                 size="small"
                 component="a"
                 target="_blank"
-                onClick={handleClickOpen('login')}
+                onClick={handleLoginButtonClick}
               >
                 Log in
               </Button>
               <Dialog
-                open={open}
-                onClose={handleClose}
+                open={openLoginDialog} 
+                onClose={handleLoginDialogClose}
                 aria-labelledby="scroll-dialog-title"
                 aria-describedby="scroll-dialog-description"
               >
                 <Login/>
               </Dialog>
-
-
               <Button
                 color="primary"
                 variant="contained"
                 size="small"
                 component="a"
-                href="/material-ui/getting-started/templates/sign-up/"
+                // href="/material-ui/getting-started/templates/sign-up/"
+                onClick={handleRegisterButtonClick}
                 target="_blank"
               >
                 Register
               </Button>
+              <Dialog
+                open={openRegisterDialog} 
+                onClose={handleRegisterDialogClose}
+                aria-labelledby="scroll-dialog-title"
+                aria-describedby="scroll-dialog-description"
+              >
+                <Register/>
+              </Dialog>
             </Box>
            
           </Toolbar>
