@@ -1,0 +1,60 @@
+entity Bid {
+    amount Long
+    timestamp Instant
+}
+
+
+entity AuctionRoom {
+	description String
+    startTime Instant
+    endTime Instant
+    initPrice Long
+}
+
+entity WinningBid {
+    paymentStatus Boolean
+}
+
+entity LicensePlate {
+	plateNumber String
+}
+
+entity VehicleType {
+	vehicleTypeID Long
+    name String
+}
+
+entity Province {
+	provinceID Long
+    name String
+}
+
+// defining multiple oneToOne relationships
+relationship OneToOne {
+    WinningBid to AuctionRoom
+    WinningBid to Bid
+    LicensePlate to AuctionRoom
+    LicensePlate to VehicleType
+    LicensePlate to Province
+}
+
+relationship ManyToOne {
+   Bid{user(login)} to User with builtInEntity
+}
+relationship ManyToMany {
+	AuctionRoom{user(login)} to User with builtInEntity
+}
+relationship OneToMany {
+    AuctionRoom to Bid
+}
+
+// Set pagination options
+use pagination for LicensePlate
+use pagination for Bid
+use pagination for AuctionRoom
+
+
+// Use Data Transfer Objects (DTO)
+dto * with mapstruct
+
+service all with serviceImpl
