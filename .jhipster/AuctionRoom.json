@@ -1,0 +1,60 @@
+{
+  "annotations": {
+    "changelogDate": "20240401160113"
+  },
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "startTime",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "endTime",
+      "fieldType": "Instant"
+    },
+    {
+      "fieldName": "initPrice",
+      "fieldType": "Long"
+    }
+  ],
+  "name": "AuctionRoom",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "bid",
+      "otherEntityRelationshipName": "auctionRoom",
+      "relationshipName": "bid",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityField": "login",
+      "otherEntityName": "user",
+      "relationshipName": "user",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-many",
+      "relationshipWithBuiltInEntity": true
+    },
+    {
+      "otherEntityName": "winningBid",
+      "otherEntityRelationshipName": "auctionRoom",
+      "relationshipName": "winningBid",
+      "relationshipSide": "right",
+      "relationshipType": "one-to-one"
+    },
+    {
+      "otherEntityName": "licensePlate",
+      "otherEntityRelationshipName": "auctionRoom",
+      "relationshipName": "licensePlate",
+      "relationshipSide": "right",
+      "relationshipType": "one-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}
