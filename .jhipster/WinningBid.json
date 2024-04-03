@@ -1,0 +1,32 @@
+{
+  "annotations": {
+    "changelogDate": "20240401160114"
+  },
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "paymentStatus",
+      "fieldType": "Boolean"
+    }
+  ],
+  "name": "WinningBid",
+  "relationships": [
+    {
+      "otherEntityName": "auctionRoom",
+      "otherEntityRelationshipName": "winningBid",
+      "relationshipName": "auctionRoom",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-one"
+    },
+    {
+      "otherEntityName": "bid",
+      "otherEntityRelationshipName": "winningBid",
+      "relationshipName": "bid",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}
