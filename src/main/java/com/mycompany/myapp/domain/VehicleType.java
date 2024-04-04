@@ -19,7 +19,10 @@ public class VehicleType implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name", unique = true)
+    @Column(name = "vehicle_type_id")
+    private Long vehicleTypeID;
+
+    @Column(name = "name")
     private String name;
 
     @JsonIgnoreProperties(value = { "auctionRoom", "vehicleType", "province" }, allowSetters = true)
@@ -41,6 +44,18 @@ public class VehicleType implements Serializable {
         this.id = id;
     }
 
+    public Long getVehicleTypeID() {
+        return this.vehicleTypeID;
+    }
+
+    public VehicleType vehicleTypeID(Long vehicleTypeID) {
+        this.setVehicleTypeID(vehicleTypeID);
+        return this;
+    }
+
+    public void setVehicleTypeID(Long vehicleTypeID) {
+        this.vehicleTypeID = vehicleTypeID;
+    }
 
     public String getName() {
         return this.name;
@@ -98,7 +113,7 @@ public class VehicleType implements Serializable {
     public String toString() {
         return "VehicleType{" +
             "id=" + getId() +
-            ", vehicleTypeID=" +
+            ", vehicleTypeID=" + getVehicleTypeID() +
             ", name='" + getName() + "'" +
             "}";
     }

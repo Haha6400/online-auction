@@ -296,8 +296,6 @@ class BidResourceIT {
         Bid partialUpdatedBid = new Bid();
         partialUpdatedBid.setId(bid.getId());
 
-        partialUpdatedBid.timestamp(UPDATED_TIMESTAMP);
-
         restBidMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedBid.getId())

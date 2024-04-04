@@ -19,7 +19,10 @@ public class Province implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name", unique = true)
+    @Column(name = "province_id")
+    private Long provinceID;
+
+    @Column(name = "name")
     private String name;
 
     @JsonIgnoreProperties(value = { "auctionRoom", "vehicleType", "province" }, allowSetters = true)
@@ -41,6 +44,18 @@ public class Province implements Serializable {
         this.id = id;
     }
 
+    public Long getProvinceID() {
+        return this.provinceID;
+    }
+
+    public Province provinceID(Long provinceID) {
+        this.setProvinceID(provinceID);
+        return this;
+    }
+
+    public void setProvinceID(Long provinceID) {
+        this.provinceID = provinceID;
+    }
 
     public String getName() {
         return this.name;
@@ -98,7 +113,7 @@ public class Province implements Serializable {
     public String toString() {
         return "Province{" +
             "id=" + getId() +
-            ", provinceID=" +
+            ", provinceID=" + getProvinceID() +
             ", name='" + getName() + "'" +
             "}";
     }

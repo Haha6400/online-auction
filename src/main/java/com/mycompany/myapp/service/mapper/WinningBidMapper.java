@@ -7,13 +7,11 @@ import com.mycompany.myapp.service.dto.AuctionRoomDTO;
 import com.mycompany.myapp.service.dto.BidDTO;
 import com.mycompany.myapp.service.dto.WinningBidDTO;
 import org.mapstruct.*;
-import org.springframework.stereotype.Component;
 
 /**
  * Mapper for the entity {@link WinningBid} and its DTO {@link WinningBidDTO}.
  */
 @Mapper(componentModel = "spring")
-@Component
 public interface WinningBidMapper extends EntityMapper<WinningBidDTO, WinningBid> {
     @Mapping(target = "auctionRoom", source = "auctionRoom", qualifiedByName = "auctionRoomId")
     @Mapping(target = "bid", source = "bid", qualifiedByName = "bidId")

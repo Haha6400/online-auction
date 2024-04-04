@@ -326,7 +326,7 @@ class AuctionRoomResourceIT {
         AuctionRoom partialUpdatedAuctionRoom = new AuctionRoom();
         partialUpdatedAuctionRoom.setId(auctionRoom.getId());
 
-        partialUpdatedAuctionRoom.startTime(UPDATED_START_TIME).initPrice(UPDATED_INIT_PRICE);
+        partialUpdatedAuctionRoom.description(UPDATED_DESCRIPTION);
 
         restAuctionRoomMockMvc
             .perform(

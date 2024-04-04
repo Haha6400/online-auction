@@ -10,16 +10,17 @@ public class VehicleTypeTestSamples {
     private static final AtomicLong longCount = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     public static VehicleType getVehicleTypeSample1() {
-        return new VehicleType().id(1L).name("name1");
+        return new VehicleType().id(1L).vehicleTypeID(1L).name("name1");
     }
 
     public static VehicleType getVehicleTypeSample2() {
-        return new VehicleType().id(2L).name("name2");
+        return new VehicleType().id(2L).vehicleTypeID(2L).name("name2");
     }
 
     public static VehicleType getVehicleTypeRandomSampleGenerator() {
         return new VehicleType()
             .id(longCount.incrementAndGet())
+            .vehicleTypeID(longCount.incrementAndGet())
             .name(UUID.randomUUID().toString());
     }
 }

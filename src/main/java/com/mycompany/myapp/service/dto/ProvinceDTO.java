@@ -11,6 +11,8 @@ public class ProvinceDTO implements Serializable {
 
     private Long id;
 
+    private Long provinceID;
+
     private String name;
 
     public Long getId() {
@@ -19,6 +21,14 @@ public class ProvinceDTO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getProvinceID() {
+        return provinceID;
+    }
+
+    public void setProvinceID(Long provinceID) {
+        this.provinceID = provinceID;
     }
 
     public String getName() {
@@ -55,7 +65,7 @@ public class ProvinceDTO implements Serializable {
     public String toString() {
         return "ProvinceDTO{" +
             "id=" + getId() +
-            ", provinceID=" +
+            ", provinceID=" + getProvinceID() +
             ", name='" + getName() + "'" +
             "}";
     }

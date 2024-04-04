@@ -47,6 +47,7 @@ public class ProvinceAsserts {
     public static void assertProvinceUpdatableFieldsEquals(Province expected, Province actual) {
         assertThat(expected)
             .as("Verify Province relevant properties")
+            .satisfies(e -> assertThat(e.getProvinceID()).as("check provinceID").isEqualTo(actual.getProvinceID()))
             .satisfies(e -> assertThat(e.getName()).as("check name").isEqualTo(actual.getName()));
     }
 

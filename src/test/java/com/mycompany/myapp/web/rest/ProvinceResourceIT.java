@@ -270,6 +270,8 @@ class ProvinceResourceIT {
         Province partialUpdatedProvince = new Province();
         partialUpdatedProvince.setId(province.getId());
 
+        partialUpdatedProvince.provinceID(UPDATED_PROVINCE_ID);
+
         restProvinceMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedProvince.getId())

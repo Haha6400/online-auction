@@ -7,13 +7,11 @@ import com.mycompany.myapp.service.dto.UserDTO;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.mapstruct.*;
-import org.springframework.stereotype.Component;
 
 /**
  * Mapper for the entity {@link AuctionRoom} and its DTO {@link AuctionRoomDTO}.
  */
 @Mapper(componentModel = "spring")
-@Component
 public interface AuctionRoomMapper extends EntityMapper<AuctionRoomDTO, AuctionRoom> {
     @Mapping(target = "users", source = "users", qualifiedByName = "userLoginSet")
     AuctionRoomDTO toDto(AuctionRoom s);

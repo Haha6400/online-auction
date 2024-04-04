@@ -9,13 +9,11 @@ import com.mycompany.myapp.service.dto.LicensePlateDTO;
 import com.mycompany.myapp.service.dto.ProvinceDTO;
 import com.mycompany.myapp.service.dto.VehicleTypeDTO;
 import org.mapstruct.*;
-import org.springframework.stereotype.Component;
 
 /**
  * Mapper for the entity {@link LicensePlate} and its DTO {@link LicensePlateDTO}.
  */
 @Mapper(componentModel = "spring")
-@Component
 public interface LicensePlateMapper extends EntityMapper<LicensePlateDTO, LicensePlate> {
     @Mapping(target = "auctionRoom", source = "auctionRoom", qualifiedByName = "auctionRoomId")
     @Mapping(target = "vehicleType", source = "vehicleType", qualifiedByName = "vehicleTypeId")

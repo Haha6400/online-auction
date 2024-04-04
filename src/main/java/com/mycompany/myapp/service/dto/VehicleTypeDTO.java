@@ -10,6 +10,9 @@ import java.util.Objects;
 public class VehicleTypeDTO implements Serializable {
 
     private Long id;
+
+    private Long vehicleTypeID;
+
     private String name;
 
     public Long getId() {
@@ -20,6 +23,13 @@ public class VehicleTypeDTO implements Serializable {
         this.id = id;
     }
 
+    public Long getVehicleTypeID() {
+        return vehicleTypeID;
+    }
+
+    public void setVehicleTypeID(Long vehicleTypeID) {
+        this.vehicleTypeID = vehicleTypeID;
+    }
 
     public String getName() {
         return name;
@@ -55,7 +65,7 @@ public class VehicleTypeDTO implements Serializable {
     public String toString() {
         return "VehicleTypeDTO{" +
             "id=" + getId() +
-            ", vehicleTypeID=" +
+            ", vehicleTypeID=" + getVehicleTypeID() +
             ", name='" + getName() + "'" +
             "}";
     }

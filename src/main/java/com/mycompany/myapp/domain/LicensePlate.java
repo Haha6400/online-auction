@@ -24,17 +24,17 @@ public class LicensePlate implements Serializable {
 
     @JsonIgnoreProperties(value = { "bids", "users", "winningBid", "licensePlate" }, allowSetters = true)
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(unique = false)
+    @JoinColumn(unique = true)
     private AuctionRoom auctionRoom;
 
     @JsonIgnoreProperties(value = { "licensePlate" }, allowSetters = true)
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(unique = false)
+    @JoinColumn(unique = true)
     private VehicleType vehicleType;
 
     @JsonIgnoreProperties(value = { "licensePlate" }, allowSetters = true)
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(unique = false)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(unique = true)
     private Province province;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
