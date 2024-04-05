@@ -1,29 +1,37 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
+import * as React from "react";
+import Box from "@mui/material/Box";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import Button from "@mui/material/Button";
+import Container from "@mui/material/Container";
+import Divider from "@mui/material/Divider";
+import Typography from "@mui/material/Typography";
+import MenuItem from "@mui/material/MenuItem";
+import Drawer from "@mui/material/Drawer";
+import MenuIcon from "@mui/icons-material/Menu";
+import ToggleColorMode from "./ToggleColorMode";
+import Dialog from "@mui/material/Dialog";
 
-import Box from '@mui/material/Box';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Button from '@mui/material/Button';
-import Container from '@mui/material/Container';
-import Divider from '@mui/material/Divider';
-import Typography from '@mui/material/Typography';
-import MenuItem from '@mui/material/MenuItem';
-import Drawer from '@mui/material/Drawer';
-import Dialog from '@mui/material/Dialog';
-import MenuIcon from '@mui/icons-material/Menu';
-import ToggleColorMode from './ToggleColorMode';
-import Login from '../common/Login'
-import Register from '../common/Register'
+import { useThemeProvider } from "../../utils/ThemeContext";
+
+import Login from "../common/Login";
+import Register from "../common/Register";
+
+import logo from "../../assets/logo.png";
 
 const logoStyle = {
-  width: '140px',
-  height: 'auto',
-  cursor: 'pointer',
+  width: "40px",
+  height: "auto",
+  cursor: "pointer",
+  marginLeft: "10px",
+  marginRight: "5px",
 };
 
-function AppAppBar({ mode, toggleColorMode }) {
-  const [open, setOpen] = React.useState(false);
+export default function AppAppBar() {
+  const { mode, toggleColorMode } = useThemeProvider();
+
+  const [openDrawer, setOpenDrawer] = React.useState(false);
+
   const [openLoginDialog, setOpenLoginDialog] = React.useState(false);
   const [openRegisterDialog, setOpenRegisterDialog] = React.useState(false);
 
@@ -42,20 +50,19 @@ function AppAppBar({ mode, toggleColorMode }) {
   const handleRegisterDialogClose = () => {
     setOpenRegisterDialog(false);
   };
-  const handleClickOpen = (scrollType) => () => {
-    setOpen(true);
+
+  const toggleDrawer = (newOpen) => () => {
+    setOpenDrawer(newOpen);
   };
-  const handleClose = () => {
-    setOpen(false);
-  };
+
   return (
     <div>
       <AppBar
         position="fixed"
         sx={{
           boxShadow: 0,
-          bgcolor: 'transparent',
-          backgroundImage: 'none',
+          bgcolor: "transparent",
+          backgroundImage: "none",
           mt: 2,
         }}
       >
@@ -63,73 +70,58 @@ function AppAppBar({ mode, toggleColorMode }) {
           <Toolbar
             variant="regular"
             sx={(theme) => ({
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
               flexShrink: 0,
-              borderRadius: '999px',
+              borderRadius: "999px",
               bgcolor:
-                theme.palette.mode === 'light'
-                  ? 'rgba(255, 255, 255, 0.4)'
-                  : 'rgba(0, 0, 0, 0.4)',
-              backdropFilter: 'blur(24px)',
+                theme.palette.mode === "light"
+                  ? "rgba(255, 255, 255, 0.4)"
+                  : "rgba(0, 0, 0, 0.4)",
+              backdropFilter: "blur(24px)",
               maxHeight: 40,
-              border: '1px solid',
-              borderColor: 'divider',
+              border: "1px solid",
+              borderColor: "divider",
               boxShadow:
-                theme.palette.mode === 'light'
+                theme.palette.mode === "light"
                   ? `0 0 1px rgba(85, 166, 246, 0.1), 1px 1.5px 2px -1px rgba(85, 166, 246, 0.15), 4px 4px 12px -2.5px rgba(85, 166, 246, 0.15)`
-                  : '0 0 1px rgba(2, 31, 59, 0.7), 1px 1.5px 2px -1px rgba(2, 31, 59, 0.65), 4px 4px 12px -2.5px rgba(2, 31, 59, 0.65)',
+                  : "0 0 1px rgba(2, 31, 59, 0.7), 1px 1.5px 2px -1px rgba(2, 31, 59, 0.65), 4px 4px 12px -2.5px rgba(2, 31, 59, 0.65)",
             })}
           >
             <Box
               sx={{
                 flexGrow: 1,
-                display: 'flex',
-                alignItems: 'center',
-                ml: '-18px',
+                display: "flex",
+                alignItems: "center",
+                ml: "-18px",
                 px: 0,
               }}
             >
-              <img
-                src={
-                  ''
-                }
-                style={logoStyle}
-                alt="logo of Online Auction System"
-              />
-              <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                <MenuItem
-                  sx={{ py: '6px', px: '12px' }}
-                >
+              <img src={logo} style={logoStyle} alt="logo of sitemark" />
+              <h3 style={{ color: "#4876EE", fontWeight: "900" }}>Onauction</h3>
+              <Box sx={{ display: { xs: "none", md: "flex" } }}>
+                <MenuItem sx={{ py: "6px", px: "12px" }}>
                   <Typography variant="body2" color="text.primary">
                     Features
                   </Typography>
                 </MenuItem>
-                <MenuItem
-                  sx={{ py: '6px', px: '12px' }}
-                >
+                <MenuItem sx={{ py: "6px", px: "12px" }}>
                   <Typography variant="body2" color="text.primary">
                     Testimonials
                   </Typography>
                 </MenuItem>
-                <MenuItem
-                  sx={{ py: '6px', px: '12px' }}
-                >
+                <MenuItem sx={{ py: "6px", px: "12px" }}>
                   <Typography variant="body2" color="text.primary">
                     Highlights
                   </Typography>
                 </MenuItem>
-                <MenuItem
-                  sx={{ py: '6px', px: '12px' }}
-                >
+                <MenuItem sx={{ py: "6px", px: "12px" }}>
                   <Typography variant="body2" color="text.primary">
                     Pricing
                   </Typography>
                 </MenuItem>
-                <MenuItem
-                  sx={{ py: '6px', px: '12px' }}
-                >
+                <MenuItem sx={{ py: "6px", px: "12px" }}>
                   <Typography variant="body2" color="text.primary">
                     FAQ
                   </Typography>
@@ -138,9 +130,9 @@ function AppAppBar({ mode, toggleColorMode }) {
             </Box>
             <Box
               sx={{
-                display: { xs: 'none', md: 'flex' },
+                display: { xs: "none", md: "flex" },
                 gap: 0.5,
-                alignItems: 'center',
+                alignItems: "center",
               }}
             >
               <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} />
@@ -148,51 +140,109 @@ function AppAppBar({ mode, toggleColorMode }) {
                 color="primary"
                 variant="text"
                 size="small"
-                component="a"
-                target="_blank"
+                component="button"
                 onClick={handleLoginButtonClick}
               >
                 Log in
               </Button>
               <Dialog
-                open={openLoginDialog} 
+                open={openLoginDialog}
                 onClose={handleLoginDialogClose}
                 aria-labelledby="scroll-dialog-title"
                 aria-describedby="scroll-dialog-description"
               >
-                <Login/>
+                <Login />
               </Dialog>
               <Button
                 color="primary"
                 variant="contained"
                 size="small"
-                component="a"
-                // href="/material-ui/getting-started/templates/sign-up/"
+                component="button"
                 onClick={handleRegisterButtonClick}
-                target="_blank"
               >
                 Register
               </Button>
               <Dialog
-                open={openRegisterDialog} 
+                open={openRegisterDialog}
                 onClose={handleRegisterDialogClose}
                 aria-labelledby="scroll-dialog-title"
                 aria-describedby="scroll-dialog-description"
               >
-                <Register/>
+                <Register />
               </Dialog>
             </Box>
-           
+
+            {/* Responsive */}
+            <Box sx={{ display: { sm: "", md: "none" } }}>
+              <Button
+                variant="text"
+                color="primary"
+                aria-label="menu"
+                onClick={toggleDrawer(true)}
+                sx={{ minWidth: "30px", p: "4px" }}
+              >
+                <MenuIcon />
+              </Button>
+              <Drawer
+                anchor="right"
+                open={openDrawer}
+                onClose={toggleDrawer(false)}
+              >
+                <Box
+                  sx={{
+                    minWidth: "60dvw",
+                    p: 2,
+                    backgroundColor: "background.paper",
+                    flexGrow: 1,
+                  }}
+                >
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "end",
+                      flexGrow: 1,
+                    }}
+                  >
+                    <ToggleColorMode
+                      mode={mode}
+                      toggleColorMode={toggleColorMode}
+                    />
+                  </Box>
+                  <MenuItem>Features</MenuItem>
+                  <MenuItem>Testimonials</MenuItem>
+                  <MenuItem>Highlights</MenuItem>
+                  <MenuItem>Pricing</MenuItem>
+                  <MenuItem>FAQ</MenuItem>
+                  <Divider />
+                  <MenuItem>
+                    <Button
+                      color="primary"
+                      variant="contained"
+                      sx={{ width: "100%" }}
+                      component="button"
+                      onClick={handleRegisterButtonClick}
+                    >
+                      Register
+                    </Button>
+                  </MenuItem>
+                  <MenuItem>
+                    <Button
+                      color="primary"
+                      variant="outlined"
+                      sx={{ width: "100%" }}
+                      component="button"
+                      onClick={handleLoginButtonClick}
+                    >
+                      Log in
+                    </Button>
+                  </MenuItem>
+                </Box>
+              </Drawer>
+            </Box>
           </Toolbar>
         </Container>
       </AppBar>
     </div>
   );
 }
-
-AppAppBar.propTypes = {
-  mode: PropTypes.oneOf(['dark', 'light']).isRequired,
-  toggleColorMode: PropTypes.func.isRequired,
-};
-
-export default AppAppBar;

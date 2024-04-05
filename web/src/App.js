@@ -1,20 +1,16 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
+import * as React from "react";
 
-import './App.css';
-import Home from './views/Home';
-import Header from './components/common/Header';
+import "./App.css";
+import Home from "./views/Home";
+import { CssBaseline } from "@mui/material";
+import CustomThemeProvider from "./utils/ThemeContext";
 
 function App() {
- 
   return (
-    <div>
-      <Header/>
-      <Home/>
-
-    </div>
-    
-
+    <CustomThemeProvider>
+      <CssBaseline />
+      <Home />
+    </CustomThemeProvider>
   );
 }
 
