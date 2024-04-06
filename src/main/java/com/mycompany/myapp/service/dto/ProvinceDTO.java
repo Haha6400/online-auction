@@ -7,11 +7,9 @@ import java.util.Objects;
  * A DTO for the {@link com.mycompany.myapp.domain.Province} entity.
  */
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class ProvinceDTO implements Serializable {
+public class ProvinceDTO {
 
     private Long id;
-
-    private Long provinceID;
 
     private String name;
 
@@ -21,14 +19,6 @@ public class ProvinceDTO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getProvinceID() {
-        return provinceID;
-    }
-
-    public void setProvinceID(Long provinceID) {
-        this.provinceID = provinceID;
     }
 
     public String getName() {
@@ -65,7 +55,6 @@ public class ProvinceDTO implements Serializable {
     public String toString() {
         return "ProvinceDTO{" +
             "id=" + getId() +
-            ", provinceID=" + getProvinceID() +
             ", name='" + getName() + "'" +
             "}";
     }

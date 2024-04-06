@@ -35,7 +35,7 @@
     "skipClient": true,
     "syncUserWithIdp": null,
     "testFrameworks": [],
-    "websocket": false,
+    "websocket": "spring-websocket",
     "withAdminUi": null
   }
 }

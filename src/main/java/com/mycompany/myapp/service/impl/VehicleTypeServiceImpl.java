@@ -34,6 +34,7 @@ public class VehicleTypeServiceImpl implements VehicleTypeService {
     }
 
     @Override
+    @Transactional
     public VehicleTypeDTO save(VehicleTypeDTO vehicleTypeDTO) {
         log.debug("Request to save VehicleType : {}", vehicleTypeDTO);
         VehicleType vehicleType = vehicleTypeMapper.toEntity(vehicleTypeDTO);

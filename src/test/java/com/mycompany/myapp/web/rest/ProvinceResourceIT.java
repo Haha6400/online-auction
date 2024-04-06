@@ -33,9 +33,6 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class ProvinceResourceIT {
 
-    private static final Long DEFAULT_PROVINCE_ID = 1L;
-    private static final Long UPDATED_PROVINCE_ID = 2L;
-
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
@@ -69,7 +66,7 @@ class ProvinceResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Province createEntity(EntityManager em) {
-        Province province = new Province().provinceID(DEFAULT_PROVINCE_ID).name(DEFAULT_NAME);
+        Province province = new Province().name(DEFAULT_NAME);
         return province;
     }
 
@@ -80,7 +77,7 @@ class ProvinceResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Province createUpdatedEntity(EntityManager em) {
-        Province province = new Province().provinceID(UPDATED_PROVINCE_ID).name(UPDATED_NAME);
+        Province province = new Province().name(UPDATED_NAME);
         return province;
     }
 
@@ -141,7 +138,6 @@ class ProvinceResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(province.getId().intValue())))
-            .andExpect(jsonPath("$.[*].provinceID").value(hasItem(DEFAULT_PROVINCE_ID.intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)));
     }
 
@@ -157,7 +153,6 @@ class ProvinceResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(province.getId().intValue()))
-            .andExpect(jsonPath("$.provinceID").value(DEFAULT_PROVINCE_ID.intValue()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME));
     }
 
@@ -180,7 +175,7 @@ class ProvinceResourceIT {
         Province updatedProvince = provinceRepository.findById(province.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedProvince are not directly saved in db
         em.detach(updatedProvince);
-        updatedProvince.provinceID(UPDATED_PROVINCE_ID).name(UPDATED_NAME);
+        updatedProvince.name(UPDATED_NAME);
         ProvinceDTO provinceDTO = provinceMapper.toDto(updatedProvince);
 
         restProvinceMockMvc
@@ -270,7 +265,7 @@ class ProvinceResourceIT {
         Province partialUpdatedProvince = new Province();
         partialUpdatedProvince.setId(province.getId());
 
-        partialUpdatedProvince.provinceID(UPDATED_PROVINCE_ID);
+        partialUpdatedProvince.name(UPDATED_NAME);
 
         restProvinceMockMvc
             .perform(
@@ -298,7 +293,7 @@ class ProvinceResourceIT {
         Province partialUpdatedProvince = new Province();
         partialUpdatedProvince.setId(province.getId());
 
-        partialUpdatedProvince.provinceID(UPDATED_PROVINCE_ID).name(UPDATED_NAME);
+        partialUpdatedProvince.name(UPDATED_NAME);
 
         restProvinceMockMvc
             .perform(

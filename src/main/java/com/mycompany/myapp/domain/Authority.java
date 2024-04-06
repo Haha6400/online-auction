@@ -14,9 +14,7 @@ import org.springframework.data.domain.Persistable;
 @Table(name = "authority")
 @JsonIgnoreProperties(value = { "new", "id" })
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class Authority implements Serializable, Persistable<String> {
-
-    private static final long serialVersionUID = 1L;
+public class Authority implements Persistable<String> {
 
     @NotNull
     @Size(max = 50)

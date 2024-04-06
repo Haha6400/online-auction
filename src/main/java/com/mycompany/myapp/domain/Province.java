@@ -2,6 +2,8 @@ package com.mycompany.myapp.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import org.hibernate.validator.constraints.UniqueElements;
+
 import java.io.Serializable;
 
 /**
@@ -10,19 +12,14 @@ import java.io.Serializable;
 @Entity
 @Table(name = "province")
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class Province implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class Province {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "province_id")
-    private Long provinceID;
-
-    @Column(name = "name")
+    @Column(unique = true)
     private String name;
 
     @JsonIgnoreProperties(value = { "auctionRoom", "vehicleType", "province" }, allowSetters = true)
@@ -42,19 +39,6 @@ public class Province implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getProvinceID() {
-        return this.provinceID;
-    }
-
-    public Province provinceID(Long provinceID) {
-        this.setProvinceID(provinceID);
-        return this;
-    }
-
-    public void setProvinceID(Long provinceID) {
-        this.provinceID = provinceID;
     }
 
     public String getName() {
@@ -113,7 +97,6 @@ public class Province implements Serializable {
     public String toString() {
         return "Province{" +
             "id=" + getId() +
-            ", provinceID=" + getProvinceID() +
             ", name='" + getName() + "'" +
             "}";
     }

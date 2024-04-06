@@ -34,6 +34,7 @@ public class ProvinceServiceImpl implements ProvinceService {
     }
 
     @Override
+    @Transactional
     public ProvinceDTO save(ProvinceDTO provinceDTO) {
         log.debug("Request to save Province : {}", provinceDTO);
         Province province = provinceMapper.toEntity(provinceDTO);

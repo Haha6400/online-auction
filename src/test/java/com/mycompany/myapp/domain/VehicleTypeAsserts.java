@@ -47,7 +47,6 @@ public class VehicleTypeAsserts {
     public static void assertVehicleTypeUpdatableFieldsEquals(VehicleType expected, VehicleType actual) {
         assertThat(expected)
             .as("Verify VehicleType relevant properties")
-            .satisfies(e -> assertThat(e.getVehicleTypeID()).as("check vehicleTypeID").isEqualTo(actual.getVehicleTypeID()))
             .satisfies(e -> assertThat(e.getName()).as("check name").isEqualTo(actual.getName()));
     }
 

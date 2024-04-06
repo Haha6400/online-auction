@@ -10,19 +10,14 @@ import java.io.Serializable;
 @Entity
 @Table(name = "vehicle_type")
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class VehicleType implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class VehicleType {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "vehicle_type_id")
-    private Long vehicleTypeID;
-
-    @Column(name = "name")
+    @Column(name = "name", unique = true)
     private String name;
 
     @JsonIgnoreProperties(value = { "auctionRoom", "vehicleType", "province" }, allowSetters = true)
@@ -42,19 +37,6 @@ public class VehicleType implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getVehicleTypeID() {
-        return this.vehicleTypeID;
-    }
-
-    public VehicleType vehicleTypeID(Long vehicleTypeID) {
-        this.setVehicleTypeID(vehicleTypeID);
-        return this;
-    }
-
-    public void setVehicleTypeID(Long vehicleTypeID) {
-        this.vehicleTypeID = vehicleTypeID;
     }
 
     public String getName() {
@@ -113,7 +95,6 @@ public class VehicleType implements Serializable {
     public String toString() {
         return "VehicleType{" +
             "id=" + getId() +
-            ", vehicleTypeID=" + getVehicleTypeID() +
             ", name='" + getName() + "'" +
             "}";
     }

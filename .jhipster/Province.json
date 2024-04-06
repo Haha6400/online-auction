@@ -6,10 +6,6 @@
   "dto": "mapstruct",
   "fields": [
     {
-      "fieldName": "provinceID",
-      "fieldType": "Long"
-    },
-    {
       "fieldName": "name",
       "fieldType": "String"
     }

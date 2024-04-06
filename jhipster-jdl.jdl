@@ -20,12 +20,10 @@ entity LicensePlate {
 }
 
 entity VehicleType {
-	vehicleTypeID Long
     name String
 }
 
 entity Province {
-	provinceID Long
     name String
 }
 

@@ -33,9 +33,6 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class VehicleTypeResourceIT {
 
-    private static final Long DEFAULT_VEHICLE_TYPE_ID = 1L;
-    private static final Long UPDATED_VEHICLE_TYPE_ID = 2L;
-
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
@@ -69,7 +66,7 @@ class VehicleTypeResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static VehicleType createEntity(EntityManager em) {
-        VehicleType vehicleType = new VehicleType().vehicleTypeID(DEFAULT_VEHICLE_TYPE_ID).name(DEFAULT_NAME);
+        VehicleType vehicleType = new VehicleType().name(DEFAULT_NAME);
         return vehicleType;
     }
 
@@ -80,7 +77,7 @@ class VehicleTypeResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static VehicleType createUpdatedEntity(EntityManager em) {
-        VehicleType vehicleType = new VehicleType().vehicleTypeID(UPDATED_VEHICLE_TYPE_ID).name(UPDATED_NAME);
+        VehicleType vehicleType = new VehicleType().name(UPDATED_NAME);
         return vehicleType;
     }
 
@@ -141,7 +138,6 @@ class VehicleTypeResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(vehicleType.getId().intValue())))
-            .andExpect(jsonPath("$.[*].vehicleTypeID").value(hasItem(DEFAULT_VEHICLE_TYPE_ID.intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)));
     }
 
@@ -157,7 +153,6 @@ class VehicleTypeResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(vehicleType.getId().intValue()))
-            .andExpect(jsonPath("$.vehicleTypeID").value(DEFAULT_VEHICLE_TYPE_ID.intValue()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME));
     }
 
@@ -180,7 +175,7 @@ class VehicleTypeResourceIT {
         VehicleType updatedVehicleType = vehicleTypeRepository.findById(vehicleType.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedVehicleType are not directly saved in db
         em.detach(updatedVehicleType);
-        updatedVehicleType.vehicleTypeID(UPDATED_VEHICLE_TYPE_ID).name(UPDATED_NAME);
+        updatedVehicleType.name(UPDATED_NAME);
         VehicleTypeDTO vehicleTypeDTO = vehicleTypeMapper.toDto(updatedVehicleType);
 
         restVehicleTypeMockMvc
@@ -270,8 +265,6 @@ class VehicleTypeResourceIT {
         VehicleType partialUpdatedVehicleType = new VehicleType();
         partialUpdatedVehicleType.setId(vehicleType.getId());
 
-        partialUpdatedVehicleType.name(UPDATED_NAME);
-
         restVehicleTypeMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedVehicleType.getId())
@@ -301,7 +294,7 @@ class VehicleTypeResourceIT {
         VehicleType partialUpdatedVehicleType = new VehicleType();
         partialUpdatedVehicleType.setId(vehicleType.getId());
 
-        partialUpdatedVehicleType.vehicleTypeID(UPDATED_VEHICLE_TYPE_ID).name(UPDATED_NAME);
+        partialUpdatedVehicleType.name(UPDATED_NAME);
 
         restVehicleTypeMockMvc
             .perform(

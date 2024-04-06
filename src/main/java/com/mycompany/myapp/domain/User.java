@@ -20,9 +20,7 @@ import org.hibernate.annotations.BatchSize;
  */
 @Entity
 @Table(name = "user")
-public class User extends AbstractAuditingEntity<Long> implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class User extends AbstractAuditingEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -79,7 +77,7 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
     private Instant resetDate = null;
 
     @JsonIgnore
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
         name = "user_authority",
         joinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "id") },

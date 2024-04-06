@@ -11,14 +11,11 @@
     -->
     <changeSet id="20240401160116-1" author="jhipster">
         <createTable tableName="vehicle_type">
-            <column name="id" type="bigint" autoIncrement="true" startWith="1500">
+            <column name="id" type="bigint" autoIncrement="true" startWith="1">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="vehicle_type_id" type="bigint">
-                <constraints nullable="true" />
-            </column>
             <column name="name" type="varchar(255)">
-                <constraints nullable="true" />
+                <constraints unique="true" nullable="true" uniqueConstraintName="ux_vehicle_type_name" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
@@ -41,7 +38,6 @@
                   tableName="vehicle_type"
                   usePreparedStatements="true">
             <column name="id" type="numeric"/>
-            <column name="vehicle_type_id" type="numeric"/>
             <column name="name" type="string"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>

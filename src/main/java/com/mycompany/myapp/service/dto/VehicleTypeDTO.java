@@ -11,8 +11,6 @@ public class VehicleTypeDTO implements Serializable {
 
     private Long id;
 
-    private Long vehicleTypeID;
-
     private String name;
 
     public Long getId() {
@@ -21,14 +19,6 @@ public class VehicleTypeDTO implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getVehicleTypeID() {
-        return vehicleTypeID;
-    }
-
-    public void setVehicleTypeID(Long vehicleTypeID) {
-        this.vehicleTypeID = vehicleTypeID;
     }
 
     public String getName() {
@@ -65,7 +55,6 @@ public class VehicleTypeDTO implements Serializable {
     public String toString() {
         return "VehicleTypeDTO{" +
             "id=" + getId() +
-            ", vehicleTypeID=" + getVehicleTypeID() +
             ", name='" + getName() + "'" +
             "}";
     }

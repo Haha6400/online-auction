@@ -6,10 +6,6 @@
   "dto": "mapstruct",
   "fields": [
     {
-      "fieldName": "vehicleTypeID",
-      "fieldType": "Long"
-    },
-    {
       "fieldName": "name",
       "fieldType": "String"
     }

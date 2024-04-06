@@ -32,11 +32,10 @@ spring:
     livereload:
       enabled: false
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:mysql://localhost:3306/myAuction?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
     username: root
-    password: Soi07052003@
+    password:
     hikari:
       poolName: Hikari
       auto-commit: false
@@ -49,16 +48,10 @@ spring:
   liquibase:
     contexts: prod
   mail:
-    host: smtp.gmail.com
-    port: 587
-    username: soi070523@gmail.com
-    password: idkyksyztasltxzr
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
+    host: localhost
+    port: 25
+    username:
+    password:
   thymeleaf:
     cache: true
 
