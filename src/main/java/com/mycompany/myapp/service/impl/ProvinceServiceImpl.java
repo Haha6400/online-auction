@@ -13,6 +13,7 @@ import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -34,7 +35,6 @@ public class ProvinceServiceImpl implements ProvinceService {
     }
 
     @Override
-    @Transactional
     public ProvinceDTO save(ProvinceDTO provinceDTO) {
         log.debug("Request to save Province : {}", provinceDTO);
         Province province = provinceMapper.toEntity(provinceDTO);
