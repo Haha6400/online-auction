@@ -11,6 +11,7 @@ import Drawer from "@mui/material/Drawer";
 import MenuIcon from "@mui/icons-material/Menu";
 import ToggleColorMode from "./ToggleColorMode";
 import Dialog from "@mui/material/Dialog";
+import Link from "@mui/material/Link";
 
 import { useThemeProvider } from "../../utils/ThemeContext";
 
@@ -21,7 +22,7 @@ import logo from "../../assets/logo.png";
 
 const logoStyle = {
   width: "40px",
-  height: "auto",
+  height: "40px",
   cursor: "pointer",
   marginLeft: "10px",
   marginRight: "5px",
@@ -98,40 +99,47 @@ export default function AppAppBar() {
                 px: 0,
               }}
             >
-              <img src={logo} style={logoStyle} alt="logo of sitemark" />
-              <h3 style={{ color: "#4876EE", fontWeight: "900" }}>Onauction</h3>
+              <Box sx={{ display: "flex", alignItems: "center", mr: 2 }}>
+                <img src={logo} style={logoStyle} alt="logo of sitemark" />
+                <h3 style={{ color: "#4876EE", fontWeight: "900" }}>
+                  Onauction
+                </h3>
+              </Box>
               <Box sx={{ display: { xs: "none", md: "flex" } }}>
                 <MenuItem sx={{ py: "6px", px: "12px" }}>
-                  <Typography variant="body2" color="text.primary">
-                    Features
-                  </Typography>
+                  <Link href="/">
+                    <Typography variant="body2" color="text.primary">
+                      Trang chủ
+                    </Typography>
+                  </Link>
                 </MenuItem>
                 <MenuItem sx={{ py: "6px", px: "12px" }}>
-                  <Typography variant="body2" color="text.primary">
-                    Testimonials
-                  </Typography>
+                  <Link href="/notification">
+                    <Typography variant="body2" color="text.primary">
+                      Thông báo
+                    </Typography>
+                  </Link>
                 </MenuItem>
                 <MenuItem sx={{ py: "6px", px: "12px" }}>
-                  <Typography variant="body2" color="text.primary">
-                    Highlights
-                  </Typography>
+                  <Link href="/">
+                    <Typography variant="body2" color="text.primary">
+                      Kế hoạch đấu giá
+                    </Typography>
+                  </Link>
                 </MenuItem>
                 <MenuItem sx={{ py: "6px", px: "12px" }}>
-                  <Typography variant="body2" color="text.primary">
-                    Pricing
-                  </Typography>
-                </MenuItem>
-                <MenuItem sx={{ py: "6px", px: "12px" }}>
-                  <Typography variant="body2" color="text.primary">
-                    FAQ
-                  </Typography>
+                  <Link href="/">
+                    <Typography variant="body2" color="text.primary">
+                      Kết quả đấu giá
+                    </Typography>
+                  </Link>
                 </MenuItem>
               </Box>
             </Box>
             <Box
               sx={{
                 display: { xs: "none", md: "flex" },
-                gap: 0.5,
+                gap: 1,
                 alignItems: "center",
               }}
             >
@@ -143,7 +151,7 @@ export default function AppAppBar() {
                 component="button"
                 onClick={handleLoginButtonClick}
               >
-                Log in
+                Đăng nhập
               </Button>
               <Dialog
                 open={openLoginDialog}
@@ -160,7 +168,7 @@ export default function AppAppBar() {
                 component="button"
                 onClick={handleRegisterButtonClick}
               >
-                Register
+                Đăng ký
               </Button>
               <Dialog
                 open={openRegisterDialog}
@@ -223,7 +231,7 @@ export default function AppAppBar() {
                       component="button"
                       onClick={handleRegisterButtonClick}
                     >
-                      Register
+                      Đăng ký
                     </Button>
                   </MenuItem>
                   <MenuItem>
@@ -234,7 +242,7 @@ export default function AppAppBar() {
                       component="button"
                       onClick={handleLoginButtonClick}
                     >
-                      Log in
+                      Đăng nhập
                     </Button>
                   </MenuItem>
                 </Box>
