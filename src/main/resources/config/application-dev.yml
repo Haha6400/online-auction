@@ -35,7 +35,7 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:mysql://localhost:3306/myAuction?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
     username: root
-    password: Soi07052003@
+    password: _dontknowwhattodo
     hikari:
       poolName: Hikari
       auto-commit: false
@@ -49,7 +49,7 @@ spring:
     contexts: dev
   mail:
     host: smtp.gmail.com
-    port: 25
+    port: 587
     username: soi070523@gmail.com
     password: idkyksyztasltxzr
     properties.mail.smtp:
