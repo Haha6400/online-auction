@@ -34,7 +34,7 @@ const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 const logoStyle = {
   width: "40px",
-  height: "auto",
+  height: "40px",
   cursor: "pointer",
   marginLeft: "10px",
   marginRight: "5px",
@@ -135,36 +135,39 @@ export default function AppAppBar(props) {
               </Link>
               <Box sx={{ display: { xs: "none", md: "flex" } }}>
                 <MenuItem sx={{ py: "6px", px: "12px" }}>
-                  <Typography variant="body2" color="text.primary">
-                    Features
-                  </Typography>
+                  <Link href="/">
+                    <Typography variant="body2" color="text.primary">
+                      Trang chủ
+                    </Typography>
+                  </Link>
                 </MenuItem>
                 <MenuItem sx={{ py: "6px", px: "12px" }}>
-                  <Typography variant="body2" color="text.primary">
-                    Testimonials
-                  </Typography>
+                  <Link href="/notification">
+                    <Typography variant="body2" color="text.primary">
+                      Thông báo
+                    </Typography>
+                  </Link>
                 </MenuItem>
                 <MenuItem sx={{ py: "6px", px: "12px" }}>
-                  <Typography variant="body2" color="text.primary">
-                    Highlights
-                  </Typography>
+                  <Link href="/">
+                    <Typography variant="body2" color="text.primary">
+                      Kế hoạch đấu giá
+                    </Typography>
+                  </Link>
                 </MenuItem>
                 <MenuItem sx={{ py: "6px", px: "12px" }}>
-                  <Typography variant="body2" color="text.primary">
-                    Pricing
-                  </Typography>
-                </MenuItem>
-                <MenuItem sx={{ py: "6px", px: "12px" }}>
-                  <Typography variant="body2" color="text.primary">
-                    FAQ
-                  </Typography>
+                  <Link href="/">
+                    <Typography variant="body2" color="text.primary">
+                      Kết quả đấu giá
+                    </Typography>
+                  </Link>
                 </MenuItem>
               </Box>
             </Box>
             <Box
               sx={{
                 display: { xs: "none", md: "flex" },
-                gap: 0.5,
+                gap: 1,
                 alignItems: "center",
               }}
             >
@@ -268,7 +271,7 @@ export default function AppAppBar(props) {
                       component="button"
                       onClick={handleRegisterButtonClick}
                     >
-                      Register
+                      Đăng ký
                     </Button>
                   </MenuItem>
                   <MenuItem>
@@ -279,7 +282,7 @@ export default function AppAppBar(props) {
                       component="button"
                       onClick={handleLoginButtonClick}
                     >
-                      Log in
+                      Đăng nhập
                     </Button>
                   </MenuItem>
                 </Box>

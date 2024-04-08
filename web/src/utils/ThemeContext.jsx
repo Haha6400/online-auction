@@ -25,7 +25,7 @@ export default function CustomThemeProvider({ children }) {
   }, [mode]);
 
   return (
-    <ThemeContext.Provider value={{ currentTheme: LPtheme, toggleColorMode }}>
+    <ThemeContext.Provider value={{ mode: mode, toggleColorMode }}>
       <ThemeProvider theme={LPtheme}>{children}</ThemeProvider>
     </ThemeContext.Provider>
   );
