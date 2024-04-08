@@ -3,7 +3,8 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -31,8 +32,8 @@ export default function Register() {
   };
 
   return (
-    <ThemeProvider theme={ LPtheme }>
-       <Container component="main" maxWidth="xs">
+    <ThemeProvider theme={LPtheme}>
+      <Container component="main" >
         <CssBaseline />
         <Box
           sx={{
@@ -50,32 +51,20 @@ export default function Register() {
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <Typography >
-                First Name
+                  Full Name
                 </Typography>
                 <TextField
                   autoComplete="given-name"
-                  name="firstName"
+                  name="fullName"
                   required
                   fullWidth
-                  id="firstName"
+                  id="fullName"
                   autoFocus
                 />
               </Grid>
               <Grid item xs={12}>
                 <Typography >
-                Last Name
-                </Typography>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  name="lastName"
-                  autoComplete="family-name"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <Typography >
-                Email Address
+                  Email Address
                 </Typography>
                 <TextField
                   required
@@ -85,10 +74,22 @@ export default function Register() {
                   autoComplete="email"
                 />
               </Grid>
-              
               <Grid item xs={12}>
                 <Typography >
-                Password
+                  Phone Number
+                </Typography>
+                <TextField
+                  required
+                  fullWidth
+                  id="phoneNumber"
+                  name="phoneNumber"
+                  autoComplete="phoneNumber"
+                />
+              </Grid>
+
+              <Grid item xs={12}>
+                <Typography >
+                  Password
                 </Typography>
                 <TextField
                   required
@@ -99,7 +100,11 @@ export default function Register() {
                   autoComplete="new-password"
                 />
               </Grid>
-              
+              <Grid item xs={12}>
+                <FormControlLabel
+                  control={<Checkbox value="allowExtraEmails" color="primary" />}
+                  label="I agree to share the provided information with the auction organization in accordance with Decree 13/2023/NĐ-CP." />
+              </Grid>
             </Grid>
             <Button
               type="submit"

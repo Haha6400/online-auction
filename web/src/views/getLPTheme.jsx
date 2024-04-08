@@ -59,19 +59,19 @@ const getDesignTokens = (mode) => ({
     primary: {
       light: brand[200],
       main: brand[500],
-      dark: brand[800],
+      dark: brand[900],
       contrastText: brand[50],
       ...(mode === 'dark' && {
         contrastText: brand[100],
         light: brand[300],
         main: brand[400],
-        dark: brand[800],
+        dark: brand[900],
       }),
     },
     secondary: {
       light: secondary[300],
       main: secondary[500],
-      dark: secondary[800],
+      dark: secondary[900],
       ...(mode === 'dark' && {
         light: secondary[400],
         main: secondary[500],
@@ -86,17 +86,17 @@ const getDesignTokens = (mode) => ({
     error: {
       light: red[50],
       main: red[500],
-      dark: red[700],
+      dark: red[800],
       ...(mode === 'dark' && { light: '#D32F2F', main: '#D32F2F', dark: '#B22A2A' }),
     },
     success: {
       light: green[300],
       main: green[400],
-      dark: green[800],
+      dark: green[900],
       ...(mode === 'dark' && {
         light: green[400],
         main: green[500],
-        dark: green[700],
+        dark: green[800],
       }),
     },
     grey: {
@@ -296,17 +296,17 @@ export default function getLPTheme(mode) {
             }),
             ...(ownerState.variant === 'contained' &&
               ownerState.color === 'primary' && {
-                color: brand[50],
-                background: brand[500],
-                backgroundImage: `linear-gradient(to bottom, ${brand[400]}, ${brand[600]})`,
-                boxShadow: `inset 0 1px ${alpha(brand[300], 0.4)}`,
-                outline: `1px solid ${brand[700]}`,
-                '&:hover': {
-                  background: brand[400],
-                  backgroundImage: 'none',
-                  boxShadow: `0 0 0 1px  ${alpha(brand[300], 0.5)}`,
-                },
-              }),
+              color: brand[50],
+              background: brand[500],
+              backgroundImage: `linear-gradient(to bottom, ${brand[400]}, ${brand[600]})`,
+              boxShadow: `inset 0 1px ${alpha(brand[300], 0.4)}`,
+              outline: `1px solid ${brand[700]}`,
+              '&:hover': {
+                background: brand[400],
+                backgroundImage: 'none',
+                boxShadow: `0 0 0 1px  ${alpha(brand[300], 0.5)}`,
+              },
+            }),
             ...(ownerState.variant === 'outlined' && {
               backgroundColor: alpha(brand[300], 0.1),
               borderColor: brand[300],
@@ -478,7 +478,7 @@ export default function getLPTheme(mode) {
             backgroundImage: 'none',
             backgroundColor: gray[100],
             ...(theme.palette.mode === 'dark' && {
-              backgroundColor: alpha(gray[900], 0.6),
+              backgroundColor: alpha(gray[900], 1),
             }),
           }),
         },

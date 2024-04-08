@@ -14,7 +14,7 @@ import AppAppBar from "../components/base/AppAppBar";
 export default function Home() {
   return (
     <>
-      <AppAppBar />
+      <AppAppBar loginCheck="false" />
       <Box
         id="hero"
         sx={(theme) => ({
