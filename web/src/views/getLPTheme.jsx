@@ -72,7 +72,7 @@ const getDesignTokens = (mode) => ({
       light: secondary[300],
       main: secondary[500],
       dark: secondary[900],
-      ...(mode === 'dark' && {
+      ...(mode === "dark" && {
         light: secondary[400],
         main: secondary[500],
         dark: secondary[900],
@@ -87,13 +87,17 @@ const getDesignTokens = (mode) => ({
       light: red[50],
       main: red[500],
       dark: red[800],
-      ...(mode === 'dark' && { light: '#D32F2F', main: '#D32F2F', dark: '#B22A2A' }),
+      ...(mode === "dark" && {
+        light: "#D32F2F",
+        main: "#D32F2F",
+        dark: "#B22A2A",
+      }),
     },
     success: {
       light: green[300],
       main: green[400],
       dark: green[900],
-      ...(mode === 'dark' && {
+      ...(mode === "dark" && {
         light: green[400],
         main: green[500],
         dark: green[800],
@@ -163,6 +167,10 @@ const getDesignTokens = (mode) => ({
     },
     subtitle2: {
       fontSize: 16,
+    },
+    navbar: {
+      fontWeight: 600,
+      fontSize: 14,
     },
     body1: {
       fontWeight: 400,
@@ -294,20 +302,19 @@ export default function getLPTheme(mode) {
             ...(ownerState.size === "medium" && {
               height: "40px",
             }),
-            ...(ownerState.variant === 'contained' &&
-              ownerState.color === 'primary' && {
-              color: brand[50],
-              background: brand[500],
-              backgroundImage: `linear-gradient(to bottom, ${brand[400]}, ${brand[600]})`,
-              boxShadow: `inset 0 1px ${alpha(brand[300], 0.4)}`,
-              outline: `1px solid ${brand[700]}`,
-              '&:hover': {
-                background: brand[400],
-                backgroundImage: 'none',
-                boxShadow: `0 0 0 1px  ${alpha(brand[300], 0.5)}`,
-              },
-            }),
-            ...(ownerState.variant === 'outlined' && {
+            ...(ownerState.variant === "contained" &&
+              ownerState.color === "primary" && {
+                color: gray[50],
+                background: "#212B36",
+                // boxShadow: `0 1px ${alpha(brand[300], 0.4)}`,
+                // outline: `1px solid ${brand[700]}`,?\
+                "&:hover": {
+                  // background: brand[800],
+                  // backgroundImage: "none",
+                  // boxShadow: `0 0 0 1px  ${alpha(brand[300], 0.5)}`,
+                },
+              }),
+            ...(ownerState.variant === "outlined" && {
               backgroundColor: alpha(brand[300], 0.1),
               borderColor: brand[300],
               color: brand[500],
@@ -317,9 +324,10 @@ export default function getLPTheme(mode) {
               },
             }),
             ...(ownerState.variant === "text" && {
-              color: brand[500],
+              color: gray[800],
               "&:hover": {
-                backgroundColor: alpha(brand[300], 0.3),
+                // backgroundColor: alpha(brand[300], 0.3),
+                backgroundColor: alpha("#4FD1C5", 0.3),
                 borderColor: brand[200],
               },
             }),
@@ -476,8 +484,9 @@ export default function getLPTheme(mode) {
         styleOverrides: {
           root: ({ theme }) => ({
             backgroundImage: "none",
-            backgroundColor: gray[100],
-            ...(theme.palette.mode === 'dark' && {
+            backgroundColor: "#FFFFFF",
+            boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;",
+            ...(theme.palette.mode === "dark" && {
               backgroundColor: alpha(gray[900], 1),
             }),
           }),

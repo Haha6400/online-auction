@@ -90,10 +90,10 @@ function CustomizedTables() {
   );
 }
 
-export default function Notification() {
+export default function Plan() {
   return (
     <>
-      <AppAppBar />
+      <AppAppBar currentPage="plan" />
       <Box
         id="hero"
         sx={(theme) => ({

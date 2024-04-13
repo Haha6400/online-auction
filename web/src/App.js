@@ -6,7 +6,8 @@ import MyAuction from "./views/account/MyAuction";
 import MyAccount from "./views/account/MyAccount";
 import { CssBaseline } from "@mui/material";
 import CustomThemeProvider from "./utils/ThemeContext";
-import Notification from "./views/Notification";
+import Plan from "./views/Plan";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 const router = createBrowserRouter([
   {
@@ -14,8 +15,8 @@ const router = createBrowserRouter([
     element: <Home />,
   },
   {
-    path: "/notification",
-    element: <Notification />,
+    path: "/plan",
+    element: <Plan />,
   },
   {
     path: "/my-auction",
@@ -24,7 +25,7 @@ const router = createBrowserRouter([
   {
     path: "/my-account",
     element: <MyAccount />,
-  }
+  },
 ]);
 
 function App() {

@@ -1,7 +1,7 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 
-import { alpha } from "@mui/material";
+import { Toolbar, alpha } from "@mui/material";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
@@ -9,36 +9,77 @@ import Typography from "@mui/material/Typography";
 import Footer from "../components/common/Footer";
 import AppAppBar from "../components/base/AppAppBar";
 
-import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
-import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.success,
-    color: "#0F3554",
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-  },
-}));
+import Launch from "@mui/icons-material/Launch";
 
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  "&:nth-of-type(odd)": {
-    backgroundColor: theme.palette.action.hover,
-  },
-  // hide last border
-  "&:last-child td, &:last-child th": {
-    border: 0,
-  },
-}));
+import carImage from "../assets/car.png";
+
+import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 
 const rows = [
+  {
+    licensePlate: "30L-111.11",
+    time: "7/4/2024",
+    province: "Thành phố Hà Nội",
+    carType: "Xe con",
+    remainingTime: "20 giờ",
+  },
+  {
+    licensePlate: "30L-222.22",
+    time: "7/4/2024",
+    province: "Thành phố Hà Nội",
+    carType: "Xe con",
+    remainingTime: "20 giờ",
+  },
+  {
+    licensePlate: "30L-333.33",
+    time: "7/4/2024",
+    province: "Thành phố Hà Nội",
+    carType: "Xe con",
+    remainingTime: "20 giờ",
+  },
+  {
+    licensePlate: "30L-444.44",
+    time: "7/4/2024",
+    province: "Thành phố Hà Nội",
+    carType: "Xe con",
+    remainingTime: "20 giờ",
+  },
+  {
+    licensePlate: "30L-111.11",
+    time: "7/4/2024",
+    province: "Thành phố Hà Nội",
+    carType: "Xe con",
+    remainingTime: "20 giờ",
+  },
+  {
+    licensePlate: "30L-222.22",
+    time: "7/4/2024",
+    province: "Thành phố Hà Nội",
+    carType: "Xe con",
+    remainingTime: "20 giờ",
+  },
+  {
+    licensePlate: "30L-333.33",
+    time: "7/4/2024",
+    province: "Thành phố Hà Nội",
+    carType: "Xe con",
+    remainingTime: "20 giờ",
+  },
+  {
+    licensePlate: "30L-444.44",
+    time: "7/4/2024",
+    province: "Thành phố Hà Nội",
+    carType: "Xe con",
+    remainingTime: "20 giờ",
+  },
   {
     licensePlate: "30L-111.11",
     time: "7/4/2024",
@@ -70,53 +111,120 @@ const rows = [
 ];
 
 function CustomizedTables() {
+  const [province, setProvince] = React.useState("");
+  const [carType, setCarType] = React.useState("");
   return (
-    <TableContainer component={Paper} sx={{ mt: 2 }}>
-      <Table sx={{ minWidth: 700 }} aria-label="customized table">
-        <TableHead sx={{ backgroundColor: "#B8D5FD" }}>
-          <TableRow>
-            <StyledTableCell>STT</StyledTableCell>
-            <StyledTableCell>Biển số</StyledTableCell>
-            <StyledTableCell>Thời gian đấu giá</StyledTableCell>
-            <StyledTableCell>Tỉnh/Thành phố</StyledTableCell>
-            <StyledTableCell>Loại xe</StyledTableCell>
-            <StyledTableCell>Thời gian đăng ký còn lại</StyledTableCell>
-            <StyledTableCell></StyledTableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row, index) => (
-            <StyledTableRow key={index}>
-              <StyledTableCell>{index + 1}</StyledTableCell>
-              <StyledTableCell>{row.licensePlate}</StyledTableCell>
-              <StyledTableCell>{row.time}</StyledTableCell>
-              <StyledTableCell>{row.province}</StyledTableCell>
-              <StyledTableCell>{row.carType}</StyledTableCell>
-              <StyledTableCell>{row.remainingTime}</StyledTableCell>
-              <StyledTableCell>
-                <Button variant="contained" color="warning" size="small">
-                  Đăng ký đấu giá
-                </Button>
-              </StyledTableCell>
-            </StyledTableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <>
+      <Box sx={{ py: 5 }}>
+        <FormControl sx={{ minWidth: 250 }} size="small">
+          <Select
+            autoWidth
+            displayEmpty
+            value={province}
+            onChange={(event) => {
+              setProvince(event.target.value);
+            }}
+            sx={{
+              width: 250,
+              marginRight: 5,
+              border: "1px solid darkgrey",
+              borderRadius: 3,
+            }}
+          >
+            <MenuItem sx={{ borderRadius: 0, width: 250 }} value="">
+              Chọn tỉnh/thành phố
+            </MenuItem>
+            <MenuItem sx={{ borderRadius: 0, width: 250 }} value={1}>
+              Thành phố Hà Nội
+            </MenuItem>
+            <MenuItem sx={{ borderRadius: 0, width: 250 }} value={2}>
+              Thành phố Hồ Chí Minh
+            </MenuItem>
+          </Select>
+        </FormControl>
+        <FormControl sx={{ minWidth: 250 }} size="small">
+          <Select
+            autoWidth
+            displayEmpty
+            value={carType}
+            onChange={(event) => {
+              setCarType(event.target.value);
+            }}
+            sx={{
+              width: 250,
+              border: "1px solid darkgrey",
+              borderRadius: 3,
+            }}
+          >
+            <MenuItem sx={{ borderRadius: 0, width: 250 }} value="">
+              Chọn loại xe
+            </MenuItem>
+            <MenuItem sx={{ borderRadius: 0, width: 250 }} value={1}>
+              Xe con
+            </MenuItem>
+            <MenuItem sx={{ borderRadius: 0, width: 250 }} value={2}>
+              Xe tải
+            </MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
+      <TableContainer component={Paper} sx={{ mt: 2 }}>
+        <Table sx={{ minWidth: 700 }} aria-label="customized table">
+          <TableHead
+            sx={(theme) => ({
+              backgroundColor:
+                theme.palette.mode === "light" ? "#F4F6F8" : "transparent",
+            })}
+          >
+            <TableRow>
+              <TableCell align="center">STT</TableCell>
+              <TableCell>Biển số</TableCell>
+              <TableCell>Thời gian đấu giá</TableCell>
+              <TableCell>Tỉnh/Thành phố</TableCell>
+              <TableCell>Loại xe</TableCell>
+              <TableCell>Thời gian đăng ký còn lại</TableCell>
+              <TableCell></TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map((row, index) => (
+              <TableRow key={index}>
+                <TableCell align="center">{index + 1}</TableCell>
+                <TableCell>{row.licensePlate}</TableCell>
+                <TableCell>{row.time}</TableCell>
+                <TableCell>{row.province}</TableCell>
+                <TableCell>{row.carType}</TableCell>
+                <TableCell>{row.remainingTime}</TableCell>
+                <TableCell>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    sx={{ whiteSpace: "nowrap" }}
+                  >
+                    Đăng ký đấu giá
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </>
   );
 }
 
 export default function Home() {
   return (
     <>
-      <AppAppBar loginCheck="false" />
+      <AppAppBar loginCheck="false" currentPage="home" />
       <Box
         id="hero"
         sx={(theme) => ({
           width: "100%",
-          backgroundImage:
+          background:
             theme.palette.mode === "light"
-              ? "linear-gradient(180deg, #CEE5FD, #FFF)"
+              ? "#F7FAFC"
               : `linear-gradient(#02294F, ${alpha("#090E10", 0.0)})`,
           backgroundSize: "100% 20%",
           backgroundRepeat: "no-repeat",
@@ -127,107 +235,104 @@ export default function Home() {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            pt: { xs: 14, sm: 20 },
+            pt: { xs: 14, sm: 16 },
             pb: { xs: 8, sm: 12 },
           }}
         >
-          <Stack
-            spacing={2}
-            useFlexGap
-            sx={{ width: { xs: "100%", sm: "100%" } }}
-          >
-            <Typography
-              variant="h1"
-              sx={{
-                display: "flex",
-                flexDirection: { xs: "column", md: "row" },
-                alignSelf: "center",
-                textAlign: "center",
-                fontSize: "50px",
-              }}
-            >
-              Công ty đấu giá hợp danh&nbsp;
+          <Box sx={{ display: "flex", justifyContent: "space-between", pl: 4 }}>
+            <Box sx={{ width: { xs: "100%", sm: "40%" } }}>
               <Typography
-                component="span"
                 variant="h1"
                 sx={{
-                  fontSize: "50px",
+                  lineHeight: 1.2,
+                  display: "flex",
+                  flexDirection: { xs: "column", md: "row" },
+                  alignSelf: "center",
+                  textAlign: "left",
+                  fontSize: "60px",
+                  fontWeight: "700",
+                }}
+              >
+                Công ty đấu giá hợp danh&nbsp;
+              </Typography>
+              <Typography
+                variant="h1"
+                sx={{
+                  fontWeight: "800",
+                  lineHeight: 1.2,
+                  fontSize: "60px",
                   color: (theme) =>
                     theme.palette.mode === "light"
-                      ? "primary.main"
+                      ? "#45BAB0"
                       : "primary.light",
                 }}
               >
-                Abc
+                OOAD
               </Typography>
-            </Typography>
-            <Typography
-              textAlign="center"
-              color="text.secondary"
-              sx={{
-                alignSelf: "center",
-                width: { sm: "100%", md: "80%" },
-                fontSize: "20px",
-              }}
-            >
-              Khám phá và sở hữu biển số xe độc đáo ngay hôm nay!
-            </Typography>
-            <Stack
-              direction={{ xs: "column", sm: "row" }}
-              alignSelf="center"
-              spacing={1}
-              useFlexGap
-              sx={{ pt: 2, width: { xs: "100%", sm: "auto" } }}
-            >
-              {/* <TextField
-                id="outlined-basic"
-                hiddenLabel
-                size="small"
-                variant="outlined"
-                aria-label="Enter your email address"
-                placeholder="Your email address"
-              /> */}
-
-              <Button variant="contained" color="primary">
-                Đăng ký
-              </Button>
-              <Button variant="outlined" color="secondary">
-                Hướng dẫn
-              </Button>
-            </Stack>
-          </Stack>
+              <Typography
+                textAlign="left"
+                color="#727584"
+                sx={{
+                  marginTop: 5,
+                  alignSelf: "center",
+                  width: { sm: "100%", md: "80%" },
+                  fontSize: "18px",
+                }}
+              >
+                Khám phá và sở hữu biển số xe độc đáo ngay hôm nay!
+              </Typography>
+              <Stack
+                direction={{ xs: "column", sm: "row" }}
+                alignSelf="center"
+                spacing={1}
+                useFlexGap
+                sx={{ pt: 5, width: { xs: "100%", sm: "auto" } }}
+              >
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="large"
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1,
+                  }}
+                >
+                  Đăng ký ngay
+                  <Launch />
+                </Button>
+              </Stack>
+            </Box>
+            <Box sx={{ width: "65%", display: "flex", alignItems: "center" }}>
+              <img
+                src={carImage}
+                style={{ width: 700 }}
+                alt="logo of onlineauction"
+              />
+            </Box>
+          </Box>
           <Box
-            id="image"
             sx={(theme) => ({
               mt: { xs: 8, sm: 10 },
               padding: 5,
               alignSelf: "center",
-              height: { xs: 200, sm: 700 },
               width: "100%",
-              backgroundImage:
-                theme.palette.mode === "light"
-                  ? 'url("/static/images/templates/templates-images/hero-light.png")'
-                  : 'url("/static/images/templates/templates-images/hero-dark.png")',
+              bgcolor: theme.palette.mode === "light" ? "#FFFFFF" : "#090E10",
               backgroundSize: "cover",
               borderRadius: "10px",
-              outline: "1px solid",
-              outlineColor:
-                theme.palette.mode === "light"
-                  ? alpha("#BFCCD9", 0.5)
-                  : alpha("#9CCCFC", 0.1),
               boxShadow:
                 theme.palette.mode === "light"
-                  ? `0 0 12px 8px ${alpha("#9CCCFC", 0.2)}`
+                  ? `0px 3.5px 5.5px rgba(0, 0, 0, 0.02)`
                   : `0 0 24px 12px ${alpha("#033363", 0.2)}`,
             })}
           >
             <Typography
               component="h2"
-              variant="h4"
+              variant="h5"
               color="text.primary"
-              sx={{}}
+              sx={{ fontWeight: 700, fontSize: 24 }}
             >
-              Danh sách biển số
+              DANH SÁCH BIỂN SỐ
             </Typography>
             <CustomizedTables />
           </Box>

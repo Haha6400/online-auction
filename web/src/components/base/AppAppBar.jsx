@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 import Box from "@mui/material/Box";
@@ -14,23 +14,19 @@ import Drawer from "@mui/material/Drawer";
 import MenuIcon from "@mui/icons-material/Menu";
 import ToggleColorMode from "./ToggleColorMode";
 import Dialog from "@mui/material/Dialog";
-import Avatar from '@mui/material/Avatar';
-import Tooltip from '@mui/material/Tooltip';
-import IconButton from '@mui/material/IconButton';
-import Menu from '@mui/material/Menu';
-
+import Avatar from "@mui/material/Avatar";
+import Tooltip from "@mui/material/Tooltip";
+import IconButton from "@mui/material/IconButton";
+import Menu from "@mui/material/Menu";
 
 import { useThemeProvider } from "../../utils/ThemeContext";
-
-
 
 import Login from "../common/Login";
 import Register from "../common/Register";
 import AccountMenu from "../base/AccountMenu";
 
 import logo from "../../assets/logo.png";
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
-
+const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 const logoStyle = {
   width: "40px",
@@ -47,7 +43,6 @@ export default function AppAppBar(props) {
 
   const [openLoginDialog, setOpenLoginDialog] = React.useState(false);
   const [openRegisterDialog, setOpenRegisterDialog] = React.useState(false);
-
 
   const handleLoginButtonClick = () => {
     setOpenLoginDialog(true);
@@ -68,7 +63,6 @@ export default function AppAppBar(props) {
   const toggleDrawer = (newOpen) => () => {
     setOpenDrawer(newOpen);
   };
-
 
   // const handleOpenUserMenu = (event) => {
   //   setAnchorElUser(event.currentTarget);
@@ -105,15 +99,15 @@ export default function AppAppBar(props) {
               borderRadius: "999px",
               bgcolor:
                 theme.palette.mode === "light"
-                  ? "rgba(255, 255, 255, 0.4)"
+                  ? "rgba(255, 255, 255)"
                   : "rgba(0, 0, 0, 0.4)",
               backdropFilter: "blur(24px)",
               maxHeight: 40,
-              border: "1px solid",
-              borderColor: "divider",
+              // border: "1px solid",
+              // borderColor: "divider",
               boxShadow:
                 theme.palette.mode === "light"
-                  ? `0 0 1px rgba(85, 166, 246, 0.1), 1px 1.5px 2px -1px rgba(85, 166, 246, 0.15), 4px 4px 12px -2.5px rgba(85, 166, 246, 0.15)`
+                  ? `0px 3.5px 5.5px rgba(0, 0, 0, 0.02)`
                   : "0 0 1px rgba(2, 31, 59, 0.7), 1px 1.5px 2px -1px rgba(2, 31, 59, 0.65), 4px 4px 12px -2.5px rgba(2, 31, 59, 0.65)",
             })}
           >
@@ -126,39 +120,74 @@ export default function AppAppBar(props) {
                 px: 0,
               }}
             >
-
               <Link to="/">
-                <img src={logo} style={logoStyle} alt="logo of onlineauction" />
-              </Link>
-              <Link to="/">
-                <h3 style={{ color: "#4876EE", fontWeight: "900", display: 'inline-block', verticalAlign: 'middle' }}>Onauction</h3>
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                  <img
+                    src={logo}
+                    style={logoStyle}
+                    alt="logo of onlineauction"
+                  />
+                  <h3
+                    style={{
+                      color: "#4FD1C5",
+                      fontWeight: "900",
+                      display: "inline-block",
+                      verticalAlign: "middle",
+                    }}
+                  >
+                    OOAD
+                  </h3>
+                </Box>
               </Link>
               <Box sx={{ display: { xs: "none", md: "flex" } }}>
-                <MenuItem sx={{ py: "6px", px: "12px" }}>
-                  <Link href="/">
-                    <Typography variant="body2" color="text.primary">
+                <MenuItem
+                  sx={{ py: "6px", px: "12px", ml: "10px" }}
+                  selected={props.currentPage === "home"}
+                >
+                  <Link to="/">
+                    <Typography
+                      variant="navbar"
+                      color={
+                        props.currentPage === "home"
+                          ? "text.primary"
+                          : "text.secondary"
+                      }
+                    >
                       Trang chủ
                     </Typography>
                   </Link>
                 </MenuItem>
-                <MenuItem sx={{ py: "6px", px: "12px" }}>
-                  <Link href="/notification">
-                    <Typography variant="body2" color="text.primary">
-                      Thông báo
-                    </Typography>
-                  </Link>
-                </MenuItem>
-                <MenuItem sx={{ py: "6px", px: "12px" }}>
-                  <Link href="/">
-                    <Typography variant="body2" color="text.primary">
+                <MenuItem
+                  sx={{ py: "6px", px: "12px", ml: "10px" }}
+                  selected={props.currentPage === "plan"}
+                >
+                  <Link to="/plan">
+                    <Typography
+                      variant="navbar"
+                      color={
+                        props.currentPage === "plan"
+                          ? "text.primary"
+                          : "text.secondary"
+                      }
+                    >
                       Kế hoạch đấu giá
                     </Typography>
                   </Link>
                 </MenuItem>
-                <MenuItem sx={{ py: "6px", px: "12px" }}>
-                  <Link href="/">
-                    <Typography variant="body2" color="text.primary">
-                      Kết quả đấu giá
+                <MenuItem
+                  sx={{ py: "6px", px: "12px", ml: "10px" }}
+                  selected={props.currentPage === "list_auction_room"}
+                >
+                  <Link to="/">
+                    <Typography
+                      variant="navbar"
+                      color={
+                        props.currentPage === "list_auction_room"
+                          ? "text.primary"
+                          : "text.secondary"
+                      }
+                    >
+                      Phòng đấu giá
                     </Typography>
                   </Link>
                 </MenuItem>
@@ -213,11 +242,12 @@ export default function AppAppBar(props) {
 
               {props.loginCheck === "true" && (
                 <>
-                  <h4 style={{ color: mode === "dark" ? "#fff" : "#007bff" }}>{props.name}</h4>
+                  <h4 style={{ color: mode === "dark" ? "#fff" : "#007bff" }}>
+                    {props.name}
+                  </h4>
                   <AccountMenu name={props.name} />
                 </>
               )}
-
             </Box>
 
             {/* Responsive */}
@@ -291,6 +321,6 @@ export default function AppAppBar(props) {
           </Toolbar>
         </Container>
       </AppBar>
-    </div >
+    </div>
   );
 }
