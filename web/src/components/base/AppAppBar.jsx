@@ -1,6 +1,5 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 
 import Box from "@mui/material/Box";
 import AppBar from "@mui/material/AppBar";
@@ -14,10 +13,6 @@ import Drawer from "@mui/material/Drawer";
 import MenuIcon from "@mui/icons-material/Menu";
 import ToggleColorMode from "./ToggleColorMode";
 import Dialog from "@mui/material/Dialog";
-import Avatar from "@mui/material/Avatar";
-import Tooltip from "@mui/material/Tooltip";
-import IconButton from "@mui/material/IconButton";
-import Menu from "@mui/material/Menu";
 
 import { useThemeProvider } from "../../utils/ThemeContext";
 
@@ -26,7 +21,6 @@ import Register from "../common/Register";
 import AccountMenu from "../base/AccountMenu";
 
 import logo from "../../assets/logo.png";
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 const logoStyle = {
   width: "40px",
@@ -122,21 +116,20 @@ export default function AppAppBar(props) {
             >
               <Link to="/">
                 <Box sx={{ display: "flex", alignItems: "center" }}>
-                  <img
-                    src={logo}
-                    style={logoStyle}
-                    alt="logo of onlineauction"
-                  />
-                  <h3
-                    style={{
-                      color: "#4FD1C5",
+                  <img src={logo} style={logoStyle} alt="logo" />
+                  <Typography
+                    sx={(theme) => ({
+                      color:
+                        theme.palette.mode === "light"
+                          ? "#4FD1C5"
+                          : "primary.light",
                       fontWeight: "900",
                       display: "inline-block",
                       verticalAlign: "middle",
-                    }}
+                    })}
                   >
                     OOAD
-                  </h3>
+                  </Typography>
                 </Box>
               </Link>
               <Box sx={{ display: { xs: "none", md: "flex" } }}>

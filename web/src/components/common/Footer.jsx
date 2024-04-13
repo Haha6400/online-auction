@@ -62,13 +62,26 @@ export default function Footer() {
             <Box
               sx={{
                 ml: "-15px",
+                mb: 2,
                 display: "flex",
                 flexDirection: "row",
                 alignItems: "center",
               }}
             >
-              <img src={logo} style={logoStyle} alt="logo of sitemark" />
-              <h3 style={{ color: "#4876EE" }}>Onauction</h3>
+              <img src={logo} style={logoStyle} alt="logo" />
+              <Typography
+                sx={(theme) => ({
+                  color:
+                    theme.palette.mode === "light"
+                      ? "#4FD1C5"
+                      : "primary.light",
+                  fontWeight: "900",
+                  display: "inline-block",
+                  verticalAlign: "middle",
+                })}
+              >
+                OOAD
+              </Typography>
             </Box>
             <Typography variant="body2" fontWeight={600} gutterBottom>
               Newsletter

@@ -1,7 +1,7 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 
-import { Toolbar, alpha } from "@mui/material";
+import { OutlinedInput, alpha } from "@mui/material";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
@@ -18,10 +18,13 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
 import Launch from "@mui/icons-material/Launch";
+import Search from "@mui/icons-material/Search";
 
-import carImage from "../assets/car.png";
+import carImage from "../assets/car3.png";
 
-import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
+import { FormControl, Select, MenuItem, Dialog } from "@mui/material";
+
+import Register from "../components/common/Register";
 
 const rows = [
   {
@@ -29,84 +32,84 @@ const rows = [
     time: "7/4/2024",
     province: "Thành phố Hà Nội",
     carType: "Xe con",
-    remainingTime: "20 giờ",
+    remainingTime: "20 giờ 24 phút",
   },
   {
     licensePlate: "30L-222.22",
     time: "7/4/2024",
     province: "Thành phố Hà Nội",
     carType: "Xe con",
-    remainingTime: "20 giờ",
+    remainingTime: "20 giờ 24 phút",
   },
   {
     licensePlate: "30L-333.33",
     time: "7/4/2024",
     province: "Thành phố Hà Nội",
     carType: "Xe con",
-    remainingTime: "20 giờ",
+    remainingTime: "20 giờ 24 phút",
   },
   {
     licensePlate: "30L-444.44",
     time: "7/4/2024",
     province: "Thành phố Hà Nội",
     carType: "Xe con",
-    remainingTime: "20 giờ",
+    remainingTime: "20 giờ 24 phút",
   },
   {
     licensePlate: "30L-111.11",
     time: "7/4/2024",
     province: "Thành phố Hà Nội",
     carType: "Xe con",
-    remainingTime: "20 giờ",
+    remainingTime: "20 giờ 24 phút",
   },
   {
     licensePlate: "30L-222.22",
     time: "7/4/2024",
     province: "Thành phố Hà Nội",
     carType: "Xe con",
-    remainingTime: "20 giờ",
+    remainingTime: "20 giờ 24 phút",
   },
   {
     licensePlate: "30L-333.33",
     time: "7/4/2024",
     province: "Thành phố Hà Nội",
     carType: "Xe con",
-    remainingTime: "20 giờ",
+    remainingTime: "20 giờ 24 phút",
   },
   {
     licensePlate: "30L-444.44",
     time: "7/4/2024",
     province: "Thành phố Hà Nội",
     carType: "Xe con",
-    remainingTime: "20 giờ",
+    remainingTime: "20 giờ 24 phút",
   },
   {
     licensePlate: "30L-111.11",
     time: "7/4/2024",
     province: "Thành phố Hà Nội",
     carType: "Xe con",
-    remainingTime: "20 giờ",
+    remainingTime: "20 giờ 24 phút",
   },
   {
     licensePlate: "30L-222.22",
     time: "7/4/2024",
     province: "Thành phố Hà Nội",
     carType: "Xe con",
-    remainingTime: "20 giờ",
+    remainingTime: "20 giờ 24 phút",
   },
   {
     licensePlate: "30L-333.33",
     time: "7/4/2024",
     province: "Thành phố Hà Nội",
     carType: "Xe con",
-    remainingTime: "20 giờ",
+    remainingTime: "20 giờ 24 phút",
   },
   {
     licensePlate: "30L-444.44",
     time: "7/4/2024",
     province: "Thành phố Hà Nội",
     carType: "Xe con",
-    remainingTime: "20 giờ",
+    remainingTime: "20 giờ 24 phút",
   },
 ];
 
@@ -115,8 +118,31 @@ function CustomizedTables() {
   const [carType, setCarType] = React.useState("");
   return (
     <>
-      <Box sx={{ py: 5 }}>
-        <FormControl sx={{ minWidth: 250 }} size="small">
+      <Box
+        sx={{
+          py: 2,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexWrap: "wrap",
+          gap: 5,
+        }}
+      >
+        <OutlinedInput
+          type="search"
+          placeholder="Nhập biển số xe cần tìm"
+          size="small"
+          sx={{
+            width: 250,
+            marginY: 2,
+            border: "1px solid darkgrey",
+            borderRadius: 3,
+          }}
+          startAdornment={
+            <Search sx={{ width: 20, color: "darkgrey", mr: 1 }} />
+          }
+        />
+        <FormControl sx={{ minWidth: 250, marginY: 2 }} size="small">
           <Select
             autoWidth
             displayEmpty
@@ -126,7 +152,6 @@ function CustomizedTables() {
             }}
             sx={{
               width: 250,
-              marginRight: 5,
               border: "1px solid darkgrey",
               borderRadius: 3,
             }}
@@ -142,7 +167,7 @@ function CustomizedTables() {
             </MenuItem>
           </Select>
         </FormControl>
-        <FormControl sx={{ minWidth: 250 }} size="small">
+        <FormControl sx={{ minWidth: 250, marginY: 2 }} size="small">
           <Select
             autoWidth
             displayEmpty
@@ -167,23 +192,34 @@ function CustomizedTables() {
             </MenuItem>
           </Select>
         </FormControl>
+        <Button
+          variant="contained"
+          color="primary"
+          sx={{ whiteSpace: "nowrap", marginY: 2 }}
+        >
+          Tìm kiếm
+        </Button>
       </Box>
       <TableContainer component={Paper} sx={{ mt: 2 }}>
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
           <TableHead
             sx={(theme) => ({
               backgroundColor:
-                theme.palette.mode === "light" ? "#F4F6F8" : "transparent",
+                theme.palette.mode === "light" ? "#F4F6F8" : "#37404E",
             })}
           >
             <TableRow>
-              <TableCell align="center">STT</TableCell>
-              <TableCell>Biển số</TableCell>
-              <TableCell>Thời gian đấu giá</TableCell>
-              <TableCell>Tỉnh/Thành phố</TableCell>
-              <TableCell>Loại xe</TableCell>
-              <TableCell>Thời gian đăng ký còn lại</TableCell>
-              <TableCell></TableCell>
+              <TableCell sx={{ fontWeight: 600 }} align="center">
+                STT
+              </TableCell>
+              <TableCell sx={{ fontWeight: 600 }}>Biển số</TableCell>
+              <TableCell sx={{ fontWeight: 600 }}>Tỉnh/Thành phố</TableCell>
+              <TableCell sx={{ fontWeight: 600 }}>Thời gian đấu giá</TableCell>
+              <TableCell sx={{ fontWeight: 600 }}>Loại xe</TableCell>
+              <TableCell sx={{ fontWeight: 600 }}>
+                Thời gian đăng ký còn lại
+              </TableCell>
+              <TableCell sx={{ fontWeight: 600 }}></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -215,6 +251,12 @@ function CustomizedTables() {
 }
 
 export default function Home() {
+  const [openRegisterDialog, setOpenRegisterDialog] = React.useState(false);
+
+  const toggleRegisterDialog = () => {
+    setOpenRegisterDialog(!openRegisterDialog);
+  };
+
   return (
     <>
       <AppAppBar loginCheck="false" currentPage="home" />
@@ -239,78 +281,111 @@ export default function Home() {
             pb: { xs: 8, sm: 12 },
           }}
         >
-          <Box sx={{ display: "flex", justifyContent: "space-between", pl: 4 }}>
-            <Box sx={{ width: { xs: "100%", sm: "40%" } }}>
-              <Typography
-                variant="h1"
-                sx={{
-                  lineHeight: 1.2,
-                  display: "flex",
-                  flexDirection: { xs: "column", md: "row" },
-                  alignSelf: "center",
-                  textAlign: "left",
-                  fontSize: "60px",
-                  fontWeight: "700",
-                }}
-              >
-                Công ty đấu giá hợp danh&nbsp;
-              </Typography>
-              <Typography
-                variant="h1"
-                sx={{
-                  fontWeight: "800",
-                  lineHeight: 1.2,
-                  fontSize: "60px",
-                  color: (theme) =>
-                    theme.palette.mode === "light"
-                      ? "#45BAB0"
-                      : "primary.light",
-                }}
-              >
-                OOAD
-              </Typography>
-              <Typography
-                textAlign="left"
-                color="#727584"
-                sx={{
-                  marginTop: 5,
-                  alignSelf: "center",
-                  width: { sm: "100%", md: "80%" },
-                  fontSize: "18px",
-                }}
-              >
-                Khám phá và sở hữu biển số xe độc đáo ngay hôm nay!
-              </Typography>
+          {/* Hero section */}
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: { lg: "row", xs: "column" },
+              justifyContent: "space-between",
+              pl: 4,
+            }}
+          >
+            <Box
+              sx={{
+                width: { xs: "100%", lg: "40%" },
+                textAlign: { xs: "center", lg: "left" },
+                display: "flex",
+                justifyContent: "center",
+              }}
+            >
               <Stack
-                direction={{ xs: "column", sm: "row" }}
-                alignSelf="center"
                 spacing={1}
                 useFlexGap
-                sx={{ pt: 5, width: { xs: "100%", sm: "auto" } }}
+                sx={{ width: { lg: "100%", md: "60%", xs: "80%" } }}
               >
-                <Button
-                  variant="contained"
-                  color="primary"
-                  size="large"
+                <Typography
+                  variant="h1"
                   sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 1,
+                    lineHeight: 1.2,
+                    fontSize: "60px",
+                    fontWeight: "700",
                   }}
                 >
-                  Đăng ký ngay
-                  <Launch />
-                </Button>
+                  Công ty đấu giá hợp danh&nbsp;
+                  <Typography
+                    component={"span"}
+                    sx={{
+                      display: { lg: "block" },
+                      fontWeight: "800",
+                      lineHeight: 1.2,
+                      fontSize: "60px",
+                      color: (theme) =>
+                        theme.palette.mode === "light"
+                          ? "#45BAB0"
+                          : "primary.light",
+                    }}
+                  >
+                    OOAD
+                  </Typography>
+                </Typography>
+
+                <Typography
+                  color="#727584"
+                  sx={{
+                    marginTop: 5,
+                    fontSize: "18px",
+                  }}
+                >
+                  Khám phá và sở hữu biển số xe độc đáo ngay hôm nay!
+                </Typography>
+
+                <Box>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    size="large"
+                    sx={{
+                      mt: 5,
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1,
+                      width: { xs: "100%", lg: "auto" },
+                    }}
+                    onClick={toggleRegisterDialog}
+                  >
+                    Đăng ký ngay
+                    <Launch />
+                  </Button>
+                  <Dialog
+                    open={openRegisterDialog}
+                    onClose={toggleRegisterDialog}
+                    aria-labelledby="scroll-dialog-title"
+                    aria-describedby="scroll-dialog-description"
+                  >
+                    <Register />
+                  </Dialog>
+                </Box>
               </Stack>
             </Box>
-            <Box sx={{ width: "65%", display: "flex", alignItems: "center" }}>
-              <img
-                src={carImage}
-                style={{ width: 700 }}
-                alt="logo of onlineauction"
-              />
+            <Box
+              sx={{
+                width: { lg: "65%", xs: "100%" },
+                display: { xs: "none", sm: "flex" },
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Box sx={{ width: { lg: "100%", xs: "80%" } }}>
+                <img
+                  src={carImage}
+                  style={{ maxWidth: "100%", textAlign: "center" }}
+                  alt="car hero"
+                />
+              </Box>
             </Box>
           </Box>
+
+          {/* List of license plate */}
           <Box
             sx={(theme) => ({
               mt: { xs: 8, sm: 10 },
@@ -330,7 +405,7 @@ export default function Home() {
               component="h2"
               variant="h5"
               color="text.primary"
-              sx={{ fontWeight: 700, fontSize: 24 }}
+              sx={{ fontWeight: 700, fontSize: 24, textAlign: "center" }}
             >
               DANH SÁCH BIỂN SỐ
             </Typography>
