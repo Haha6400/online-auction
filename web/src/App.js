@@ -2,6 +2,7 @@ import * as React from "react";
 
 import "./App.css";
 import Home from "./views/Home";
+import HomeTest from "./views/HomeTest";
 import MyAuction from "./views/account/MyAuction";
 import MyAccount from "./views/account/MyAccount";
 import { CssBaseline } from "@mui/material";
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
   {
     path: "/my-account",
     element: <MyAccount />,
+  },
+  {
+    path: "/test",
+    element: <HomeTest />,
   },
 ]);
 
