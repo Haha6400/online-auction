@@ -1,6 +1,4 @@
-import AppAppBar from "../components/base/AppAppBar";
-import Footer from "../components/common/Footer";
-import Box from "@mui/material/Box";
+import { useState } from "react";
 
 import { alpha } from "@mui/material";
 import Button from "@mui/material/Button";
@@ -8,38 +6,61 @@ import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
 
-import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
-import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
+import dayjs from "dayjs";
+import { DemoItem } from "@mui/x-date-pickers/internals/demo";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+
 import DownloadIcon from "@mui/icons-material/Download";
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.success,
-    color: "#0F3554",
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-  },
-}));
+import AppAppBar from "../components/base/AppAppBar";
+import Footer from "../components/common/Footer";
+import Box from "@mui/material/Box";
 
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  "&:nth-of-type(odd)": {
-    backgroundColor: theme.palette.action.hover,
-  },
-  // hide last border
-  "&:last-child td, &:last-child th": {
-    border: 0,
-  },
-}));
+import FilterAltIcon from "@mui/icons-material/FilterAlt";
 
 const rows = [
+  {
+    time: "7/4/2024",
+    name: "Thông báo thời gian đấu giá trực tuyến biển số xe ô tô ngày 7/4/2024",
+  },
+  {
+    time: "7/4/2024",
+    name: "Thông báo thời gian đấu giá trực tuyến biển số xe ô tô ngày 7/4/2024",
+  },
+  {
+    time: "7/4/2024",
+    name: "Thông báo thời gian đấu giá trực tuyến biển số xe ô tô ngày 7/4/2024",
+  },
+  {
+    time: "7/4/2024",
+    name: "Thông báo thời gian đấu giá trực tuyến biển số xe ô tô ngày 7/4/2024",
+  },
+  {
+    time: "7/4/2024",
+    name: "Thông báo thời gian đấu giá trực tuyến biển số xe ô tô ngày 7/4/2024",
+  },
+  {
+    time: "7/4/2024",
+    name: "Thông báo thời gian đấu giá trực tuyến biển số xe ô tô ngày 7/4/2024",
+  },
+  {
+    time: "7/4/2024",
+    name: "Thông báo thời gian đấu giá trực tuyến biển số xe ô tô ngày 7/4/2024",
+  },
+  {
+    time: "7/4/2024",
+    name: "Thông báo thời gian đấu giá trực tuyến biển số xe ô tô ngày 7/4/2024",
+  },
   {
     time: "7/4/2024",
     name: "Thông báo thời gian đấu giá trực tuyến biển số xe ô tô ngày 7/4/2024",
@@ -59,48 +80,117 @@ const rows = [
 ];
 
 function CustomizedTables() {
+  const [startDate, setStartDate] = useState(dayjs("2024-04-14"));
+  const [endDate, setEndDate] = useState(dayjs());
+
   return (
-    <TableContainer component={Paper} sx={{ mt: 2 }}>
-      <Table sx={{ minWidth: 700 }} aria-label="customized table">
-        <TableHead sx={{ backgroundColor: "#B8D5FD" }}>
-          <TableRow>
-            <StyledTableCell>Thời gian đăng tải</StyledTableCell>
-            <StyledTableCell>Tên tài liệu</StyledTableCell>
-            <StyledTableCell></StyledTableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row, index) => (
-            <StyledTableRow key={index}>
-              <StyledTableCell>{row.time}</StyledTableCell>
-              <StyledTableCell>
-                <Link href="/">{row.name}</Link>
-              </StyledTableCell>
-              <StyledTableCell>
-                <Button variant="contained" color="success" size="small">
-                  Tải xuống
-                  <DownloadIcon sx={{ fontSize: 15, ml: 1 }} />
-                </Button>
-              </StyledTableCell>
-            </StyledTableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <>
+      <Box
+        sx={{
+          py: 2,
+          display: "flex",
+          alignItems: "flex-end",
+          justifyContent: "center",
+          flexWrap: "wrap",
+          gap: 5,
+        }}
+      >
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DemoItem label="Từ ngày:">
+            <DatePicker
+              value={startDate}
+              onChange={(newValue) => setStartDate(newValue)}
+              sx={{
+                border: "2px solid darkgrey",
+                borderRadius: 3,
+              }}
+              slotProps={{
+                field: { clearable: true },
+              }}
+            />
+          </DemoItem>
+        </LocalizationProvider>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DemoItem label="Đến ngày:">
+            <DatePicker
+              value={endDate}
+              onChange={(newValue) => setEndDate(newValue)}
+              sx={{
+                border: "2px solid darkgrey",
+                borderRadius: 3,
+              }}
+              slotProps={{
+                field: { clearable: true },
+              }}
+            />
+          </DemoItem>
+        </LocalizationProvider>
+        <Button
+          variant="contained"
+          color="primary"
+          sx={{ whiteSpace: "nowrap", pr: 2, mb: "2px" }}
+        >
+          <FilterAltIcon sx={{ width: 18, mr: 1 }} />
+          Lọc
+        </Button>
+      </Box>
+      <TableContainer component={Paper} sx={{ mt: 2 }}>
+        <Table sx={{ minWidth: 700 }} aria-label="customized table">
+          <TableHead
+            sx={(theme) => ({
+              backgroundColor:
+                theme.palette.mode === "light" ? "#F4F6F8" : "#37404E",
+            })}
+          >
+            <TableRow>
+              <TableCell
+                sx={{ fontWeight: 600, whiteSpace: "nowrap" }}
+                align="center"
+              >
+                Thời gian đăng tải
+              </TableCell>
+              <TableCell sx={{ fontWeight: 600 }}>Tên tài liệu</TableCell>
+              <TableCell sx={{ fontWeight: 600 }}></TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map((row, index) => (
+              <TableRow key={index}>
+                <TableCell align="center">{row.time}</TableCell>
+                <TableCell>
+                  <Link href="#">{row.name}</Link>
+                </TableCell>
+                <TableCell>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    sx={{ whiteSpace: "nowrap" }}
+                  >
+                    Tải xuống
+                    <DownloadIcon sx={{ fontSize: 15, ml: 1 }} />
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </>
   );
 }
 
 export default function Plan() {
   return (
     <>
-      <AppAppBar currentPage="plan" />
+      <AppAppBar loginCheck="false" currentPage="plan" />
       <Box
         id="hero"
         sx={(theme) => ({
           width: "100%",
-          backgroundImage:
+          background:
             theme.palette.mode === "light"
-              ? "linear-gradient(180deg, #CEE5FD, #FFF)"
+              ? "#F7FAFC"
               : `linear-gradient(#02294F, ${alpha("#090E10", 0.0)})`,
           backgroundSize: "100% 20%",
           backgroundRepeat: "no-repeat",
@@ -118,37 +208,29 @@ export default function Plan() {
           <Typography
             variant="h2"
             sx={{
+              my: 3,
               display: "flex",
               flexDirection: { xs: "column", md: "row" },
               alignSelf: "center",
               textAlign: "center",
-              fontSize: "36px",
+              fontSize: "32px",
+              fontWeight: "700",
             }}
           >
-            Kế hoạch đấu giá
+            KẾ HOẠCH ĐẤU GIÁ
           </Typography>
           <Box
-            id="image"
             sx={(theme) => ({
-              mt: { xs: 8, sm: 10 },
+              mt: 3,
               padding: 5,
               alignSelf: "center",
-              height: { xs: 200, sm: 700 },
               width: "100%",
-              backgroundImage:
-                theme.palette.mode === "light"
-                  ? 'url("/static/images/templates/templates-images/hero-light.png")'
-                  : 'url("/static/images/templates/templates-images/hero-dark.png")',
+              bgcolor: theme.palette.mode === "light" ? "#FFFFFF" : "#090E10",
               backgroundSize: "cover",
               borderRadius: "10px",
-              outline: "1px solid",
-              outlineColor:
-                theme.palette.mode === "light"
-                  ? alpha("#BFCCD9", 0.5)
-                  : alpha("#9CCCFC", 0.1),
               boxShadow:
                 theme.palette.mode === "light"
-                  ? `0 0 12px 8px ${alpha("#9CCCFC", 0.2)}`
+                  ? `0px 3.5px 5.5px rgba(0, 0, 0, 0.02)`
                   : `0 0 24px 12px ${alpha("#033363", 0.2)}`,
             })}
           >

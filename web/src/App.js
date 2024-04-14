@@ -8,6 +8,7 @@ import { CssBaseline } from "@mui/material";
 import CustomThemeProvider from "./utils/ThemeContext";
 import Plan from "./views/Plan";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import AuctionRoom from "./views/AuctionRoom";
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,10 @@ const router = createBrowserRouter([
   {
     path: "/plan",
     element: <Plan />,
+  },
+  {
+    path: "/list-auction-room",
+    element: <AuctionRoom />,
   },
   {
     path: "/my-auction",

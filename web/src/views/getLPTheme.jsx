@@ -315,19 +315,22 @@ export default function getLPTheme(mode) {
                 },
               }),
             ...(ownerState.variant === "outlined" && {
-              backgroundColor: alpha(brand[300], 0.1),
-              borderColor: brand[300],
-              color: brand[500],
+              // backgroundColor: alpha(brand[300], 0.1),
+              borderColor: gray[800],
+              color: gray[800],
               "&:hover": {
-                backgroundColor: alpha(brand[300], 0.3),
-                borderColor: brand[200],
+                backgroundColor: alpha(gray[300], 0.3),
+                borderColor: gray[800],
+                // backgroundColor: alpha(brand[300], 0.3),
+                // borderColor: brand[200],
               },
             }),
             ...(ownerState.variant === "text" && {
               color: gray[800],
               "&:hover": {
                 // backgroundColor: alpha(brand[300], 0.3),
-                backgroundColor: alpha("#4FD1C5", 0.3),
+                // backgroundColor: alpha("#4FD1C5", 0.3)
+                backgroundColor: alpha(gray[300], 0.3),
                 borderColor: brand[200],
               },
             }),
@@ -443,7 +446,7 @@ export default function getLPTheme(mode) {
         },
         styleOverrides: {
           root: ({ theme }) => ({
-            color: brand[600],
+            color: gray[800],
             fontWeight: 500,
             position: "relative",
             textDecoration: "none",

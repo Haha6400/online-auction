@@ -6,7 +6,6 @@ import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
-import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import MenuItem from "@mui/material/MenuItem";
 import Drawer from "@mui/material/Drawer";
@@ -97,14 +96,13 @@ export default function AppAppBar(props) {
                   : "rgba(0, 0, 0, 0.4)",
               backdropFilter: "blur(24px)",
               maxHeight: 40,
-              // border: "1px solid",
-              // borderColor: "divider",
               boxShadow:
                 theme.palette.mode === "light"
                   ? `0px 3.5px 5.5px rgba(0, 0, 0, 0.02)`
                   : "0 0 1px rgba(2, 31, 59, 0.7), 1px 1.5px 2px -1px rgba(2, 31, 59, 0.65), 4px 4px 12px -2.5px rgba(2, 31, 59, 0.65)",
             })}
           >
+            {/* Left side of navbar */}
             <Box
               sx={{
                 flexGrow: 1,
@@ -114,6 +112,7 @@ export default function AppAppBar(props) {
                 px: 0,
               }}
             >
+              {/* Logo */}
               <Link to="/">
                 <Box sx={{ display: "flex", alignItems: "center" }}>
                   <img src={logo} style={logoStyle} alt="logo" />
@@ -132,12 +131,14 @@ export default function AppAppBar(props) {
                   </Typography>
                 </Box>
               </Link>
+
+              {/* Navbar items */}
               <Box sx={{ display: { xs: "none", md: "flex" } }}>
-                <MenuItem
-                  sx={{ py: "6px", px: "12px", ml: "10px" }}
-                  selected={props.currentPage === "home"}
-                >
-                  <Link to="/">
+                <Link to="/">
+                  <MenuItem
+                    sx={{ py: "6px", px: "12px", ml: "10px" }}
+                    selected={props.currentPage === "home"}
+                  >
                     <Typography
                       variant="navbar"
                       color={
@@ -148,13 +149,13 @@ export default function AppAppBar(props) {
                     >
                       Trang chủ
                     </Typography>
-                  </Link>
-                </MenuItem>
-                <MenuItem
-                  sx={{ py: "6px", px: "12px", ml: "10px" }}
-                  selected={props.currentPage === "plan"}
-                >
-                  <Link to="/plan">
+                  </MenuItem>
+                </Link>
+                <Link to="/plan">
+                  <MenuItem
+                    sx={{ py: "6px", px: "12px", ml: "10px" }}
+                    selected={props.currentPage === "plan"}
+                  >
                     <Typography
                       variant="navbar"
                       color={
@@ -165,13 +166,13 @@ export default function AppAppBar(props) {
                     >
                       Kế hoạch đấu giá
                     </Typography>
-                  </Link>
-                </MenuItem>
-                <MenuItem
-                  sx={{ py: "6px", px: "12px", ml: "10px" }}
-                  selected={props.currentPage === "list_auction_room"}
-                >
-                  <Link to="/">
+                  </MenuItem>
+                </Link>
+                <Link to="/list-auction-room">
+                  <MenuItem
+                    sx={{ py: "6px", px: "12px", ml: "10px" }}
+                    selected={props.currentPage === "list_auction_room"}
+                  >
                     <Typography
                       variant="navbar"
                       color={
@@ -182,10 +183,12 @@ export default function AppAppBar(props) {
                     >
                       Phòng đấu giá
                     </Typography>
-                  </Link>
-                </MenuItem>
+                  </MenuItem>
+                </Link>
               </Box>
             </Box>
+
+            {/* Right side of navbar */}
             <Box
               sx={{
                 display: { xs: "none", md: "flex" },
@@ -194,6 +197,7 @@ export default function AppAppBar(props) {
               }}
             >
               <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} />
+
               {props.loginCheck === "false" && (
                 <>
                   <Button
@@ -201,9 +205,10 @@ export default function AppAppBar(props) {
                     variant="text"
                     size="small"
                     component="button"
+                    sx={{ px: 1 }}
                     onClick={handleLoginButtonClick}
                   >
-                    Log in
+                    Đăng nhập
                   </Button>
                   <Dialog
                     open={openLoginDialog}
@@ -220,7 +225,7 @@ export default function AppAppBar(props) {
                     component="button"
                     onClick={handleRegisterButtonClick}
                   >
-                    Register
+                    Đăng ký
                   </Button>
                   <Dialog
                     open={openRegisterDialog}
@@ -243,8 +248,9 @@ export default function AppAppBar(props) {
               )}
             </Box>
 
-            {/* Responsive */}
+            {/* Responsive drawer */}
             <Box sx={{ display: { sm: "", md: "none" } }}>
+              {/* Toggle button */}
               <Button
                 variant="text"
                 color="primary"
@@ -254,6 +260,8 @@ export default function AppAppBar(props) {
               >
                 <MenuIcon />
               </Button>
+
+              {/* Drawer */}
               <Drawer
                 anchor="right"
                 open={openDrawer}
@@ -261,12 +269,13 @@ export default function AppAppBar(props) {
               >
                 <Box
                   sx={{
-                    minWidth: "60dvw",
+                    minWidth: "40dvw",
                     p: 2,
                     backgroundColor: "background.paper",
                     flexGrow: 1,
                   }}
                 >
+                  {/* Toggle mode */}
                   <Box
                     sx={{
                       display: "flex",
@@ -280,34 +289,79 @@ export default function AppAppBar(props) {
                       toggleColorMode={toggleColorMode}
                     />
                   </Box>
-                  <MenuItem>Features</MenuItem>
-                  <MenuItem>Testimonials</MenuItem>
-                  <MenuItem>Highlights</MenuItem>
-                  <MenuItem>Pricing</MenuItem>
-                  <MenuItem>FAQ</MenuItem>
-                  <Divider />
-                  <MenuItem>
-                    <Button
-                      color="primary"
-                      variant="contained"
-                      sx={{ width: "100%" }}
-                      component="button"
-                      onClick={handleRegisterButtonClick}
+
+                  {/* Links */}
+                  <Link to="/">
+                    <MenuItem
+                      sx={{ my: 1, py: 1 }}
+                      selected={props.currentPage === "home"}
                     >
-                      Đăng ký
-                    </Button>
-                  </MenuItem>
-                  <MenuItem>
-                    <Button
-                      color="primary"
-                      variant="outlined"
-                      sx={{ width: "100%" }}
-                      component="button"
-                      onClick={handleLoginButtonClick}
+                      <Typography
+                        variant="navbar"
+                        color={
+                          props.currentPage === "home"
+                            ? "text.primary"
+                            : "text.secondary"
+                        }
+                      >
+                        Trang chủ
+                      </Typography>
+                    </MenuItem>
+                  </Link>
+                  <Link to="/plan">
+                    <MenuItem
+                      sx={{ my: 1, py: 1 }}
+                      selected={props.currentPage === "plan"}
                     >
-                      Đăng nhập
-                    </Button>
-                  </MenuItem>
+                      <Typography
+                        variant="navbar"
+                        color={
+                          props.currentPage === "plan"
+                            ? "text.primary"
+                            : "text.secondary"
+                        }
+                      >
+                        Kế hoạch đấu giá
+                      </Typography>
+                    </MenuItem>
+                  </Link>
+                  <Link to="/list-auction-room">
+                    <MenuItem
+                      sx={{ my: 1, py: 1 }}
+                      selected={props.currentPage === "list_auction_room"}
+                    >
+                      <Typography
+                        variant="navbar"
+                        color={
+                          props.currentPage === "list_auction_room"
+                            ? "text.primary"
+                            : "text.secondary"
+                        }
+                      >
+                        Phòng đấu giá
+                      </Typography>
+                    </MenuItem>
+                  </Link>
+
+                  {/* Account buttons */}
+                  <Button
+                    color="primary"
+                    variant="contained"
+                    sx={{ width: "100%", my: 1 }}
+                    component="button"
+                    onClick={handleRegisterButtonClick}
+                  >
+                    Đăng ký
+                  </Button>
+                  <Button
+                    color="primary"
+                    variant="outlined"
+                    sx={{ width: "100%" }}
+                    component="button"
+                    onClick={handleLoginButtonClick}
+                  >
+                    Đăng nhập
+                  </Button>
                 </Box>
               </Drawer>
             </Box>
