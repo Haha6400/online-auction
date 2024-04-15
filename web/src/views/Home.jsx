@@ -1,4 +1,5 @@
-import * as React from "react";
+import { useState } from "react";
+
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
@@ -24,6 +25,7 @@ import { FormControl, Select, MenuItem, Dialog } from "@mui/material";
 import Footer from "../components/common/Footer";
 import AppAppBar from "../components/base/AppAppBar";
 import Register from "../components/common/Register";
+import AuctionRegisterModal from "../components/modals/AuctionRegisterModal";
 
 const rows = [
   {
@@ -31,90 +33,97 @@ const rows = [
     time: "7/4/2024",
     province: "Thành phố Hà Nội",
     carType: "Xe con",
-    remainingTime: "20 giờ 24 phút",
+    remainingTime: "1 ngày 20 giờ 24 phút",
   },
   {
     licensePlate: "30L-222.22",
     time: "7/4/2024",
     province: "Thành phố Hà Nội",
     carType: "Xe con",
-    remainingTime: "20 giờ 24 phút",
+    remainingTime: "1 ngày 20 giờ 24 phút",
   },
   {
     licensePlate: "30L-333.33",
     time: "7/4/2024",
     province: "Thành phố Hà Nội",
     carType: "Xe con",
-    remainingTime: "20 giờ 24 phút",
+    remainingTime: "1 ngày 20 giờ 24 phút",
   },
   {
     licensePlate: "30L-444.44",
     time: "7/4/2024",
     province: "Thành phố Hà Nội",
     carType: "Xe con",
-    remainingTime: "20 giờ 24 phút",
+    remainingTime: "1 ngày 20 giờ 24 phút",
   },
   {
     licensePlate: "30L-111.11",
     time: "7/4/2024",
     province: "Thành phố Hà Nội",
     carType: "Xe con",
-    remainingTime: "20 giờ 24 phút",
+    remainingTime: "1 ngày 20 giờ 24 phút",
   },
   {
     licensePlate: "30L-222.22",
     time: "7/4/2024",
     province: "Thành phố Hà Nội",
     carType: "Xe con",
-    remainingTime: "20 giờ 24 phút",
+    remainingTime: "1 ngày 20 giờ 24 phút",
   },
   {
     licensePlate: "30L-333.33",
     time: "7/4/2024",
     province: "Thành phố Hà Nội",
     carType: "Xe con",
-    remainingTime: "20 giờ 24 phút",
+    remainingTime: "1 ngày 20 giờ 24 phút",
   },
   {
     licensePlate: "30L-444.44",
     time: "7/4/2024",
     province: "Thành phố Hà Nội",
     carType: "Xe con",
-    remainingTime: "20 giờ 24 phút",
+    remainingTime: "1 ngày 20 giờ 24 phút",
   },
   {
     licensePlate: "30L-111.11",
     time: "7/4/2024",
     province: "Thành phố Hà Nội",
     carType: "Xe con",
-    remainingTime: "20 giờ 24 phút",
+    remainingTime: "1 ngày 20 giờ 24 phút",
   },
   {
     licensePlate: "30L-222.22",
     time: "7/4/2024",
     province: "Thành phố Hà Nội",
     carType: "Xe con",
-    remainingTime: "20 giờ 24 phút",
+    remainingTime: "1 ngày 20 giờ 24 phút",
   },
   {
     licensePlate: "30L-333.33",
     time: "7/4/2024",
     province: "Thành phố Hà Nội",
     carType: "Xe con",
-    remainingTime: "20 giờ 24 phút",
+    remainingTime: "1 ngày 20 giờ 24 phút",
   },
   {
     licensePlate: "30L-444.44",
     time: "7/4/2024",
     province: "Thành phố Hà Nội",
     carType: "Xe con",
-    remainingTime: "20 giờ 24 phút",
+    remainingTime: "1 ngày 20 giờ 24 phút",
   },
 ];
 
 function CustomizedTables() {
-  const [province, setProvince] = React.useState("");
-  const [carType, setCarType] = React.useState("");
+  const [province, setProvince] = useState("");
+  const [carType, setCarType] = useState("");
+  const [openAuctionRegisterModal, setOpenAuctionRegisterModal] =
+    useState(false);
+
+  const toggleAuctionRegisterMdal = () => {
+    setOpenAuctionRegisterModal(!openAuctionRegisterModal);
+  };
+
   return (
     <>
       <Box
@@ -221,10 +230,11 @@ function CustomizedTables() {
                 STT
               </TableCell>
               <TableCell sx={{ fontWeight: 600 }}>Biển số</TableCell>
-              <TableCell sx={{ fontWeight: 600 }}>Tỉnh/Thành phố</TableCell>
-              <TableCell sx={{ fontWeight: 600 }}>Thời gian đấu giá</TableCell>
-              <TableCell sx={{ fontWeight: 600 }}>Loại xe</TableCell>
-              <TableCell sx={{ fontWeight: 600 }}>
+              <TableCell sx={{ fontWeight: 600 }}>Tỉnh, Thành phố</TableCell>
+              <TableCell sx={{ fontWeight: 600, whiteSpace: "nowrap" }}>
+                Loại xe
+              </TableCell>
+              <TableCell sx={{ fontWeight: 600 }} align="center">
                 Thời gian đăng ký còn lại
               </TableCell>
               <TableCell sx={{ fontWeight: 600 }}></TableCell>
@@ -235,16 +245,16 @@ function CustomizedTables() {
               <TableRow key={index}>
                 <TableCell align="center">{index + 1}</TableCell>
                 <TableCell>{row.licensePlate}</TableCell>
-                <TableCell>{row.time}</TableCell>
                 <TableCell>{row.province}</TableCell>
                 <TableCell>{row.carType}</TableCell>
-                <TableCell>{row.remainingTime}</TableCell>
+                <TableCell align="center">{row.remainingTime}</TableCell>
                 <TableCell>
                   <Button
                     variant="contained"
                     color="primary"
                     size="small"
                     sx={{ whiteSpace: "nowrap" }}
+                    onClick={toggleAuctionRegisterMdal}
                   >
                     Đăng ký đấu giá
                   </Button>
@@ -254,12 +264,18 @@ function CustomizedTables() {
           </TableBody>
         </Table>
       </TableContainer>
+      <Dialog
+        open={openAuctionRegisterModal}
+        onClose={toggleAuctionRegisterMdal}
+      >
+        <AuctionRegisterModal />
+      </Dialog>
     </>
   );
 }
 
 export default function Home() {
-  const [openRegisterDialog, setOpenRegisterDialog] = React.useState(false);
+  const [openRegisterDialog, setOpenRegisterDialog] = useState(false);
 
   const toggleRegisterDialog = () => {
     setOpenRegisterDialog(!openRegisterDialog);
@@ -272,7 +288,8 @@ export default function Home() {
           theme.palette.mode === "light"
             ? "url(/bgr.png)"
             : `linear-gradient(#02294F, ${alpha("#090E10", 0.0)})`,
-        backgroundSize: theme.palette.mode === "light" ? "100%" : "100% 20%",
+        backgroundSize:
+          theme.palette.mode === "light" ? "100% 100%" : "100% 20%",
         backgroundRepeat: "no-repeat",
       })}
     >
@@ -298,7 +315,6 @@ export default function Home() {
               display: "flex",
               flexDirection: { lg: "row", xs: "column" },
               justifyContent: "space-between",
-              pl: 4,
             }}
           >
             <Box
@@ -307,6 +323,7 @@ export default function Home() {
                 textAlign: { xs: "center", lg: "left" },
                 display: "flex",
                 justifyContent: "center",
+                pl: { xs: 0, lg: 4 },
               }}
             >
               <Stack
