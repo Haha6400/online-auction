@@ -268,7 +268,7 @@ function CustomizedTables() {
         open={openAuctionRegisterModal}
         onClose={toggleAuctionRegisterMdal}
       >
-        <AuctionRegisterModal />
+        <AuctionRegisterModal close={toggleAuctionRegisterMdal} />
       </Dialog>
     </>
   );

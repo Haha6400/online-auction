@@ -8,7 +8,7 @@ import EventIcon from "@mui/icons-material/Event";
 import HourglassTopIcon from "@mui/icons-material/HourglassTop";
 import { Button, Grid, Stack } from "@mui/material";
 
-export default function AuctionRegisterModal() {
+export default function AuctionRegisterModal({ close }) {
   return (
     <Container component="main">
       <Box
@@ -143,7 +143,12 @@ export default function AuctionRegisterModal() {
 
         <Grid container spacing={3} sx={{ mt: 0.5 }}>
           <Grid item xs={6}>
-            <Button variant="outlined" color="primary" sx={{ width: "100%" }}>
+            <Button
+              variant="outlined"
+              color="primary"
+              sx={{ width: "100%" }}
+              onClick={close}
+            >
               Hủy bỏ
             </Button>
           </Grid>

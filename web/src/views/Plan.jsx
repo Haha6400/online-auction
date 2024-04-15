@@ -1,10 +1,9 @@
 import { useState } from "react";
 
-import { alpha } from "@mui/material";
+import { Dialog, alpha } from "@mui/material";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
-import Link from "@mui/material/Link";
 import Stack from "@mui/material/Stack";
 
 import Table from "@mui/material/Table";
@@ -28,6 +27,7 @@ import Footer from "../components/common/Footer";
 import Box from "@mui/material/Box";
 
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
+import ViewPlanModal from "../components/modals/ViewPlanModal";
 
 const rows = [
   {
@@ -83,6 +83,12 @@ const rows = [
 function CustomizedTables() {
   const [startDate, setStartDate] = useState(dayjs("2024-04-14"));
   const [endDate, setEndDate] = useState(dayjs());
+
+  const [openPdfModal, setOpenPdfModal] = useState(false);
+
+  const togglePdfModal = () => {
+    setOpenPdfModal(!openPdfModal);
+  };
 
   return (
     <>
@@ -170,7 +176,17 @@ function CustomizedTables() {
               <TableRow key={index}>
                 <TableCell align="center">{row.time}</TableCell>
                 <TableCell>
-                  <Link href="#">{row.name}</Link>
+                  <div onClick={togglePdfModal}>
+                    <Typography
+                      sx={{
+                        fontWeight: 500,
+                        fontSize: 14,
+                        ":hover": { cursor: "pointer", color: "#079455" },
+                      }}
+                    >
+                      {row.name}
+                    </Typography>
+                  </div>
                 </TableCell>
                 <TableCell>
                   <Button
@@ -188,6 +204,9 @@ function CustomizedTables() {
           </TableBody>
         </Table>
       </TableContainer>
+      <Dialog maxWidth="xl" open={openPdfModal} onClose={togglePdfModal}>
+        <ViewPlanModal close={togglePdfModal} />
+      </Dialog>
     </>
   );
 }
@@ -200,7 +219,8 @@ export default function Plan() {
           theme.palette.mode === "light"
             ? "url(/bgr.png)"
             : `linear-gradient(#02294F, ${alpha("#090E10", 0.0)})`,
-        backgroundSize: theme.palette.mode === "light" ? "100%" : "100% 20%",
+        backgroundSize:
+          theme.palette.mode === "light" ? "100% 100%" : "100% 20%",
         backgroundRepeat: "no-repeat",
       })}
     >
