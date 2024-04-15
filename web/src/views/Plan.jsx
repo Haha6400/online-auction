@@ -5,6 +5,7 @@ import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
+import Stack from "@mui/material/Stack";
 
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -96,12 +97,13 @@ function CustomizedTables() {
         }}
       >
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DemoItem label="Từ ngày:">
+          <DemoItem>
+            <Typography sx={{ fontWeight: 700 }}>Từ ngày:</Typography>
             <DatePicker
               value={startDate}
               onChange={(newValue) => setStartDate(newValue)}
               sx={{
-                border: "2px solid darkgrey",
+                border: "2px solid #015433",
                 borderRadius: 3,
               }}
               slotProps={{
@@ -111,12 +113,13 @@ function CustomizedTables() {
           </DemoItem>
         </LocalizationProvider>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DemoItem label="Đến ngày:">
+          <DemoItem>
+            <Typography sx={{ fontWeight: 700 }}>Đến ngày:</Typography>
             <DatePicker
               value={endDate}
               onChange={(newValue) => setEndDate(newValue)}
               sx={{
-                border: "2px solid darkgrey",
+                border: "2px solid #015433",
                 borderRadius: 3,
               }}
               slotProps={{
@@ -134,12 +137,21 @@ function CustomizedTables() {
           Lọc
         </Button>
       </Box>
-      <TableContainer component={Paper} sx={{ mt: 2 }}>
+      <TableContainer
+        component={Paper}
+        sx={(theme) => ({
+          mt: 2,
+          backgroundColor:
+            theme.palette.mode === "light" ? "rgba(255, 255, 255, 0.15)" : "",
+        })}
+      >
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
           <TableHead
             sx={(theme) => ({
               backgroundColor:
-                theme.palette.mode === "light" ? "#F4F6F8" : "#37404E",
+                theme.palette.mode === "light"
+                  ? "rgba(1, 84, 51, 0.2)"
+                  : "#37404E",
             })}
           >
             <TableRow>
@@ -182,20 +194,18 @@ function CustomizedTables() {
 
 export default function Plan() {
   return (
-    <>
+    <Stack
+      sx={(theme) => ({
+        background:
+          theme.palette.mode === "light"
+            ? "url(/bgr.png)"
+            : `linear-gradient(#02294F, ${alpha("#090E10", 0.0)})`,
+        backgroundSize: theme.palette.mode === "light" ? "100%" : "100% 20%",
+        backgroundRepeat: "no-repeat",
+      })}
+    >
       <AppAppBar loginCheck="false" currentPage="plan" />
-      <Box
-        id="hero"
-        sx={(theme) => ({
-          width: "100%",
-          background:
-            theme.palette.mode === "light"
-              ? "#F7FAFC"
-              : `linear-gradient(#02294F, ${alpha("#090E10", 0.0)})`,
-          backgroundSize: "100% 20%",
-          backgroundRepeat: "no-repeat",
-        })}
-      >
+      <Box id="hero" sx={{ width: "100%" }}>
         <Container
           sx={{
             display: "flex",
@@ -207,6 +217,7 @@ export default function Plan() {
         >
           <Typography
             variant="h2"
+            color="text.secondary"
             sx={{
               my: 3,
               display: "flex",
@@ -225,7 +236,10 @@ export default function Plan() {
               padding: 5,
               alignSelf: "center",
               width: "100%",
-              bgcolor: theme.palette.mode === "light" ? "#FFFFFF" : "#090E10",
+              bgcolor:
+                theme.palette.mode === "light"
+                  ? "rgba(255, 255, 255, 0.3)"
+                  : "#090E10",
               backgroundSize: "cover",
               borderRadius: "10px",
               boxShadow:
@@ -239,6 +253,6 @@ export default function Plan() {
         </Container>
       </Box>
       <Footer />
-    </>
+    </Stack>
   );
 }

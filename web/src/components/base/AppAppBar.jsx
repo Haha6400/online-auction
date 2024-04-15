@@ -92,7 +92,7 @@ export default function AppAppBar(props) {
               borderRadius: "999px",
               bgcolor:
                 theme.palette.mode === "light"
-                  ? "rgba(255, 255, 255)"
+                  ? "rgba(255, 255, 255, 0.3)"
                   : "rgba(0, 0, 0, 0.4)",
               backdropFilter: "blur(24px)",
               maxHeight: 40,
@@ -116,19 +116,6 @@ export default function AppAppBar(props) {
               <Link to="/">
                 <Box sx={{ display: "flex", alignItems: "center" }}>
                   <img src={logo} style={logoStyle} alt="logo" />
-                  <Typography
-                    sx={(theme) => ({
-                      color:
-                        theme.palette.mode === "light"
-                          ? "#4FD1C5"
-                          : "primary.light",
-                      fontWeight: "900",
-                      display: "inline-block",
-                      verticalAlign: "middle",
-                    })}
-                  >
-                    OOAD
-                  </Typography>
                 </Box>
               </Link>
 
@@ -192,7 +179,7 @@ export default function AppAppBar(props) {
             <Box
               sx={{
                 display: { xs: "none", md: "flex" },
-                gap: 1,
+                gap: 0.5,
                 alignItems: "center",
               }}
             >

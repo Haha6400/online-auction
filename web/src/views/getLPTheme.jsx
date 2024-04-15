@@ -123,7 +123,7 @@ const getDesignTokens = (mode) => ({
     },
     text: {
       primary: gray[800],
-      secondary: gray[600],
+      secondary: "#015433",
       ...(mode === "dark" && { primary: "#fff", secondary: gray[400] }),
     },
     action: {
@@ -304,14 +304,11 @@ export default function getLPTheme(mode) {
             }),
             ...(ownerState.variant === "contained" &&
               ownerState.color === "primary" && {
-                color: gray[50],
-                background: "#212B36",
-                // boxShadow: `0 1px ${alpha(brand[300], 0.4)}`,
-                // outline: `1px solid ${brand[700]}`,?\
+                color: "#FFFFFF",
+                backgroundColor: "#015433",
                 "&:hover": {
-                  // background: brand[800],
-                  // backgroundImage: "none",
-                  // boxShadow: `0 0 0 1px  ${alpha(brand[300], 0.5)}`,
+                  color: "#FFFFFF",
+                  backgroundColor: "#015433",
                 },
               }),
             ...(ownerState.variant === "outlined" && {
@@ -326,7 +323,7 @@ export default function getLPTheme(mode) {
               },
             }),
             ...(ownerState.variant === "text" && {
-              color: gray[800],
+              color: "#015433",
               "&:hover": {
                 // backgroundColor: alpha(brand[300], 0.3),
                 // backgroundColor: alpha("#4FD1C5", 0.3)
@@ -585,12 +582,12 @@ export default function getLPTheme(mode) {
                 background: `${alpha("#FFF", 0.3)}`,
               },
               "&:hover": {
-                borderColor: brand[300],
+                // borderColor: brand[300],
               },
               "&.Mui-focused": {
-                borderColor: brand[400],
-                outline: "4px solid",
-                outlineColor: brand[200],
+                // borderColor: brand[400],
+                // outline: "4px solid",
+                // outlineColor: brand[200],
               },
             },
             ...(theme.palette.mode === "dark" && {
@@ -609,12 +606,12 @@ export default function getLPTheme(mode) {
                   background: `${alpha(gray[800], 0.4)}`,
                 },
                 "&:hover": {
-                  borderColor: brand[300],
+                  // borderColor: brand[300],
                 },
                 "&.Mui-focused": {
-                  borderColor: brand[400],
-                  outline: "4px solid",
-                  outlineColor: alpha(brand[500], 0.5),
+                  // borderColor: brand[400],
+                  // outline: "4px solid",
+                  // outlineColor: alpha(brand[500], 0.5),
                 },
               },
             }),

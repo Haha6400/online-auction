@@ -134,11 +134,11 @@ function CustomizedTables() {
           sx={{
             width: 250,
             marginY: 2,
-            border: "1px solid darkgrey",
+            border: "1px solid #015433",
             borderRadius: 3,
           }}
           startAdornment={
-            <Search sx={{ width: 20, color: "darkgrey", mr: 1 }} />
+            <Search sx={{ width: 20, color: "#015433", mr: 1 }} />
           }
         />
         <FormControl sx={{ minWidth: 250, marginY: 2 }} size="small">
@@ -151,7 +151,7 @@ function CustomizedTables() {
             }}
             sx={{
               width: 250,
-              border: "1px solid darkgrey",
+              border: "1px solid #015433",
               borderRadius: 3,
             }}
           >
@@ -176,7 +176,7 @@ function CustomizedTables() {
             }}
             sx={{
               width: 250,
-              border: "1px solid darkgrey",
+              border: "1px solid #015433",
               borderRadius: 3,
             }}
           >
@@ -199,12 +199,21 @@ function CustomizedTables() {
           Tìm kiếm
         </Button>
       </Box>
-      <TableContainer component={Paper} sx={{ mt: 2 }}>
+      <TableContainer
+        component={Paper}
+        sx={(theme) => ({
+          mt: 2,
+          backgroundColor:
+            theme.palette.mode === "light" ? "rgba(255, 255, 255, 0.15)" : "",
+        })}
+      >
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
           <TableHead
             sx={(theme) => ({
               backgroundColor:
-                theme.palette.mode === "light" ? "#F4F6F8" : "#37404E",
+                theme.palette.mode === "light"
+                  ? "rgba(1, 84, 51, 0.2)"
+                  : "#37404E",
             })}
           >
             <TableRow>
@@ -257,19 +266,22 @@ export default function Home() {
   };
 
   return (
-    <>
+    <Stack
+      sx={(theme) => ({
+        background:
+          theme.palette.mode === "light"
+            ? "url(/bgr.png)"
+            : `linear-gradient(#02294F, ${alpha("#090E10", 0.0)})`,
+        backgroundSize: theme.palette.mode === "light" ? "100%" : "100% 20%",
+        backgroundRepeat: "no-repeat",
+      })}
+    >
       <AppAppBar loginCheck="false" currentPage="home" />
       <Box
         id="hero"
-        sx={(theme) => ({
+        sx={{
           width: "100%",
-          background:
-            theme.palette.mode === "light"
-              ? "#F7FAFC"
-              : `linear-gradient(#02294F, ${alpha("#090E10", 0.0)})`,
-          backgroundSize: "100% 20%",
-          backgroundRepeat: "no-repeat",
-        })}
+        }}
       >
         <Container
           sx={{
@@ -320,7 +332,7 @@ export default function Home() {
                       fontSize: "60px",
                       color: (theme) =>
                         theme.palette.mode === "light"
-                          ? "#45BAB0"
+                          ? "#015433"
                           : "primary.light",
                     }}
                   >
@@ -391,7 +403,10 @@ export default function Home() {
               padding: 5,
               alignSelf: "center",
               width: "100%",
-              bgcolor: theme.palette.mode === "light" ? "#FFFFFF" : "#090E10",
+              bgcolor:
+                theme.palette.mode === "light"
+                  ? "rgba(255, 255, 255, 0.3)"
+                  : "#090E10",
               backgroundSize: "cover",
               borderRadius: "10px",
               boxShadow:
@@ -403,7 +418,7 @@ export default function Home() {
             <Typography
               component="h2"
               variant="h5"
-              color="text.primary"
+              color="text.secondary"
               sx={{ fontWeight: 700, fontSize: 24, textAlign: "center" }}
             >
               DANH SÁCH BIỂN SỐ
@@ -413,6 +428,6 @@ export default function Home() {
         </Container>
       </Box>
       <Footer />
-    </>
+    </Stack>
   );
 }
