@@ -62,10 +62,7 @@ export default function Login() {
               autoFocus
               sx={{
                 mt: 1, mb: 1,
-                boxShadow: (theme) =>
-                  theme.palette.mode === "light"
-                    ? `0px 3.5px 5.5px rgba(0, 0, 0, 0.2)`
-                    : `0 0 24px 12px ${alpha("#033363", 0.2)}`,
+                boxShadow: `0px 3.5px 5.5px rgba(0, 0, 0, 0.2)`,
                 borderRadius: 3,
               }}
             />
@@ -81,10 +78,7 @@ export default function Login() {
               autoComplete="current-password"
               sx={{
                 mt: 1, mb: 1,
-                boxShadow: (theme) =>
-                  theme.palette.mode === "light"
-                    ? `0px 3.5px 5.5px rgba(0, 0, 0, 0.2)`
-                    : `0 0 24px 12px ${alpha("#033363", 0.2)}`,
+                boxShadow: `0px 3.5px 5.5px rgba(0, 0, 0, 0.2)`,
                 borderRadius: 3,
               }}
             />
@@ -98,14 +92,8 @@ export default function Login() {
               fullWidth
               variant="contained"
               sx={{
-                mt: 1, mb: 1, backgroundColor: (theme) =>
-                  theme.palette.mode === "light"
-                    ? "primary"
-                    : "primary.light",
-                color: (theme) =>
-                  theme.palette.mode === "light"
-                    ? "white"
-                    : "black",
+                mt: 1, mb: 1, backgroundColor: "primary",
+                color: "white"
               }}
             >
               Đăng nhập

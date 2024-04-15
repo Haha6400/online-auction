@@ -14,15 +14,12 @@ export default function AuctionRoom() {
       <AppAppBar loginCheck="false" currentPage="list_auction_room" />
       <Box
         id="hero"
-        sx={(theme) => ({
+        sx={{
           width: "100%",
-          background:
-            theme.palette.mode === "light"
-              ? "#F7FAFC"
-              : `linear-gradient(#02294F, ${alpha("#090E10", 0.0)})`,
+          background: "#F7FAFC",
           backgroundSize: "100% 20%",
           backgroundRepeat: "no-repeat",
-        })}
+        }}
       >
         <Container
           sx={{
@@ -34,19 +31,16 @@ export default function AuctionRoom() {
           }}
         >
           <Box
-            sx={(theme) => ({
+            sx={{
               mt: { xs: 8, sm: 10 },
               padding: 5,
               alignSelf: "center",
               width: "100%",
-              bgcolor: theme.palette.mode === "light" ? "#FFFFFF" : "#090E10",
+              bgcolor: "#FFFFFF",
               backgroundSize: "cover",
               borderRadius: "10px",
-              boxShadow:
-                theme.palette.mode === "light"
-                  ? `0px 3.5px 5.5px rgba(0, 0, 0, 0.02)`
-                  : `0 0 24px 12px ${alpha("#033363", 0.2)}`,
-            })}
+              boxShadow: `0px 3.5px 5.5px rgba(0, 0, 0, 0.02)`,
+            }}
           >
             <Typography
               component="h2"

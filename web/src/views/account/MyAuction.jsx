@@ -46,15 +46,12 @@ export default function MyAuction() {
             <AppAppBar loginCheck="true" name="Ha Nguyen" />
             <Box
                 id="hero"
-                sx={(theme) => ({
+                sx={{
                     width: "100%",
-                    backgroundImage:
-                        theme.palette.mode === "light"
-                            ? "linear-gradient(180deg, #CEE5FD, #FFF)"
-                            : `linear-gradient(#02294F, ${alpha("#090E10", 0.0)})`,
+                    backgroundImage: "linear-gradient(180deg, #CEE5FD, #FFF)",
                     backgroundSize: "100% 20%",
                     backgroundRepeat: "no-repeat",
-                })}
+                }}
             >
                 <Container id="myAuction" sx={{ py: { xs: 8, sm: 16 } }}>
                     <Grid container spacing={6}>
@@ -80,14 +77,9 @@ export default function MyAuction() {
                                             background: 'none',
                                             backgroundColor:
                                                 selectedItemIndex === index ? 'action.selected' : undefined,
-                                            borderColor: (theme) => {
-                                                if (theme.palette.mode === 'light') {
-                                                    return selectedItemIndex === index
-                                                        ? 'primary.light'
-                                                        : 'grey.200';
-                                                }
-                                                return selectedItemIndex === index ? 'primary.dark' : 'grey.800';
-                                            },
+                                            borderColor: selectedItemIndex === index
+                                                ? 'primary.light'
+                                                : 'grey.200',
                                         }}
                                     >
                                         <Box
@@ -102,16 +94,9 @@ export default function MyAuction() {
                                         >
                                             <Box
                                                 sx={{
-                                                    color: (theme) => {
-                                                        if (theme.palette.mode === 'light') {
-                                                            return selectedItemIndex === index
-                                                                ? 'primary.main'
-                                                                : 'grey.300';
-                                                        }
-                                                        return selectedItemIndex === index
-                                                            ? 'primary.main'
-                                                            : 'grey.700';
-                                                    },
+                                                    color: selectedItemIndex === index
+                                                        ? 'primary.main'
+                                                        : 'grey.300',
                                                     display: 'flex', alignItems: 'center', textTransform: 'none'
                                                 }}
 
@@ -174,10 +159,7 @@ export default function MyAuction() {
                                         width: 420,
                                         height: 500,
                                         backgroundSize: 'contain',
-                                        backgroundImage: (theme) =>
-                                            theme.palette.mode === 'light'
-                                                ? items[selectedItemIndex].imageLight
-                                                : items[selectedItemIndex].imageDark,
+                                        backgroundImage: items[selectedItemIndex].imageLight
                                     }}
                                 />
                             </Card>

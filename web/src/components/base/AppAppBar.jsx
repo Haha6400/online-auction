@@ -20,7 +20,7 @@ import Register from "../common/Register";
 import AccountMenu from "../base/AccountMenu";
 
 import logo from "../../assets/logo.png";
-import LicensePlate from "../common/LicensePlate";
+import LicensePlate from "../modals/LicensePlate";
 
 const logoStyle = {
   width: "40px",
@@ -85,23 +85,17 @@ export default function AppAppBar(props) {
         <Container maxWidth="lg">
           <Toolbar
             variant="regular"
-            sx={(theme) => ({
+            sx={{
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
               flexShrink: 0,
               borderRadius: "999px",
-              bgcolor:
-                theme.palette.mode === "light"
-                  ? "rgba(255, 255, 255, 0.3)"
-                  : "rgba(0, 0, 0, 0.4)",
+              bgcolor: "rgba(255, 255, 255, 0.3)",
               backdropFilter: "blur(24px)",
               maxHeight: 40,
-              boxShadow:
-                theme.palette.mode === "light"
-                  ? `0px 3.5px 5.5px rgba(0, 0, 0, 0.02)`
-                  : "0 0 1px rgba(2, 31, 59, 0.7), 1px 1.5px 2px -1px rgba(2, 31, 59, 0.65), 4px 4px 12px -2.5px rgba(2, 31, 59, 0.65)",
-            })}
+              boxShadow: `0px 3.5px 5.5px rgba(0, 0, 0, 0.02)`,
+            }}
           >
             {/* Left side of navbar */}
             <Box
@@ -188,7 +182,7 @@ export default function AppAppBar(props) {
 
               {props.loginCheck === "false" && (
                 <>
-                  <Button
+                  {/* <Button
                     color="primary"
                     variant="text"
                     size="small"
@@ -206,9 +200,9 @@ export default function AppAppBar(props) {
                     aria-describedby="scroll-dialog-description"
 
                   >
-                    <LicensePlate title="Tạo biển số xe" />
-                  </Dialog>
-                  {/* <Button
+                    <LicensePlate title="TẠO BIỂN SỐ XE" />
+                  </Dialog> */}
+                  <Button
                     color="primary"
                     variant="text"
                     size="small"
@@ -225,17 +219,11 @@ export default function AppAppBar(props) {
                     aria-describedby="scroll-dialog-description"
                   >
                     <Login />
-                  </Dialog> */}
+                  </Dialog>
                   <Button
                     sx={{
-                      backgroundColor: (theme) =>
-                        theme.palette.mode === "light"
-                          ? "primary"
-                          : "primary.light",
-                      color: (theme) =>
-                        theme.palette.mode === "light"
-                          ? "white"
-                          : "black",
+                      backgroundColor: "primary",
+                      color: "white",
                     }}
                     variant="contained"
                     size="small"

@@ -62,10 +62,7 @@ export default function Register() {
                   id="fullName"
                   autoFocus
                   sx={{
-                    boxShadow: (theme) =>
-                      theme.palette.mode === "light"
-                        ? `0px 3.5px 5.5px rgba(0, 0, 0, 0.1)`
-                        : `0 0 24px 12px ${alpha("#033363", 0.2)}`,
+                    boxShadow: `0px 3.5px 5.5px rgba(0, 0, 0, 0.1)`,
                     borderRadius: 3,
                   }}
                 />
@@ -81,10 +78,7 @@ export default function Register() {
                   name="email"
                   autoComplete="email"
                   sx={{
-                    boxShadow: (theme) =>
-                      theme.palette.mode === "light"
-                        ? `0px 3.5px 5.5px rgba(0, 0, 0, 0.1)`
-                        : `0 0 24px 12px ${alpha("#033363", 0.2)}`,
+                    boxShadow: `0px 3.5px 5.5px rgba(0, 0, 0, 0.1)`,
                     borderRadius: 3,
                   }}
                 />
@@ -100,10 +94,7 @@ export default function Register() {
                   name="phoneNumber"
                   autoComplete="phoneNumber"
                   sx={{
-                    boxShadow: (theme) =>
-                      theme.palette.mode === "light"
-                        ? `0px 3.5px 5.5px rgba(0, 0, 0, 0.1)`
-                        : `0 0 24px 12px ${alpha("#033363", 0.2)}`,
+                    boxShadow: `0px 3.5px 5.5px rgba(0, 0, 0, 0.1)`,
                     borderRadius: 3,
                   }}
                 />
@@ -121,10 +112,7 @@ export default function Register() {
                   id="password"
                   autoComplete="new-password"
                   sx={{
-                    boxShadow: (theme) =>
-                      theme.palette.mode === "light"
-                        ? `0px 3.5px 5.5px rgba(0, 0, 0, 0.1)`
-                        : `0 0 24px 12px ${alpha("#033363", 0.2)}`,
+                    boxShadow: `0px 3.5px 5.5px rgba(0, 0, 0, 0.1)`,
                     borderRadius: 3,
                   }}
                 />
@@ -141,14 +129,8 @@ export default function Register() {
               variant="contained"
               sx={{
                 mt: 3, mb: 2,
-                backgroundColor: (theme) =>
-                  theme.palette.mode === "light"
-                    ? "primary"
-                    : "primary.light",
-                color: (theme) =>
-                  theme.palette.mode === "light"
-                    ? "white"
-                    : "black",
+                backgroundColor: "primary",
+                color: "white",
               }}
             >
               Đăng ký

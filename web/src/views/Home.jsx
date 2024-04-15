@@ -143,19 +143,13 @@ function CustomizedTables() {
           sx={{
             width: 250,
             marginY: 2,
-            border: (theme) =>
-              theme.palette.mode === "light"
-                ? "1px solid #015433"
-                : "1px solid primary.light",
+            border: "1px solid #015433",
             borderRadius: 3,
           }}
           startAdornment={
             <Search sx={{
               width: 20,
-              color: (theme) =>
-                theme.palette.mode === "light"
-                  ? "015433"
-                  : "primary.light",
+              color: "015433",
               mr: 1
             }} />
           }
@@ -170,10 +164,7 @@ function CustomizedTables() {
             }}
             sx={{
               width: 250,
-              border: (theme) =>
-                theme.palette.mode === "light"
-                  ? "1px solid #015433"
-                  : "1px solid primary.light",
+              border: "1px solid #015433",
               borderRadius: 3,
             }}
           >
@@ -198,10 +189,7 @@ function CustomizedTables() {
             }}
             sx={{
               width: 250,
-              border: (theme) =>
-                theme.palette.mode === "light"
-                  ? "1px solid #015433"
-                  : "1px solid primary.light",
+              border: "1px solid #015433",
               borderRadius: 3,
             }}
           >
@@ -221,14 +209,8 @@ function CustomizedTables() {
           color="primary"
           sx={{
             whiteSpace: "nowrap", marginY: 2,
-            backgroundColor: (theme) =>
-              theme.palette.mode === "light"
-                ? "primary"
-                : "primary.light",
-            color: (theme) =>
-              theme.palette.mode === "light"
-                ? "white"
-                : "black",
+            backgroundColor: "primary",
+            color: "white",
           }}
         >
           Tìm kiếm
@@ -236,20 +218,14 @@ function CustomizedTables() {
       </Box>
       <TableContainer
         component={Paper}
-        sx={(theme) => ({
+        sx={{
           mt: 2,
-          backgroundColor:
-            theme.palette.mode === "light" ? "rgba(255, 255, 255, 0.15)" : "",
-        })}
+          backgroundColor: "rgba(255, 255, 255, 0.15)"
+        }}
       >
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
           <TableHead
-            sx={(theme) => ({
-              backgroundColor:
-                theme.palette.mode === "light"
-                  ? "rgba(1, 84, 51, 0.2)"
-                  : "#37404E",
-            })}
+            sx={{ backgroundColor: "rgba(1, 84, 51, 0.2)" }}
           >
             <TableRow>
               <TableCell sx={{ fontWeight: 600 }} align="center">
@@ -276,19 +252,14 @@ function CustomizedTables() {
                 <TableCell align="center">{row.remainingTime}</TableCell>
                 <TableCell>
                   <Button
+                    onClick={toggleAuctionRegisterMdal}
                     variant="contained"
                     color="primary"
                     size="small"
                     sx={{
                       whiteSpace: "nowrap",
-                      backgroundColor: (theme) =>
-                        theme.palette.mode === "light"
-                          ? "primary"
-                          : "primary.light",
-                      color: (theme) =>
-                        theme.palette.mode === "light"
-                          ? "white"
-                          : "black",
+                      backgroundColor: "primary",
+                      color: "white"
                     }}
                   >
                     Đăng ký đấu giá
@@ -318,15 +289,11 @@ export default function Home() {
 
   return (
     <Stack
-      sx={(theme) => ({
-        background:
-          theme.palette.mode === "light"
-            ? "url(/bgr.png)"
-            : `linear-gradient(#02294F, ${alpha("#090E10", 0.0)})`,
-        backgroundSize:
-          theme.palette.mode === "light" ? "100% 100%" : "100% 20%",
+      sx={{
+        background: "url(/bgr.png)",
+        backgroundSize: "100% 100%",
         backgroundRepeat: "no-repeat",
-      })}
+      }}
     >
       <AppAppBar loginCheck="false" currentPage="home" />
       <Box
@@ -382,10 +349,7 @@ export default function Home() {
                       fontWeight: "800",
                       lineHeight: 1.2,
                       fontSize: "60px",
-                      color: (theme) =>
-                        theme.palette.mode === "light"
-                          ? "#015433"
-                          : "primary.light",
+                      color: "#015433",
                     }}
                   >
                     OOAD
@@ -412,14 +376,8 @@ export default function Home() {
                       alignItems: "center",
                       gap: 1,
                       width: { xs: "100%", lg: "auto" },
-                      backgroundColor: (theme) =>
-                        theme.palette.mode === "light"
-                          ? "primary"
-                          : "primary.light",
-                      color: (theme) =>
-                        theme.palette.mode === "light"
-                          ? "white"
-                          : "black"
+                      backgroundColor: "primary",
+                      color: "white"
 
                     }}
                     onClick={toggleRegisterDialog}
@@ -458,22 +416,16 @@ export default function Home() {
 
           {/* List of license plate */}
           <Box
-            sx={(theme) => ({
+            sx={{
               mt: { xs: 8, sm: 10 },
               padding: 5,
               alignSelf: "center",
               width: "100%",
-              bgcolor:
-                theme.palette.mode === "light"
-                  ? "rgba(255, 255, 255, 0.3)"
-                  : "#090E10",
+              bgcolor: "rgba(255, 255, 255, 0.3)",
               backgroundSize: "cover",
               borderRadius: "10px",
-              boxShadow:
-                theme.palette.mode === "light"
-                  ? `0px 3.5px 5.5px rgba(0, 0, 0, 0.02)`
-                  : `0 0 24px 12px ${alpha("#033363", 0.2)}`,
-            })}
+              boxShadow: `0px 3.5px 5.5px rgba(0, 0, 0, 0.02)`,
+            }}
           >
             <Typography
               component="h2"

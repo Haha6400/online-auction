@@ -70,15 +70,12 @@ export default function Footer() {
             >
               <img src={logo} style={logoStyle} alt="logo" />
               <Typography
-                sx={(theme) => ({
-                  color:
-                    theme.palette.mode === "light"
-                      ? "#4FD1C5"
-                      : "primary.light",
+                sx={{
+                  color: "#4FD1C5",
                   fontWeight: "900",
                   display: "inline-block",
                   verticalAlign: "middle",
-                })}
+                }}
               >
                 OOAD
               </Typography>
