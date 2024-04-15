@@ -43,7 +43,7 @@
   },
   "config": {
     "backend_port": 8080,
-    "default_environment": "prod",
+    "default_environment": "dev",
     "packaging": "jar"
   },
   "devDependencies": {

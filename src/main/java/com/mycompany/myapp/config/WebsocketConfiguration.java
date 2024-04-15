@@ -1,5 +1,7 @@
 package com.mycompany.myapp.config;
 
+import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mycompany.myapp.security.AuthoritiesConstants;
 import java.security.Principal;
@@ -8,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.server.*;
 import org.springframework.messaging.converter.*;
+import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -16,8 +19,6 @@ import org.springframework.web.socket.config.annotation.*;
 import org.springframework.web.socket.server.HandshakeInterceptor;
 import org.springframework.web.socket.server.support.DefaultHandshakeHandler;
 import tech.jhipster.config.JHipsterProperties;
-
-import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON;
 
 @Configuration
 @EnableWebSocketMessageBroker
@@ -50,10 +51,14 @@ public class WebsocketConfiguration implements WebSocketMessageBrokerConfigurer 
             .addEndpoint("/ws")
             .addInterceptors(httpSessionHandshakeInterceptor())
             .setHandshakeHandler(defaultHandshakeHandler())
-            .setAllowedOrigins(allowedOrigins)
-            ;
-//            .withSockJS()
-//            .setInterceptors(httpSessionHandshakeInterceptor());
+            .setAllowedOrigins(allowedOrigins);
+        //            .withSockJS()
+        //            .setInterceptors(httpSessionHandshakeInterceptor());
+    }
+
+    @Override
+    public void configureClientInboundChannel(ChannelRegistration registration) {
+        WebSocketMessageBrokerConfigurer.super.configureClientInboundChannel(registration);
     }
 
     @Bean
