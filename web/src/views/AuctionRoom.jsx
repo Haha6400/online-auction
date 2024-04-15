@@ -222,15 +222,11 @@ const rows = [
 export default function AuctionRoom() {
   return (
     <Stack
-      sx={(theme) => ({
-        background:
-          theme.palette.mode === "light"
-            ? "url(/bgr.png)"
-            : `linear-gradient(#02294F, ${alpha("#090E10", 0.0)})`,
-        backgroundSize:
-          theme.palette.mode === "light" ? "100% 100%" : "100% 20%",
+      sx={{
+        background: "url(/bgr.png)",
+        backgroundSize: "100% 100%",
         backgroundRepeat: "no-repeat",
-      })}
+      }}
     >
       <AppAppBar loginCheck="false" currentPage="list_auction_room" />
       <Box id="hero" sx={{ width: "100%" }}>
@@ -259,22 +255,16 @@ export default function AuctionRoom() {
             DANH SÁCH PHÒNG ĐẤU GIÁ
           </Typography>
           <Box
-            sx={(theme) => ({
+            sx={{
               mt: 3,
               padding: 5,
               alignSelf: "center",
               width: "100%",
-              bgcolor:
-                theme.palette.mode === "light"
-                  ? "rgba(255, 255, 255, 0.3)"
-                  : "#090E10",
+              bgcolor: "rgba(255, 255, 255, 0.3)",
               backgroundSize: "cover",
               borderRadius: "10px",
-              boxShadow:
-                theme.palette.mode === "light"
-                  ? `0px 3.5px 5.5px rgba(0, 0, 0, 0.02)`
-                  : `0 0 24px 12px ${alpha("#033363", 0.2)}`,
-            })}
+              boxShadow: `0px 3.5px 5.5px rgba(0, 0, 0, 0.02)`,
+            }}
           >
             <Button
               variant="contained"
