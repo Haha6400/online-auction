@@ -12,6 +12,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { OutlinedInput, alpha } from "@mui/material";
 import getLPTheme from '../../views/getLPTheme';
 export default function Register() {
   const [mode, setMode] = React.useState(getInitialMode());
@@ -45,13 +46,13 @@ export default function Register() {
           }}
         >
           <Typography component="h1" variant="h5">
-            Register
+            Đăng ký
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <Typography >
-                  Full Name
+                  Họ và tên
                 </Typography>
                 <TextField
                   autoComplete="given-name"
@@ -60,11 +61,18 @@ export default function Register() {
                   fullWidth
                   id="fullName"
                   autoFocus
+                  sx={{
+                    boxShadow: (theme) =>
+                      theme.palette.mode === "light"
+                        ? `0px 3.5px 5.5px rgba(0, 0, 0, 0.1)`
+                        : `0 0 24px 12px ${alpha("#033363", 0.2)}`,
+                    borderRadius: 3,
+                  }}
                 />
               </Grid>
               <Grid item xs={12}>
                 <Typography >
-                  Email Address
+                  Email
                 </Typography>
                 <TextField
                   required
@@ -72,11 +80,18 @@ export default function Register() {
                   id="email"
                   name="email"
                   autoComplete="email"
+                  sx={{
+                    boxShadow: (theme) =>
+                      theme.palette.mode === "light"
+                        ? `0px 3.5px 5.5px rgba(0, 0, 0, 0.1)`
+                        : `0 0 24px 12px ${alpha("#033363", 0.2)}`,
+                    borderRadius: 3,
+                  }}
                 />
               </Grid>
               <Grid item xs={12}>
                 <Typography >
-                  Phone Number
+                  Số điện thoại
                 </Typography>
                 <TextField
                   required
@@ -84,12 +99,19 @@ export default function Register() {
                   id="phoneNumber"
                   name="phoneNumber"
                   autoComplete="phoneNumber"
+                  sx={{
+                    boxShadow: (theme) =>
+                      theme.palette.mode === "light"
+                        ? `0px 3.5px 5.5px rgba(0, 0, 0, 0.1)`
+                        : `0 0 24px 12px ${alpha("#033363", 0.2)}`,
+                    borderRadius: 3,
+                  }}
                 />
               </Grid>
 
               <Grid item xs={12}>
                 <Typography >
-                  Password
+                  Mật khẩu
                 </Typography>
                 <TextField
                   required
@@ -98,27 +120,44 @@ export default function Register() {
                   type="password"
                   id="password"
                   autoComplete="new-password"
+                  sx={{
+                    boxShadow: (theme) =>
+                      theme.palette.mode === "light"
+                        ? `0px 3.5px 5.5px rgba(0, 0, 0, 0.1)`
+                        : `0 0 24px 12px ${alpha("#033363", 0.2)}`,
+                    borderRadius: 3,
+                  }}
                 />
               </Grid>
               <Grid item xs={12}>
                 <FormControlLabel
                   control={<Checkbox value="allowExtraEmails" color="primary" />}
-                  label="I agree to share the provided information with the auction organization in accordance with Decree 13/2023/NĐ-CP." />
+                  label="Tôi đồng ý chia sẻ các thông tin đã cung cấp cho tổ chức đấu giá tham chiếu theo nghị định 13/2023/NĐ-CP"></FormControlLabel>
               </Grid>
             </Grid>
             <Button
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{
+                mt: 3, mb: 2,
+                backgroundColor: (theme) =>
+                  theme.palette.mode === "light"
+                    ? "primary"
+                    : "primary.light",
+                color: (theme) =>
+                  theme.palette.mode === "light"
+                    ? "white"
+                    : "black",
+              }}
             >
-              Register
+              Đăng ký
             </Button>
-            <Grid container justifyContent="flex-end">
+            <Grid container justifyContent="center">
               <Grid item>
                 <Link href="#" variant="body2">
-                  {" Already have an account?"}
-                  <strong>{"  Login"}</strong>
+                  {" Đã có tài khoản?"}
+                  <strong>{"  Đăng nhập"}</strong>
                 </Link>
               </Grid>
             </Grid>

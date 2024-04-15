@@ -11,6 +11,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { OutlinedInput, alpha } from "@mui/material";
 import getLPTheme from '../../views/getLPTheme';
 export default function Login() {
   const [mode, setMode] = React.useState(getInitialMode());
@@ -31,8 +32,8 @@ export default function Login() {
   };
 
   return (
-    <ThemeProvider theme={ LPtheme }>
-       <Container component="main" width='70%'>
+    <ThemeProvider theme={LPtheme}>
+      <Container component="main" width='70%'>
         <CssBaseline />
         <Box
           sx={{
@@ -42,11 +43,11 @@ export default function Login() {
             flexDirection: 'column',
             alignItems: 'center',
             alignContent: 'center',
-            
+
           }}
         >
           <Typography component="h1" variant="h5">
-            Log in
+            Đăng nhập
           </Typography>
           <Box component="form" onSubmit={handleSubmit}>
             <Typography >
@@ -59,10 +60,17 @@ export default function Login() {
               name="email"
               autoComplete="email"
               autoFocus
-              sx={{ mt: 1, mb: 1 }}
+              sx={{
+                mt: 1, mb: 1,
+                boxShadow: (theme) =>
+                  theme.palette.mode === "light"
+                    ? `0px 3.5px 5.5px rgba(0, 0, 0, 0.2)`
+                    : `0 0 24px 12px ${alpha("#033363", 0.2)}`,
+                borderRadius: 3,
+              }}
             />
             <Typography >
-              Password
+              Mật khẩu
             </Typography>
             <TextField
               required
@@ -71,27 +79,43 @@ export default function Login() {
               type="password"
               id="password"
               autoComplete="current-password"
-              sx={{ mt: 1, mb: 1 }}
+              sx={{
+                mt: 1, mb: 1,
+                boxShadow: (theme) =>
+                  theme.palette.mode === "light"
+                    ? `0px 3.5px 5.5px rgba(0, 0, 0, 0.2)`
+                    : `0 0 24px 12px ${alpha("#033363", 0.2)}`,
+                borderRadius: 3,
+              }}
             />
-             <Grid item>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
+            <Grid item>
+              <Link href="#" variant="body2">
+                Quên mật khẩu?
+              </Link>
+            </Grid>
             <Button
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 1, mb: 1 }}
+              sx={{
+                mt: 1, mb: 1, backgroundColor: (theme) =>
+                  theme.palette.mode === "light"
+                    ? "primary"
+                    : "primary.light",
+                color: (theme) =>
+                  theme.palette.mode === "light"
+                    ? "white"
+                    : "black",
+              }}
             >
-              Log In
+              Đăng nhập
             </Button>
-            <Grid container>
-              
-              <Grid item>
+            <Grid container justifyContent="center">
+
+              <Grid item >
                 <Link href="#" variant="body2">
-                  {"Don't have an account?"}
-                  <strong>{"  Sign Up"}</strong>
+                  {"Không có tài khoản?"}
+                  <strong>{"  Đăng ký"}</strong>
                 </Link>
               </Grid>
             </Grid>

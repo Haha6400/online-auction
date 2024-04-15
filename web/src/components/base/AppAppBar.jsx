@@ -12,7 +12,7 @@ import Drawer from "@mui/material/Drawer";
 import MenuIcon from "@mui/icons-material/Menu";
 import ToggleColorMode from "./ToggleColorMode";
 import Dialog from "@mui/material/Dialog";
-
+import { OutlinedInput, alpha } from "@mui/material";
 import { useThemeProvider } from "../../utils/ThemeContext";
 
 import Login from "../common/Login";
@@ -20,6 +20,7 @@ import Register from "../common/Register";
 import AccountMenu from "../base/AccountMenu";
 
 import logo from "../../assets/logo.png";
+import LicensePlate from "../common/LicensePlate";
 
 const logoStyle = {
   width: "40px",
@@ -194,6 +195,26 @@ export default function AppAppBar(props) {
                     component="button"
                     sx={{ px: 1 }}
                     onClick={handleLoginButtonClick}
+
+                  >
+                    TEST DIALOG
+                  </Button>
+                  <Dialog
+                    open={openLoginDialog}
+                    onClose={handleLoginDialogClose}
+                    aria-labelledby="scroll-dialog-title"
+                    aria-describedby="scroll-dialog-description"
+
+                  >
+                    <LicensePlate title="Tạo biển số xe" />
+                  </Dialog>
+                  {/* <Button
+                    color="primary"
+                    variant="text"
+                    size="small"
+                    component="button"
+                    sx={{ px: 1 }}
+                    onClick={handleLoginButtonClick}
                   >
                     Đăng nhập
                   </Button>
@@ -204,9 +225,18 @@ export default function AppAppBar(props) {
                     aria-describedby="scroll-dialog-description"
                   >
                     <Login />
-                  </Dialog>
+                  </Dialog> */}
                   <Button
-                    color="primary"
+                    sx={{
+                      backgroundColor: (theme) =>
+                        theme.palette.mode === "light"
+                          ? "primary"
+                          : "primary.light",
+                      color: (theme) =>
+                        theme.palette.mode === "light"
+                          ? "white"
+                          : "black",
+                    }}
                     variant="contained"
                     size="small"
                     component="button"
@@ -355,6 +385,6 @@ export default function AppAppBar(props) {
           </Toolbar>
         </Container>
       </AppBar>
-    </div>
+    </div >
   );
 }

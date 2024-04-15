@@ -1,9 +1,6 @@
 // color:
 // primary: #00623B
 // secondary: #015433
-
-
-
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";

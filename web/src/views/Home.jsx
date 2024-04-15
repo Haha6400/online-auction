@@ -134,11 +134,21 @@ function CustomizedTables() {
           sx={{
             width: 250,
             marginY: 2,
-            border: "1px solid #015433",
+            border: (theme) =>
+              theme.palette.mode === "light"
+                ? "1px solid #015433"
+                : "1px solid primary.light",
             borderRadius: 3,
           }}
           startAdornment={
-            <Search sx={{ width: 20, color: "#015433", mr: 1 }} />
+            <Search sx={{
+              width: 20,
+              color: (theme) =>
+                theme.palette.mode === "light"
+                  ? "015433"
+                  : "primary.light",
+              mr: 1
+            }} />
           }
         />
         <FormControl sx={{ minWidth: 250, marginY: 2 }} size="small">
@@ -151,7 +161,10 @@ function CustomizedTables() {
             }}
             sx={{
               width: 250,
-              border: "1px solid #015433",
+              border: (theme) =>
+                theme.palette.mode === "light"
+                  ? "1px solid #015433"
+                  : "1px solid primary.light",
               borderRadius: 3,
             }}
           >
@@ -176,7 +189,10 @@ function CustomizedTables() {
             }}
             sx={{
               width: 250,
-              border: "1px solid #015433",
+              border: (theme) =>
+                theme.palette.mode === "light"
+                  ? "1px solid #015433"
+                  : "1px solid primary.light",
               borderRadius: 3,
             }}
           >
@@ -194,7 +210,17 @@ function CustomizedTables() {
         <Button
           variant="contained"
           color="primary"
-          sx={{ whiteSpace: "nowrap", marginY: 2 }}
+          sx={{
+            whiteSpace: "nowrap", marginY: 2,
+            backgroundColor: (theme) =>
+              theme.palette.mode === "light"
+                ? "primary"
+                : "primary.light",
+            color: (theme) =>
+              theme.palette.mode === "light"
+                ? "white"
+                : "black",
+          }}
         >
           Tìm kiếm
         </Button>
@@ -244,7 +270,17 @@ function CustomizedTables() {
                     variant="contained"
                     color="primary"
                     size="small"
-                    sx={{ whiteSpace: "nowrap" }}
+                    sx={{
+                      whiteSpace: "nowrap",
+                      backgroundColor: (theme) =>
+                        theme.palette.mode === "light"
+                          ? "primary"
+                          : "primary.light",
+                      color: (theme) =>
+                        theme.palette.mode === "light"
+                          ? "white"
+                          : "black",
+                    }}
                   >
                     Đăng ký đấu giá
                   </Button>
@@ -353,7 +389,6 @@ export default function Home() {
                 <Box>
                   <Button
                     variant="contained"
-                    color="primary"
                     size="large"
                     sx={{
                       mt: 5,
@@ -361,6 +396,15 @@ export default function Home() {
                       alignItems: "center",
                       gap: 1,
                       width: { xs: "100%", lg: "auto" },
+                      backgroundColor: (theme) =>
+                        theme.palette.mode === "light"
+                          ? "primary"
+                          : "primary.light",
+                      color: (theme) =>
+                        theme.palette.mode === "light"
+                          ? "white"
+                          : "black"
+
                     }}
                     onClick={toggleRegisterDialog}
                   >
