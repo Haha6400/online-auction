@@ -182,7 +182,7 @@ export default function AppAppBar(props) {
 
               {props.loginCheck === "false" && (
                 <>
-                  {/* <Button
+                  <Button
                     color="primary"
                     variant="text"
                     size="small"
@@ -201,8 +201,8 @@ export default function AppAppBar(props) {
 
                   >
                     <LicensePlate title="TẠO BIỂN SỐ XE" />
-                  </Dialog> */}
-                  <Button
+                  </Dialog>
+                  {/* <Button
                     color="primary"
                     variant="text"
                     size="small"
@@ -219,7 +219,7 @@ export default function AppAppBar(props) {
                     aria-describedby="scroll-dialog-description"
                   >
                     <Login />
-                  </Dialog>
+                  </Dialog> */}
                   <Button
                     sx={{
                       backgroundColor: "primary",
