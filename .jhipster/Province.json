@@ -1,0 +1,25 @@
+{
+  "annotations": {
+    "changelogDate": "20240401160117"
+  },
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String"
+    }
+  ],
+  "name": "Province",
+  "relationships": [
+    {
+      "otherEntityName": "licensePlate",
+      "otherEntityRelationshipName": "province",
+      "relationshipName": "licensePlate",
+      "relationshipSide": "right",
+      "relationshipType": "one-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}
