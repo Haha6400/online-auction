@@ -2,9 +2,10 @@ package com.mycompany.myapp.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import org.hibernate.validator.constraints.UniqueElements;
-
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+import org.hibernate.validator.constraints.UniqueElements;
 
 /**
  * A Province.
@@ -22,8 +23,9 @@ public class Province {
     private String name;
 
     @JsonIgnoreProperties(value = { "auctionRoom", "vehicleType", "province" }, allowSetters = true)
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "province")
-    private LicensePlate licensePlate;
+    //    @OneToOne(fetch = FetchType.LAZY, mappedBy = "province")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "province")
+    private Set<LicensePlate> licensePlate = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -53,22 +55,22 @@ public class Province {
         this.name = name;
     }
 
-    public LicensePlate getLicensePlate() {
+    public Set<LicensePlate> getLicensePlate() {
         return this.licensePlate;
     }
 
-    public void setLicensePlate(LicensePlate licensePlate) {
-        if (this.licensePlate != null) {
-            this.licensePlate.setProvince(null);
-        }
-        if (licensePlate != null) {
-            licensePlate.setProvince(this);
-        }
+    public void setLicensePlate(Set<LicensePlate> licensePlate) {
+        //        if (this.licensePlate != null) {
+        //            this.licensePlate.setProvince(null);
+        //        }
+        //        if (licensePlate != null) {
+        //            licensePlate.setProvince(this);
+        //        }
         this.licensePlate = licensePlate;
     }
 
     public Province licensePlate(LicensePlate licensePlate) {
-        this.setLicensePlate(licensePlate);
+        //        this.setLicensePlate(licensePlate);
         return this;
     }
 
