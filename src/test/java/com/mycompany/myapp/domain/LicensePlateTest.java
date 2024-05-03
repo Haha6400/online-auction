@@ -26,18 +26,6 @@ class LicensePlateTest {
     }
 
     @Test
-    void provinceTest() throws Exception {
-        LicensePlate licensePlate = getLicensePlateRandomSampleGenerator();
-        Province provinceBack = getProvinceRandomSampleGenerator();
-
-        licensePlate.setProvince(provinceBack);
-        assertThat(licensePlate.getProvince()).isEqualTo(provinceBack);
-
-        licensePlate.province(null);
-        assertThat(licensePlate.getProvince()).isNull();
-    }
-
-    @Test
     void auctionRoomTest() throws Exception {
         LicensePlate licensePlate = getLicensePlateRandomSampleGenerator();
         AuctionRoom auctionRoomBack = getAuctionRoomRandomSampleGenerator();
@@ -61,5 +49,17 @@ class LicensePlateTest {
 
         licensePlate.vehicleType(null);
         assertThat(licensePlate.getVehicleType()).isNull();
+    }
+
+    @Test
+    void provinceTest() throws Exception {
+        LicensePlate licensePlate = getLicensePlateRandomSampleGenerator();
+        Province provinceBack = getProvinceRandomSampleGenerator();
+
+        licensePlate.setProvince(provinceBack);
+        assertThat(licensePlate.getProvince()).isEqualTo(provinceBack);
+
+        licensePlate.province(null);
+        assertThat(licensePlate.getProvince()).isNull();
     }
 }

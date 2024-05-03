@@ -13,9 +13,7 @@ import java.util.Set;
 @Entity
 @Table(name = "auction_room")
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class AuctionRoom implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class AuctionRoom {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,13 +32,11 @@ public class AuctionRoom implements Serializable {
     @Column(name = "init_price")
     private Long initPrice;
 
-    @JsonIgnoreProperties(value = { "province", "auctionRoom", "vehicleType" }, allowSetters = true)
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(unique = true)
     private LicensePlate licensePlate;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "auctionRoom")
-    @JsonIgnoreProperties(value = { "user", "winningBid", "auctionRoom" }, allowSetters = true)
     private Set<Bid> bids = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -51,7 +47,6 @@ public class AuctionRoom implements Serializable {
     )
     private Set<User> users = new HashSet<>();
 
-    @JsonIgnoreProperties(value = { "auctionRoom", "bid" }, allowSetters = true)
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "auctionRoom")
     private WinningBid winningBid;
 

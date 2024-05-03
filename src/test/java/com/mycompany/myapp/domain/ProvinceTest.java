@@ -5,6 +5,8 @@ import static com.mycompany.myapp.domain.ProvinceTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.mycompany.myapp.web.rest.TestUtil;
+import java.util.HashSet;
+import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 class ProvinceTest {
@@ -28,12 +30,20 @@ class ProvinceTest {
         Province province = getProvinceRandomSampleGenerator();
         LicensePlate licensePlateBack = getLicensePlateRandomSampleGenerator();
 
-        province.setLicensePlate(licensePlateBack);
-        assertThat(province.getLicensePlate()).isEqualTo(licensePlateBack);
+        province.addLicensePlate(licensePlateBack);
+        assertThat(province.getLicensePlates()).containsOnly(licensePlateBack);
         assertThat(licensePlateBack.getProvince()).isEqualTo(province);
 
-        province.licensePlate(null);
-        assertThat(province.getLicensePlate()).isNull();
+        province.removeLicensePlate(licensePlateBack);
+        assertThat(province.getLicensePlates()).doesNotContain(licensePlateBack);
+        assertThat(licensePlateBack.getProvince()).isNull();
+
+        province.licensePlates(new HashSet<>(Set.of(licensePlateBack)));
+        assertThat(province.getLicensePlates()).containsOnly(licensePlateBack);
+        assertThat(licensePlateBack.getProvince()).isEqualTo(province);
+
+        province.setLicensePlates(new HashSet<>());
+        assertThat(province.getLicensePlates()).doesNotContain(licensePlateBack);
         assertThat(licensePlateBack.getProvince()).isNull();
     }
 }

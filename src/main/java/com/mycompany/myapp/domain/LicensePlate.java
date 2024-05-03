@@ -10,9 +10,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "license_plate")
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class LicensePlate implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class LicensePlate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,18 +20,19 @@ public class LicensePlate implements Serializable {
     @Column(name = "plate_number")
     private String plateNumber;
 
-    @JsonIgnoreProperties(value = { "licensePlate" }, allowSetters = true)
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(unique = true)
-    private Province province;
-
-    @JsonIgnoreProperties(value = { "licensePlate", "bids", "users", "winningBid" }, allowSetters = true)
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "licensePlate")
     private AuctionRoom auctionRoom;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "licensePlates" }, allowSetters = true)
+    @ManyToOne(fetch = FetchType.EAGER)
     private VehicleType vehicleType;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinTable(
+        name = "license_plate_province",
+        joinColumns = { @JoinColumn(name = "license_plate_id") },
+        inverseJoinColumns = { @JoinColumn(name = "province_name") }
+    )
+    private Province province;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -61,19 +60,6 @@ public class LicensePlate implements Serializable {
 
     public void setPlateNumber(String plateNumber) {
         this.plateNumber = plateNumber;
-    }
-
-    public Province getProvince() {
-        return this.province;
-    }
-
-    public void setProvince(Province province) {
-        this.province = province;
-    }
-
-    public LicensePlate province(Province province) {
-        this.setProvince(province);
-        return this;
     }
 
     public AuctionRoom getAuctionRoom() {
@@ -105,6 +91,19 @@ public class LicensePlate implements Serializable {
 
     public LicensePlate vehicleType(VehicleType vehicleType) {
         this.setVehicleType(vehicleType);
+        return this;
+    }
+
+    public Province getProvince() {
+        return this.province;
+    }
+
+    public void setProvince(Province province) {
+        this.province = province;
+    }
+
+    public LicensePlate province(Province province) {
+        this.setProvince(province);
         return this;
     }
 

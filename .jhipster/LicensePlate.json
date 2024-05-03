@@ -14,13 +14,6 @@
   "pagination": "pagination",
   "relationships": [
     {
-      "otherEntityName": "province",
-      "otherEntityRelationshipName": "licensePlate",
-      "relationshipName": "province",
-      "relationshipSide": "left",
-      "relationshipType": "one-to-one"
-    },
-    {
       "otherEntityName": "auctionRoom",
       "otherEntityRelationshipName": "licensePlate",
       "relationshipName": "auctionRoom",
@@ -31,6 +24,13 @@
       "otherEntityName": "vehicleType",
       "otherEntityRelationshipName": "licensePlate",
       "relationshipName": "vehicleType",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "province",
+      "otherEntityRelationshipName": "licensePlate",
+      "relationshipName": "province",
       "relationshipSide": "right",
       "relationshipType": "many-to-one"
     }

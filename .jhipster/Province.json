@@ -16,8 +16,8 @@
       "otherEntityName": "licensePlate",
       "otherEntityRelationshipName": "province",
       "relationshipName": "licensePlate",
-      "relationshipSide": "right",
-      "relationshipType": "one-to-one"
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
     }
   ],
   "searchEngine": "no",

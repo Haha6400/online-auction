@@ -13,9 +13,9 @@ public class LicensePlateDTO implements Serializable {
 
     private String plateNumber;
 
-    private ProvinceDTO province;
-
     private VehicleTypeDTO vehicleType;
+
+    private ProvinceDTO province;
 
     public Long getId() {
         return id;
@@ -33,20 +33,20 @@ public class LicensePlateDTO implements Serializable {
         this.plateNumber = plateNumber;
     }
 
-    public ProvinceDTO getProvince() {
-        return province;
-    }
-
-    public void setProvince(ProvinceDTO province) {
-        this.province = province;
-    }
-
     public VehicleTypeDTO getVehicleType() {
         return vehicleType;
     }
 
     public void setVehicleType(VehicleTypeDTO vehicleType) {
         this.vehicleType = vehicleType;
+    }
+
+    public ProvinceDTO getProvince() {
+        return province;
+    }
+
+    public void setProvince(ProvinceDTO province) {
+        this.province = province;
     }
 
     @Override
@@ -76,8 +76,8 @@ public class LicensePlateDTO implements Serializable {
         return "LicensePlateDTO{" +
             "id=" + getId() +
             ", plateNumber='" + getPlateNumber() + "'" +
-            ", province=" + getProvince() +
             ", vehicleType=" + getVehicleType() +
+            ", province=" + getProvince() +
             "}";
     }
 }

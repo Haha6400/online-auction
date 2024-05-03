@@ -9,7 +9,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -69,19 +68,6 @@ public class ProvinceServiceImpl implements ProvinceService {
     public List<ProvinceDTO> findAll() {
         log.debug("Request to get all Provinces");
         return provinceRepository.findAll().stream().map(provinceMapper::toDto).collect(Collectors.toCollection(LinkedList::new));
-    }
-
-    /**
-     *  Get all the provinces where LicensePlate is {@code null}.
-     *  @return the list of entities.
-     */
-    @Transactional(readOnly = true)
-    public List<ProvinceDTO> findAllWhereLicensePlateIsNull() {
-        log.debug("Request to get all provinces where LicensePlate is null");
-        return StreamSupport.stream(provinceRepository.findAll().spliterator(), false)
-            .filter(province -> province.getLicensePlate() == null)
-            .map(provinceMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
     }
 
     @Override

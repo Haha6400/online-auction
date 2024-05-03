@@ -3,6 +3,8 @@ package com.mycompany.myapp.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A Province.
@@ -10,9 +12,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "province")
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class Province implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class Province {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,9 +22,8 @@ public class Province implements Serializable {
     @Column(name = "name")
     private String name;
 
-    @JsonIgnoreProperties(value = { "province", "auctionRoom", "vehicleType" }, allowSetters = true)
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "province")
-    private LicensePlate licensePlate;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "province")
+    private Set<LicensePlate> licensePlates = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -54,22 +53,34 @@ public class Province implements Serializable {
         this.name = name;
     }
 
-    public LicensePlate getLicensePlate() {
-        return this.licensePlate;
+    public Set<LicensePlate> getLicensePlates() {
+        return this.licensePlates;
     }
 
-    public void setLicensePlate(LicensePlate licensePlate) {
-        if (this.licensePlate != null) {
-            this.licensePlate.setProvince(null);
+    public void setLicensePlates(Set<LicensePlate> licensePlates) {
+        if (this.licensePlates != null) {
+            this.licensePlates.forEach(i -> i.setProvince(null));
         }
-        if (licensePlate != null) {
-            licensePlate.setProvince(this);
+        if (licensePlates != null) {
+            licensePlates.forEach(i -> i.setProvince(this));
         }
-        this.licensePlate = licensePlate;
+        this.licensePlates = licensePlates;
     }
 
-    public Province licensePlate(LicensePlate licensePlate) {
-        this.setLicensePlate(licensePlate);
+    public Province licensePlates(Set<LicensePlate> licensePlates) {
+        this.setLicensePlates(licensePlates);
+        return this;
+    }
+
+    public Province addLicensePlate(LicensePlate licensePlate) {
+        this.licensePlates.add(licensePlate);
+        licensePlate.setProvince(this);
+        return this;
+    }
+
+    public Province removeLicensePlate(LicensePlate licensePlate) {
+        this.licensePlates.remove(licensePlate);
+        licensePlate.setProvince(null);
         return this;
     }
 

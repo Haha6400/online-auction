@@ -59,7 +59,7 @@ public class LicensePlateAsserts {
     public static void assertLicensePlateUpdatableRelationshipsEquals(LicensePlate expected, LicensePlate actual) {
         assertThat(expected)
             .as("Verify LicensePlate relationships")
-            .satisfies(e -> assertThat(e.getProvince()).as("check province").isEqualTo(actual.getProvince()))
-            .satisfies(e -> assertThat(e.getVehicleType()).as("check vehicleType").isEqualTo(actual.getVehicleType()));
+            .satisfies(e -> assertThat(e.getVehicleType()).as("check vehicleType").isEqualTo(actual.getVehicleType()))
+            .satisfies(e -> assertThat(e.getProvince()).as("check province").isEqualTo(actual.getProvince()));
     }
 }

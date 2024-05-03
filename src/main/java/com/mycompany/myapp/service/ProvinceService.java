@@ -40,13 +40,6 @@ public interface ProvinceService {
     List<ProvinceDTO> findAll();
 
     /**
-     * Get all the ProvinceDTO where LicensePlate is {@code null}.
-     *
-     * @return the {@link List} of entities.
-     */
-    List<ProvinceDTO> findAllWhereLicensePlateIsNull();
-
-    /**
      * Get the "id" province.
      *
      * @param id the id of the entity.

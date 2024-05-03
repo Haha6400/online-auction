@@ -13,17 +13,17 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring")
 public interface LicensePlateMapper extends EntityMapper<LicensePlateDTO, LicensePlate> {
-    @Mapping(target = "province", source = "province", qualifiedByName = "provinceId")
     @Mapping(target = "vehicleType", source = "vehicleType", qualifiedByName = "vehicleTypeId")
+    @Mapping(target = "province", source = "province", qualifiedByName = "provinceId")
     LicensePlateDTO toDto(LicensePlate s);
-
-    @Named("provinceId")
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    ProvinceDTO toDtoProvinceId(Province province);
 
     @Named("vehicleTypeId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     VehicleTypeDTO toDtoVehicleTypeId(VehicleType vehicleType);
+
+    @Named("provinceId")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    ProvinceDTO toDtoProvinceId(Province province);
 }

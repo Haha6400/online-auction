@@ -2,6 +2,8 @@ package com.mycompany.myapp.service.impl;
 
 import com.mycompany.myapp.domain.LicensePlate;
 import com.mycompany.myapp.repository.LicensePlateRepository;
+import com.mycompany.myapp.repository.ProvinceRepository;
+import com.mycompany.myapp.repository.VehicleTypeRepository;
 import com.mycompany.myapp.service.LicensePlateService;
 import com.mycompany.myapp.service.dto.LicensePlateDTO;
 import com.mycompany.myapp.service.mapper.LicensePlateMapper;
@@ -27,11 +29,20 @@ public class LicensePlateServiceImpl implements LicensePlateService {
     private final Logger log = LoggerFactory.getLogger(LicensePlateServiceImpl.class);
 
     private final LicensePlateRepository licensePlateRepository;
+    private final ProvinceRepository provinceRepository;
+    private final VehicleTypeRepository vehicleTypeRepository;
 
     private final LicensePlateMapper licensePlateMapper;
 
-    public LicensePlateServiceImpl(LicensePlateRepository licensePlateRepository, LicensePlateMapper licensePlateMapper) {
+    public LicensePlateServiceImpl(
+        LicensePlateRepository licensePlateRepository,
+        LicensePlateMapper licensePlateMapper,
+        ProvinceRepository provinceRepository,
+        VehicleTypeRepository vehicleTypeRepository
+    ) {
         this.licensePlateRepository = licensePlateRepository;
+        this.provinceRepository = provinceRepository;
+        this.vehicleTypeRepository = vehicleTypeRepository;
         this.licensePlateMapper = licensePlateMapper;
     }
 
@@ -39,7 +50,21 @@ public class LicensePlateServiceImpl implements LicensePlateService {
     public LicensePlateDTO save(LicensePlateDTO licensePlateDTO) {
         log.debug("Request to save LicensePlate : {}", licensePlateDTO);
         LicensePlate licensePlate = licensePlateMapper.toEntity(licensePlateDTO);
+        String vehicleType = licensePlateDTO.getVehicleType().getName();
+        String provinceName = licensePlateDTO.getProvince().getName();
+        try {
+            if (licensePlateDTO.getVehicleType().getId() == null) {
+                licensePlate.setProvince(provinceRepository.findByName(provinceName));
+            }
+            if (licensePlateDTO.getVehicleType().getId() == null) {
+                licensePlate.setVehicleType(vehicleTypeRepository.findByName(vehicleType));
+            }
+        } catch (NullPointerException e) {
+            throw e;
+        }
         licensePlate = licensePlateRepository.save(licensePlate);
+        System.out.println(licensePlate.getProvince());
+
         return licensePlateMapper.toDto(licensePlate);
     }
 

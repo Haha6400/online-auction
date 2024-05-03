@@ -12,9 +12,7 @@ import java.util.Set;
 @Entity
 @Table(name = "vehicle_type")
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class VehicleType implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class VehicleType {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,8 +22,7 @@ public class VehicleType implements Serializable {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "vehicleType")
-    @JsonIgnoreProperties(value = { "province", "auctionRoom", "vehicleType" }, allowSetters = true)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "vehicleType")
     private Set<LicensePlate> licensePlates = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

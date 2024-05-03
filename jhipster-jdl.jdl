@@ -32,7 +32,6 @@ relationship OneToOne {
     WinningBid to AuctionRoom
     WinningBid to Bid
     AuctionRoom to LicensePlate
-    LicensePlate to Province
 }
 
 relationship ManyToOne {
@@ -44,6 +43,7 @@ relationship ManyToMany {
 relationship OneToMany {
     VehicleType to LicensePlate
     AuctionRoom to Bid
+    Province to LicensePlate
 }
 
 // Set pagination options
