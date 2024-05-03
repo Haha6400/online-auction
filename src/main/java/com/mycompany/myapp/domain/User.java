@@ -77,7 +77,7 @@ public class User extends AbstractAuditingEntity<Long> {
     private Instant resetDate = null;
 
     @JsonIgnore
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinTable(
         name = "user_authority",
         joinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "id") },
