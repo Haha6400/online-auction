@@ -26,6 +26,13 @@
   "pagination": "pagination",
   "relationships": [
     {
+      "otherEntityName": "licensePlate",
+      "otherEntityRelationshipName": "auctionRoom",
+      "relationshipName": "licensePlate",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-one"
+    },
+    {
       "otherEntityName": "bid",
       "otherEntityRelationshipName": "auctionRoom",
       "relationshipName": "bid",
@@ -44,13 +51,6 @@
       "otherEntityName": "winningBid",
       "otherEntityRelationshipName": "auctionRoom",
       "relationshipName": "winningBid",
-      "relationshipSide": "right",
-      "relationshipType": "one-to-one"
-    },
-    {
-      "otherEntityName": "licensePlate",
-      "otherEntityRelationshipName": "auctionRoom",
-      "relationshipName": "licensePlate",
       "relationshipSide": "right",
       "relationshipType": "one-to-one"
     }

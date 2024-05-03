@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
@@ -132,15 +131,10 @@ public class VehicleTypeResource {
     /**
      * {@code GET  /vehicle-types} : get all the vehicleTypes.
      *
-     * @param filter the filter of the request.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of vehicleTypes in body.
      */
     @GetMapping("")
-    public List<VehicleTypeDTO> getAllVehicleTypes(@RequestParam(name = "filter", required = false) String filter) {
-        if ("licenseplate-is-null".equals(filter)) {
-            log.debug("REST request to get all VehicleTypes where licensePlate is null");
-            return vehicleTypeService.findAllWhereLicensePlateIsNull();
-        }
+    public List<VehicleTypeDTO> getAllVehicleTypes() {
         log.debug("REST request to get all VehicleTypes");
         return vehicleTypeService.findAll();
     }

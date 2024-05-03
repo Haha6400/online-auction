@@ -22,24 +22,18 @@ public class LicensePlate implements Serializable {
     @Column(name = "plate_number")
     private String plateNumber;
 
-    @JsonIgnoreProperties(value = { "bids", "users", "winningBid", "licensePlate" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "licensePlate" }, allowSetters = true)
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(unique = true)
+    private Province province;
+
+    @JsonIgnoreProperties(value = { "licensePlate", "bids", "users", "winningBid" }, allowSetters = true)
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "licensePlate")
     private AuctionRoom auctionRoom;
 
-    @JsonIgnoreProperties(value = { "licensePlate" }, allowSetters = true)
-    //    @OneToOne(fetch = FetchType.LAZY)
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    //    @JoinColumn(unique = true)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = { "licensePlates" }, allowSetters = true)
     private VehicleType vehicleType;
-
-    @JsonIgnoreProperties(value = { "licensePlate" }, allowSetters = true)
-    //    @OneToOne(fetch = FetchType.LAZY)
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    //    @JoinColumn(unique = true)
-    private Province province;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -69,11 +63,30 @@ public class LicensePlate implements Serializable {
         this.plateNumber = plateNumber;
     }
 
+    public Province getProvince() {
+        return this.province;
+    }
+
+    public void setProvince(Province province) {
+        this.province = province;
+    }
+
+    public LicensePlate province(Province province) {
+        this.setProvince(province);
+        return this;
+    }
+
     public AuctionRoom getAuctionRoom() {
         return this.auctionRoom;
     }
 
     public void setAuctionRoom(AuctionRoom auctionRoom) {
+        if (this.auctionRoom != null) {
+            this.auctionRoom.setLicensePlate(null);
+        }
+        if (auctionRoom != null) {
+            auctionRoom.setLicensePlate(this);
+        }
         this.auctionRoom = auctionRoom;
     }
 
@@ -92,19 +105,6 @@ public class LicensePlate implements Serializable {
 
     public LicensePlate vehicleType(VehicleType vehicleType) {
         this.setVehicleType(vehicleType);
-        return this;
-    }
-
-    public Province getProvince() {
-        return this.province;
-    }
-
-    public void setProvince(Province province) {
-        this.province = province;
-    }
-
-    public LicensePlate province(Province province) {
-        this.setProvince(province);
         return this;
     }
 

@@ -13,11 +13,9 @@ public class LicensePlateDTO implements Serializable {
 
     private String plateNumber;
 
-    private AuctionRoomDTO auctionRoom;
+    private ProvinceDTO province;
 
     private VehicleTypeDTO vehicleType;
-
-    private ProvinceDTO province;
 
     public Long getId() {
         return id;
@@ -35,12 +33,12 @@ public class LicensePlateDTO implements Serializable {
         this.plateNumber = plateNumber;
     }
 
-    public AuctionRoomDTO getAuctionRoom() {
-        return auctionRoom;
+    public ProvinceDTO getProvince() {
+        return province;
     }
 
-    public void setAuctionRoom(AuctionRoomDTO auctionRoom) {
-        this.auctionRoom = auctionRoom;
+    public void setProvince(ProvinceDTO province) {
+        this.province = province;
     }
 
     public VehicleTypeDTO getVehicleType() {
@@ -49,14 +47,6 @@ public class LicensePlateDTO implements Serializable {
 
     public void setVehicleType(VehicleTypeDTO vehicleType) {
         this.vehicleType = vehicleType;
-    }
-
-    public ProvinceDTO getProvince() {
-        return province;
-    }
-
-    public void setProvince(ProvinceDTO province) {
-        this.province = province;
     }
 
     @Override
@@ -86,9 +76,8 @@ public class LicensePlateDTO implements Serializable {
         return "LicensePlateDTO{" +
             "id=" + getId() +
             ", plateNumber='" + getPlateNumber() + "'" +
-            ", auctionRoom=" + getAuctionRoom() +
-            ", vehicleType=" + getVehicleType() +
             ", province=" + getProvince() +
+            ", vehicleType=" + getVehicleType() +
             "}";
     }
 }

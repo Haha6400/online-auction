@@ -265,8 +265,6 @@ class LicensePlateResourceIT {
         LicensePlate partialUpdatedLicensePlate = new LicensePlate();
         partialUpdatedLicensePlate.setId(licensePlate.getId());
 
-        partialUpdatedLicensePlate.plateNumber(UPDATED_PLATE_NUMBER);
-
         restLicensePlateMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedLicensePlate.getId())

@@ -11,7 +11,7 @@
     -->
     <changeSet id="20240401160113-1" author="jhipster">
         <createTable tableName="auction_room">
-            <column name="id" type="bigint" autoIncrement="true" startWith="1">
+            <column name="id" type="bigint" autoIncrement="true" startWith="1500">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="description" type="varchar(255)">
@@ -25,6 +25,9 @@
             </column>
             <column name="init_price" type="bigint">
                 <constraints nullable="true" />
+            </column>
+            <column name="license_plate_id" type="bigint">
+                <constraints nullable="true" unique="true" uniqueConstraintName="ux_auction_room__license_plate_id" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>

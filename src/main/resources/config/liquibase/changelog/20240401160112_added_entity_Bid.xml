@@ -11,7 +11,7 @@
     -->
     <changeSet id="20240401160112-1" author="jhipster">
         <createTable tableName="bid">
-            <column name="id" type="bigint" autoIncrement="true" startWith="1">
+            <column name="id" type="bigint" autoIncrement="true" startWith="1500">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="amount" type="bigint">

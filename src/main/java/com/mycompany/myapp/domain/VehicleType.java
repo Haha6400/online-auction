@@ -12,21 +12,21 @@ import java.util.Set;
 @Entity
 @Table(name = "vehicle_type")
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class VehicleType {
+public class VehicleType implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name", unique = true)
+    @Column(name = "name")
     private String name;
 
-    @JsonIgnoreProperties(value = { "auctionRoom", "vehicleType", "province" }, allowSetters = true)
-    //    @OneToOne(fetch = FetchType.LAZY, mappedBy = "vehicleType")
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "vehicleType")
-    //    private LicensePlate licensePlate;
-    private Set<LicensePlate> licensePlate = new HashSet<>();
+    @JsonIgnoreProperties(value = { "province", "auctionRoom", "vehicleType" }, allowSetters = true)
+    private Set<LicensePlate> licensePlates = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -56,37 +56,36 @@ public class VehicleType {
         this.name = name;
     }
 
-    //    public LicensePlate getLicensePlate() {
-    //        return this.licensePlate;
-    //    }
-    public Set<LicensePlate> getLicensePlate() {
-        return this.licensePlate;
+    public Set<LicensePlate> getLicensePlates() {
+        return this.licensePlates;
     }
 
-    //    public void setLicensePlate(LicensePlate licensePlate) {
-    //        if (this.licensePlate != null) {
-    //            this.licensePlate.setVehicleType(null);
-    //        }
-    //        if (licensePlate != null) {
-    //            licensePlate.setVehicleType(this);
-    //        }
-    //        this.licensePlate = licensePlate;
-    //    }
-
-    public void setLicensePlate(Set<LicensePlate> licensePlate) {
-        //        if (this.licensePlate != null) {
-        //            this.licensePlate.setVehicleType(null);
-        //        }
-        //        if (licensePlate != null) {
-        //            licensePlate.setVehicleType(this);
-        //        }
-        this.licensePlate = licensePlate;
+    public void setLicensePlates(Set<LicensePlate> licensePlates) {
+        if (this.licensePlates != null) {
+            this.licensePlates.forEach(i -> i.setVehicleType(null));
+        }
+        if (licensePlates != null) {
+            licensePlates.forEach(i -> i.setVehicleType(this));
+        }
+        this.licensePlates = licensePlates;
     }
 
-    //    public VehicleType licensePlate(LicensePlate licensePlate) {
-    //        this.setLicensePlate(licensePlate);
-    //        return this;
-    //    }
+    public VehicleType licensePlates(Set<LicensePlate> licensePlates) {
+        this.setLicensePlates(licensePlates);
+        return this;
+    }
+
+    public VehicleType addLicensePlate(LicensePlate licensePlate) {
+        this.licensePlates.add(licensePlate);
+        licensePlate.setVehicleType(this);
+        return this;
+    }
+
+    public VehicleType removeLicensePlate(LicensePlate licensePlate) {
+        this.licensePlates.remove(licensePlate);
+        licensePlate.setVehicleType(null);
+        return this;
+    }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 

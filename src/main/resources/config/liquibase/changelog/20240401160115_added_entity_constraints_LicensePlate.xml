@@ -10,11 +10,11 @@
     -->
     <changeSet id="20240401160115-2" author="jhipster">
 
-        <addForeignKeyConstraint baseColumnNames="auction_room_id"
+        <addForeignKeyConstraint baseColumnNames="province_id"
                                  baseTableName="license_plate"
-                                 constraintName="fk_license_plate__auction_room_id"
+                                 constraintName="fk_license_plate__province_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="auction_room"
+                                 referencedTableName="province"
                                  />
 
         <addForeignKeyConstraint baseColumnNames="vehicle_type_id"
@@ -22,13 +22,6 @@
                                  constraintName="fk_license_plate__vehicle_type_id"
                                  referencedColumnNames="id"
                                  referencedTableName="vehicle_type"
-                                 />
-
-        <addForeignKeyConstraint baseColumnNames="province_id"
-                                 baseTableName="license_plate"
-                                 constraintName="fk_license_plate__province_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="province"
                                  />
     </changeSet>
 </databaseChangeLog>

@@ -22,6 +22,8 @@ public class AuctionRoomDTO implements Serializable {
 
     private Long initPrice;
 
+    private LicensePlateDTO licensePlate;
+
     private Set<UserDTO> users = new HashSet<>();
 
     public Long getId() {
@@ -64,6 +66,14 @@ public class AuctionRoomDTO implements Serializable {
         this.initPrice = initPrice;
     }
 
+    public LicensePlateDTO getLicensePlate() {
+        return licensePlate;
+    }
+
+    public void setLicensePlate(LicensePlateDTO licensePlate) {
+        this.licensePlate = licensePlate;
+    }
+
     public Set<UserDTO> getUsers() {
         return users;
     }
@@ -102,6 +112,7 @@ public class AuctionRoomDTO implements Serializable {
             ", startTime='" + getStartTime() + "'" +
             ", endTime='" + getEndTime() + "'" +
             ", initPrice=" + getInitPrice() +
+            ", licensePlate=" + getLicensePlate() +
             ", users=" + getUsers() +
             "}";
     }

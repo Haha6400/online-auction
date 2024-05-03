@@ -152,11 +152,6 @@ public class AuctionRoomResource {
             log.debug("REST request to get all AuctionRooms where winningBid is null");
             return new ResponseEntity<>(auctionRoomService.findAllWhereWinningBidIsNull(), HttpStatus.OK);
         }
-
-        if ("licenseplate-is-null".equals(filter)) {
-            log.debug("REST request to get all AuctionRooms where licensePlate is null");
-            return new ResponseEntity<>(auctionRoomService.findAllWhereLicensePlateIsNull(), HttpStatus.OK);
-        }
         log.debug("REST request to get a page of AuctionRooms");
         Page<AuctionRoomDTO> page;
         if (eagerload) {

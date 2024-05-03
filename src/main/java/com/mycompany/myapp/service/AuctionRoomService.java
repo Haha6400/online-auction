@@ -48,12 +48,6 @@ public interface AuctionRoomService {
      * @return the {@link List} of entities.
      */
     List<AuctionRoomDTO> findAllWhereWinningBidIsNull();
-    /**
-     * Get all the AuctionRoomDTO where LicensePlate is {@code null}.
-     *
-     * @return the {@link List} of entities.
-     */
-    List<AuctionRoomDTO> findAllWhereLicensePlateIsNull();
 
     /**
      * Get all the auctionRooms with eager load of many-to-many relationships.

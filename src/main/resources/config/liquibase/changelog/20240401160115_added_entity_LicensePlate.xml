@@ -11,20 +11,17 @@
     -->
     <changeSet id="20240401160115-1" author="jhipster">
         <createTable tableName="license_plate">
-            <column name="id" type="bigint" autoIncrement="true" startWith="1">
+            <column name="id" type="bigint" autoIncrement="true" startWith="1500">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="plate_number" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="auction_room_id" type="bigint">
-                <constraints nullable="true" unique="true" uniqueConstraintName="ux_license_plate__auction_room_id" />
-            </column>
-            <column name="vehicle_type_id" type="bigint">
-                <constraints nullable="true" unique="true" uniqueConstraintName="ux_license_plate__vehicle_type_id" />
-            </column>
             <column name="province_id" type="bigint">
                 <constraints nullable="true" unique="true" uniqueConstraintName="ux_license_plate__province_id" />
+            </column>
+            <column name="vehicle_type_id" type="bigint">
+                <constraints nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>

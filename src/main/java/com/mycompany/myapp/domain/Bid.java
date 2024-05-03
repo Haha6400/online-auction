@@ -34,7 +34,7 @@ public class Bid implements Serializable {
     private WinningBid winningBid;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "bids", "users", "winningBid", "licensePlate" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "licensePlate", "bids", "users", "winningBid" }, allowSetters = true)
     private AuctionRoom auctionRoom;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

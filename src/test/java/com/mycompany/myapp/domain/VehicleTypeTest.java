@@ -5,6 +5,8 @@ import static com.mycompany.myapp.domain.VehicleTypeTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.mycompany.myapp.web.rest.TestUtil;
+import java.util.HashSet;
+import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 class VehicleTypeTest {
@@ -28,12 +30,20 @@ class VehicleTypeTest {
         VehicleType vehicleType = getVehicleTypeRandomSampleGenerator();
         LicensePlate licensePlateBack = getLicensePlateRandomSampleGenerator();
 
-        vehicleType.setLicensePlate(licensePlateBack);
-        assertThat(vehicleType.getLicensePlate()).isEqualTo(licensePlateBack);
+        vehicleType.addLicensePlate(licensePlateBack);
+        assertThat(vehicleType.getLicensePlates()).containsOnly(licensePlateBack);
         assertThat(licensePlateBack.getVehicleType()).isEqualTo(vehicleType);
 
-        vehicleType.licensePlate(null);
-        assertThat(vehicleType.getLicensePlate()).isNull();
+        vehicleType.removeLicensePlate(licensePlateBack);
+        assertThat(vehicleType.getLicensePlates()).doesNotContain(licensePlateBack);
+        assertThat(licensePlateBack.getVehicleType()).isNull();
+
+        vehicleType.licensePlates(new HashSet<>(Set.of(licensePlateBack)));
+        assertThat(vehicleType.getLicensePlates()).containsOnly(licensePlateBack);
+        assertThat(licensePlateBack.getVehicleType()).isEqualTo(vehicleType);
+
+        vehicleType.setLicensePlates(new HashSet<>());
+        assertThat(vehicleType.getLicensePlates()).doesNotContain(licensePlateBack);
         assertThat(licensePlateBack.getVehicleType()).isNull();
     }
 }

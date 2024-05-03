@@ -1,6 +1,7 @@
 package com.mycompany.myapp.service;
 
 import com.mycompany.myapp.service.dto.LicensePlateDTO;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -40,6 +41,13 @@ public interface LicensePlateService {
      * @return the list of entities.
      */
     Page<LicensePlateDTO> findAll(Pageable pageable);
+
+    /**
+     * Get all the LicensePlateDTO where AuctionRoom is {@code null}.
+     *
+     * @return the {@link List} of entities.
+     */
+    List<LicensePlateDTO> findAllWhereAuctionRoomIsNull();
 
     /**
      * Get the "id" licensePlate.

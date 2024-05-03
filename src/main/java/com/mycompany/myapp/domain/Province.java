@@ -3,9 +3,6 @@ package com.mycompany.myapp.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
-import org.hibernate.validator.constraints.UniqueElements;
 
 /**
  * A Province.
@@ -13,19 +10,21 @@ import org.hibernate.validator.constraints.UniqueElements;
 @Entity
 @Table(name = "province")
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class Province {
+public class Province implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    @Column(unique = true)
+    @Column(name = "name")
     private String name;
 
-    @JsonIgnoreProperties(value = { "auctionRoom", "vehicleType", "province" }, allowSetters = true)
-    //    @OneToOne(fetch = FetchType.LAZY, mappedBy = "province")
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "province")
-    private Set<LicensePlate> licensePlate = new HashSet<>();
+    @JsonIgnoreProperties(value = { "province", "auctionRoom", "vehicleType" }, allowSetters = true)
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "province")
+    private LicensePlate licensePlate;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -55,22 +54,22 @@ public class Province {
         this.name = name;
     }
 
-    public Set<LicensePlate> getLicensePlate() {
+    public LicensePlate getLicensePlate() {
         return this.licensePlate;
     }
 
-    public void setLicensePlate(Set<LicensePlate> licensePlate) {
-        //        if (this.licensePlate != null) {
-        //            this.licensePlate.setProvince(null);
-        //        }
-        //        if (licensePlate != null) {
-        //            licensePlate.setProvince(this);
-        //        }
+    public void setLicensePlate(LicensePlate licensePlate) {
+        if (this.licensePlate != null) {
+            this.licensePlate.setProvince(null);
+        }
+        if (licensePlate != null) {
+            licensePlate.setProvince(this);
+        }
         this.licensePlate = licensePlate;
     }
 
     public Province licensePlate(LicensePlate licensePlate) {
-        //        this.setLicensePlate(licensePlate);
+        this.setLicensePlate(licensePlate);
         return this;
     }
 

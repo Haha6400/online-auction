@@ -22,7 +22,7 @@ public class WinningBid implements Serializable {
     @Column(name = "payment_status")
     private Boolean paymentStatus;
 
-    @JsonIgnoreProperties(value = { "bids", "users", "winningBid", "licensePlate" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "licensePlate", "bids", "users", "winningBid" }, allowSetters = true)
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(unique = true)
     private AuctionRoom auctionRoom;
