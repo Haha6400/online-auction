@@ -3,6 +3,8 @@ package com.mycompany.myapp.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A VehicleType.
@@ -21,8 +23,10 @@ public class VehicleType {
     private String name;
 
     @JsonIgnoreProperties(value = { "auctionRoom", "vehicleType", "province" }, allowSetters = true)
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "vehicleType")
-    private LicensePlate licensePlate;
+    //    @OneToOne(fetch = FetchType.LAZY, mappedBy = "vehicleType")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "vehicleType")
+    //    private LicensePlate licensePlate;
+    private Set<LicensePlate> licensePlate = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -52,24 +56,37 @@ public class VehicleType {
         this.name = name;
     }
 
-    public LicensePlate getLicensePlate() {
+    //    public LicensePlate getLicensePlate() {
+    //        return this.licensePlate;
+    //    }
+    public Set<LicensePlate> getLicensePlate() {
         return this.licensePlate;
     }
 
-    public void setLicensePlate(LicensePlate licensePlate) {
-        if (this.licensePlate != null) {
-            this.licensePlate.setVehicleType(null);
-        }
-        if (licensePlate != null) {
-            licensePlate.setVehicleType(this);
-        }
+    //    public void setLicensePlate(LicensePlate licensePlate) {
+    //        if (this.licensePlate != null) {
+    //            this.licensePlate.setVehicleType(null);
+    //        }
+    //        if (licensePlate != null) {
+    //            licensePlate.setVehicleType(this);
+    //        }
+    //        this.licensePlate = licensePlate;
+    //    }
+
+    public void setLicensePlate(Set<LicensePlate> licensePlate) {
+        //        if (this.licensePlate != null) {
+        //            this.licensePlate.setVehicleType(null);
+        //        }
+        //        if (licensePlate != null) {
+        //            licensePlate.setVehicleType(this);
+        //        }
         this.licensePlate = licensePlate;
     }
 
-    public VehicleType licensePlate(LicensePlate licensePlate) {
-        this.setLicensePlate(licensePlate);
-        return this;
-    }
+    //    public VehicleType licensePlate(LicensePlate licensePlate) {
+    //        this.setLicensePlate(licensePlate);
+    //        return this;
+    //    }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
