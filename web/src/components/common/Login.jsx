@@ -13,9 +13,17 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { OutlinedInput, alpha } from "@mui/material";
 import getLPTheme from '../../views/getLPTheme';
+
+import { useNavigate } from 'react-router-dom';
+
 export default function Login() {
   const [mode, setMode] = React.useState(getInitialMode());
   const LPtheme = createTheme(getLPTheme(mode));
+  const navigate = useNavigate();
+
+  const handleRegisterClick = () => {
+    navigate('/register'); // Navigate to the registration page
+  };
 
 
   function getInitialMode() {
@@ -101,10 +109,16 @@ export default function Login() {
             <Grid container justifyContent="center">
 
               <Grid item >
-                <Link href="#" variant="body2">
+                <Button
+                  color="primary"
+                  variant="text"
+                  sx={{ width: "100%" }}
+                  component="button"
+                  onClick={handleRegisterClick}
+                >
                   {"Không có tài khoản?"}
-                  <strong>{"  Đăng ký"}</strong>
-                </Link>
+                  <strong style={{ margin: "5px" }}>{"  Đăng ký"}</strong>
+                </Button>
               </Grid>
             </Grid>
           </Box>

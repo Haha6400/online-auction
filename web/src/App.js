@@ -10,6 +10,9 @@ import CustomThemeProvider from "./utils/ThemeContext";
 import Plan from "./views/Plan";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import AuctionRoom from "./views/AuctionRoom";
+import RegisterV2 from "./components/common/RegisterV2"
+
+
 
 const router = createBrowserRouter([
   {
@@ -33,8 +36,8 @@ const router = createBrowserRouter([
     element: <MyAccount />,
   },
   {
-    path: "/test",
-    element: <HomeTest />,
+    path: "/register",
+    element: <RegisterV2 />,
   },
 ]);
 

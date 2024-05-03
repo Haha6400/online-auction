@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 import Box from "@mui/material/Box";
 import AppBar from "@mui/material/AppBar";
@@ -10,17 +11,18 @@ import Typography from "@mui/material/Typography";
 import MenuItem from "@mui/material/MenuItem";
 import Drawer from "@mui/material/Drawer";
 import MenuIcon from "@mui/icons-material/Menu";
-import ToggleColorMode from "./ToggleColorMode";
 import Dialog from "@mui/material/Dialog";
-import { OutlinedInput, alpha } from "@mui/material";
 import { useThemeProvider } from "../../utils/ThemeContext";
 
 import Login from "../common/Login";
 import Register from "../common/Register";
+import RegisterV2 from "../common/RegisterV2";
 import AccountMenu from "../base/AccountMenu";
 
+
 import logo from "../../assets/logo.png";
-import LicensePlate from "../modals/LicensePlate";
+
+
 
 const logoStyle = {
   width: "40px",
@@ -44,6 +46,7 @@ export default function AppAppBar(props) {
 
   const handleRegisterButtonClick = () => {
     setOpenRegisterDialog(true);
+
   };
 
   const handleLoginDialogClose = () => {
@@ -178,11 +181,10 @@ export default function AppAppBar(props) {
                 alignItems: "center",
               }}
             >
-              <ToggleColorMode mode={mode} toggleColorMode={toggleColorMode} />
 
               {props.loginCheck === "false" && (
                 <>
-                  <Button
+                  {/* <Button
                     color="primary"
                     variant="text"
                     size="small"
@@ -201,8 +203,8 @@ export default function AppAppBar(props) {
 
                   >
                     <LicensePlate title="TẠO BIỂN SỐ XE" />
-                  </Dialog>
-                  {/* <Button
+                  </Dialog> */}
+                  <Button
                     color="primary"
                     variant="text"
                     size="small"
@@ -219,27 +221,22 @@ export default function AppAppBar(props) {
                     aria-describedby="scroll-dialog-description"
                   >
                     <Login />
-                  </Dialog> */}
-                  <Button
-                    sx={{
-                      backgroundColor: "primary",
-                      color: "white",
-                    }}
-                    variant="contained"
-                    size="small"
-                    component="button"
-                    onClick={handleRegisterButtonClick}
-                  >
-                    Đăng ký
-                  </Button>
-                  <Dialog
-                    open={openRegisterDialog}
-                    onClose={handleRegisterDialogClose}
-                    aria-labelledby="scroll-dialog-title"
-                    aria-describedby="scroll-dialog-description"
-                  >
-                    <Register />
                   </Dialog>
+                  <Link to="/register">
+                    <Button
+                      sx={{
+                        backgroundColor: "primary",
+                        color: "white",
+                      }}
+                      variant="contained"
+                      size="small"
+                      component="button"
+                      onClick={handleRegisterButtonClick}
+                    >
+                      Đăng ký
+                    </Button>
+                  </Link>
+
                 </>
               )}
 
@@ -280,7 +277,7 @@ export default function AppAppBar(props) {
                     flexGrow: 1,
                   }}
                 >
-                  {/* Toggle mode */}
+                  {/* Toggle mode
                   <Box
                     sx={{
                       display: "flex",
@@ -293,7 +290,7 @@ export default function AppAppBar(props) {
                       mode={mode}
                       toggleColorMode={toggleColorMode}
                     />
-                  </Box>
+                  </Box> */}
 
                   {/* Links */}
                   <Link to="/">
@@ -351,15 +348,6 @@ export default function AppAppBar(props) {
                   {/* Account buttons */}
                   <Button
                     color="primary"
-                    variant="contained"
-                    sx={{ width: "100%", my: 1 }}
-                    component="button"
-                    onClick={handleRegisterButtonClick}
-                  >
-                    Đăng ký
-                  </Button>
-                  <Button
-                    color="primary"
                     variant="outlined"
                     sx={{ width: "100%" }}
                     component="button"
@@ -367,6 +355,26 @@ export default function AppAppBar(props) {
                   >
                     Đăng nhập
                   </Button>
+                  <Dialog
+                    open={openLoginDialog}
+                    onClose={handleLoginDialogClose}
+                    aria-labelledby="scroll-dialog-title"
+                    aria-describedby="scroll-dialog-description"
+                  >
+                    <Login />
+                  </Dialog>
+                  <Link to="/register">
+                    <Button
+                      color="primary"
+                      variant="contained"
+                      sx={{ width: "100%", my: 1 }}
+                      component="button"
+                      onClick={handleRegisterButtonClick}
+                    >
+                      Đăng ký
+                    </Button>
+                  </Link>
+
                 </Box>
               </Drawer>
             </Box>

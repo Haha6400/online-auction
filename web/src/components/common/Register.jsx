@@ -14,10 +14,11 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { OutlinedInput, alpha } from "@mui/material";
 import getLPTheme from '../../views/getLPTheme';
+
+
 export default function Register() {
   const [mode, setMode] = React.useState(getInitialMode());
   const LPtheme = createTheme(getLPTheme(mode));
-
 
   function getInitialMode() {
     const savedMode = JSON.parse(localStorage.getItem('mode'));
@@ -67,6 +68,7 @@ export default function Register() {
                   }}
                 />
               </Grid>
+
               <Grid item xs={12}>
                 <Typography >
                   Email
@@ -105,10 +107,10 @@ export default function Register() {
                   Mật khẩu
                 </Typography>
                 <TextField
+                  type="password"
                   required
                   fullWidth
                   name="password"
-                  type="password"
                   id="password"
                   autoComplete="new-password"
                   sx={{
@@ -132,6 +134,7 @@ export default function Register() {
                 backgroundColor: "primary",
                 color: "white",
               }}
+              onClick={handleSubmit}
             >
               Đăng ký
             </Button>
@@ -146,6 +149,6 @@ export default function Register() {
           </Box>
         </Box>
       </Container>
-    </ThemeProvider>
+    </ThemeProvider >
   );
 }
