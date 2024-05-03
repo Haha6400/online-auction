@@ -1,4 +1,6 @@
-import React from "react"
+import React, { useState } from "react"
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
@@ -11,13 +13,11 @@ import CardActions from '@mui/material/CardActions';
 import Button from '@mui/material/Button';
 import Stack from "@mui/material/Stack";
 import Box from '@mui/material/Box';
+import Alert from '@mui/material/Alert';
 import { TextField } from "formik-material-ui"
 import { Formik, Form, Field } from "formik"
 
 import * as Yup from "yup"
-import axios from 'axios';
-
-
 
 import Login from "../common/Login";
 import Footer from "./Footer";
@@ -63,7 +63,13 @@ let validationSchema = Yup.object().shape({
 
 
 export default function RegisterV2() {
+
     const [openLoginDialog, setOpenLoginDialog] = React.useState(false);
+    const [alertSeverity, setAlertSeverity] = React.useState('');
+    const [alertMessage, setAlertMessage] = React.useState('');
+    const [showAlert, setShowAlert] = React.useState(false);
+    const navigate = useNavigate();
+
     const handleLoginButtonClick = () => {
         setOpenLoginDialog(true);
     };
@@ -74,9 +80,23 @@ export default function RegisterV2() {
         delete values.reEnterPassword;
         try {
             const response = await axios.post(`http://localhost:8080/api/register`, values);
-            console.log(response.data);
+            if (response.status === 201) {
+                setAlertSeverity('success');
+                setAlertMessage('Đăng ký thành công!');
+                setShowAlert(true);
+                setTimeout(() => {
+                    setShowAlert(false);
+                    navigate('/');
+                }, 3000);
+            } else {
+                setAlertSeverity('error');
+                setAlertMessage('Đăng ký thất bại.');
+                setShowAlert(true);
+                setTimeout(() => setShowAlert(false), 3000);
+            }
         } catch (error) {
-            console.error('Registration error:', error);
+            console.dir('Registration error:', error);
+
         }
     };
     return (
@@ -223,7 +243,19 @@ export default function RegisterV2() {
                                         </CardContent>
 
                                         <CardActions>
-
+                                            {showAlert && (
+                                                <Alert
+                                                    severity={alertSeverity}
+                                                    sx={{
+                                                        position: 'fixed',
+                                                        bottom: '20px',
+                                                        right: '20px',
+                                                        zIndex: 9999
+                                                    }}
+                                                >
+                                                    {alertMessage}
+                                                </Alert>
+                                            )}
                                             <Button
                                                 disabled={!dirty || !isValid}
                                                 type="submit"

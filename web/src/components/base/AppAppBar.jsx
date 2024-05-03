@@ -39,6 +39,12 @@ export default function AppAppBar(props) {
 
   const [openLoginDialog, setOpenLoginDialog] = React.useState(false);
   const [openRegisterDialog, setOpenRegisterDialog] = React.useState(false);
+  const [idToken, setIdToken] = React.useState(localStorage.getItem('id_token'));
+
+  React.useEffect(() => {
+    const token = localStorage.getItem('id_token');
+    setIdToken(token);
+  }, [idToken]);
 
   const handleLoginButtonClick = () => {
     setOpenLoginDialog(true);
@@ -60,6 +66,8 @@ export default function AppAppBar(props) {
   const toggleDrawer = (newOpen) => () => {
     setOpenDrawer(newOpen);
   };
+
+
 
   // const handleOpenUserMenu = (event) => {
   //   setAnchorElUser(event.currentTarget);
@@ -182,7 +190,7 @@ export default function AppAppBar(props) {
               }}
             >
 
-              {props.loginCheck === "false" && (
+              {!idToken && (
                 <>
                   {/* <Button
                     color="primary"
@@ -220,7 +228,7 @@ export default function AppAppBar(props) {
                     aria-labelledby="scroll-dialog-title"
                     aria-describedby="scroll-dialog-description"
                   >
-                    <Login />
+                    <Login handleLoginDialogClose={handleLoginDialogClose} />
                   </Dialog>
                   <Link to="/register">
                     <Button
@@ -240,9 +248,9 @@ export default function AppAppBar(props) {
                 </>
               )}
 
-              {props.loginCheck === "true" && (
+              {idToken && (
                 <>
-                  <h4 style={{ color: mode === "dark" ? "#fff" : "#007bff" }}>
+                  <h4 style={{ color: "#015433", 'fontSize': '14px' }}>
                     {props.name}
                   </h4>
                   <AccountMenu name={props.name} />

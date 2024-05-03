@@ -67,12 +67,14 @@ export default function AccountMenu(props) {
                     <IconButton
                         onClick={handleOpenUserMenu}
                         size="small"
-                        sx={{ ml: 2 }}
                         aria-controls={open ? 'account-menu' : undefined}
                         aria-haspopup="true"
                         aria-expanded={open ? 'true' : undefined}
                     >
-                        <Avatar {...stringAvatar(props.name, mode)} />
+                        <Avatar style={{
+                            backgroundColor: "rgba(9, 89, 170, 0.08)",
+                            textColor: "#015433"
+                        }} {...stringAvatar(props.name, mode)} />
                     </IconButton>
                 </Tooltip>
                 <Menu

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -16,7 +16,7 @@ import Paper from "@mui/material/Paper";
 
 import Launch from "@mui/icons-material/Launch";
 import Search from "@mui/icons-material/Search";
-
+import Alert from '@mui/material/Alert';
 import carImage from "../assets/car.png";
 
 import { OutlinedInput, alpha } from "@mui/material";
@@ -117,8 +117,7 @@ const rows = [
 function CustomizedTables() {
   const [province, setProvince] = useState("");
   const [carType, setCarType] = useState("");
-  const [openAuctionRegisterModal, setOpenAuctionRegisterModal] =
-    useState(false);
+  const [openAuctionRegisterModal, setOpenAuctionRegisterModal] = useState(false);
 
   const toggleAuctionRegisterMdal = () => {
     setOpenAuctionRegisterModal(!openAuctionRegisterModal);
@@ -295,7 +294,7 @@ export default function Home() {
         backgroundRepeat: "no-repeat",
       }}
     >
-      <AppAppBar loginCheck="false" currentPage="home" />
+      <AppAppBar name="Ha Nguyen" currentPage="home" />
       <Box
         id="hero"
         sx={{
@@ -355,7 +354,6 @@ export default function Home() {
                     OOAD
                   </Typography>
                 </Typography>
-
                 <Typography
                   color="#727584"
                   sx={{

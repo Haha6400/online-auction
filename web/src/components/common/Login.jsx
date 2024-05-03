@@ -1,23 +1,26 @@
 import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import Alert from '@mui/material/Alert';
+
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { OutlinedInput, alpha } from "@mui/material";
 import getLPTheme from '../../views/getLPTheme';
 
-import { useNavigate } from 'react-router-dom';
 
-export default function Login() {
+
+export default function Login({ handleLoginDialogClose }) {
   const [mode, setMode] = React.useState(getInitialMode());
+  const [loginError, setLoginError] = React.useState(false);
+
   const LPtheme = createTheme(getLPTheme(mode));
   const navigate = useNavigate();
 
@@ -30,13 +33,24 @@ export default function Login() {
     const savedMode = JSON.parse(localStorage.getItem('mode'));
     return savedMode || 'light';
   }
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    const values = {
+      'username': data.get('username'),
+      'password': data.get('password')
+    }
+    try {
+      const response = await axios.post(`http://localhost:8080/api/authenticate`, values);
+      const id_token = response.data.id_token;
+      localStorage.setItem('id_token', id_token);
+      if (id_token) {
+        handleLoginDialogClose();
+      }
+    } catch (error) {
+      setLoginError(true);
+      console.dir('Login error:', error);
+    }
   };
 
   return (
@@ -59,14 +73,14 @@ export default function Login() {
           </Typography>
           <Box component="form" onSubmit={handleSubmit}>
             <Typography >
-              Email
+              Tên đăng nhập
             </Typography>
             <TextField
               required
               fullWidth
-              id="email"
-              name="email"
-              autoComplete="email"
+              id="username"
+              name="username"
+              autoComplete="username"
               autoFocus
               sx={{
                 mt: 1, mb: 1,
@@ -91,6 +105,15 @@ export default function Login() {
               }}
             />
             <Grid item>
+              {loginError && (
+                <div style={{
+                  'color': 'red',
+                  'fontSize': '14px'
+
+                }}>
+                  Tên đăng nhập hoặc mật khẩu không hợp lệ!
+                </div>
+              )}
               <Link href="#" variant="body2">
                 Quên mật khẩu?
               </Link>
