@@ -81,6 +81,7 @@ public class CacheConfiguration {
             createCache(cm, com.mycompany.myapp.domain.VehicleType.class.getName(), jcacheConfiguration);
             createCache(cm, com.mycompany.myapp.domain.Province.class.getName(), jcacheConfiguration);
             // jhipster-needle-redis-add-entry
+            createCache(cm, "registeredUser", jcacheConfiguration);
         };
     }
 

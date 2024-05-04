@@ -110,6 +110,7 @@ public class UserService {
                     throw new EmailAlreadyUsedException();
                 }
             });
+
         User newUser = new User();
         String encryptedPassword = passwordEncoder.encode(password);
         newUser.setLogin(userDTO.getLogin().toLowerCase());
@@ -133,6 +134,9 @@ public class UserService {
         userRepository.save(newUser);
         this.clearUserCaches(newUser);
         log.debug("Created Information for User: {}", newUser);
+        Objects.requireNonNull(cacheManager.getCache("registeredUser")).put("username", userDTO.getLogin());
+        Objects.requireNonNull(cacheManager.getCache("registeredUser")).put("password", password);
+
         return newUser;
     }
 

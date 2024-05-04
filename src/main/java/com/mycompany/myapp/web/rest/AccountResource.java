@@ -9,13 +9,16 @@ import com.mycompany.myapp.service.dto.AdminUserDTO;
 import com.mycompany.myapp.service.dto.PasswordChangeDTO;
 import com.mycompany.myapp.web.rest.errors.*;
 import com.mycompany.myapp.web.rest.vm.KeyAndPasswordVM;
+import com.mycompany.myapp.web.rest.vm.LoginVM;
 import com.mycompany.myapp.web.rest.vm.ManagedUserVM;
 import jakarta.validation.Valid;
 import java.util.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.CacheManager;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -39,11 +42,21 @@ public class AccountResource {
     private final UserService userService;
 
     private final MailService mailService;
+    private final AuthenticateController authenticateController;
+    private final CacheManager cacheManager;
 
-    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService) {
+    public AccountResource(
+        UserRepository userRepository,
+        UserService userService,
+        MailService mailService,
+        AuthenticateController authenticateController,
+        CacheManager cacheManager
+    ) {
         this.userRepository = userRepository;
         this.userService = userService;
         this.mailService = mailService;
+        this.authenticateController = authenticateController;
+        this.cacheManager = cacheManager;
     }
 
     /**
@@ -71,11 +84,16 @@ public class AccountResource {
      * @throws RuntimeException {@code 500 (Internal Server Error)} if the user couldn't be activated.
      */
     @GetMapping("/activate")
-    public void activateAccount(@RequestParam(value = "key") String key) {
-        Optional<User> user = userService.activateRegistration(key);
-        if (!user.isPresent()) {
+    public ResponseEntity<AuthenticateController.JWTToken> activateAccount(@RequestParam(value = "key") String key) {
+        Optional<User> activatedUser = userService.activateRegistration(key);
+        LoginVM loginVM = new LoginVM();
+        loginVM.setUsername(cacheManager.getCache("registeredUser").get("username").get().toString());
+        loginVM.setPassword(cacheManager.getCache("registeredUser").get("password").get().toString());
+        this.clearUserCaches(loginVM);
+        if (!activatedUser.isPresent()) {
             throw new AccountResourceException("No user was found for this activation key");
         }
+        return authenticateController.authorize(loginVM);
     }
 
     /**
@@ -177,5 +195,10 @@ public class AccountResource {
             password.length() < ManagedUserVM.PASSWORD_MIN_LENGTH ||
             password.length() > ManagedUserVM.PASSWORD_MAX_LENGTH
         );
+    }
+
+    private void clearUserCaches(LoginVM user) {
+        Objects.requireNonNull(cacheManager.getCache("registeredUser")).evict(user.getUsername());
+        Objects.requireNonNull(cacheManager.getCache("registeredUser")).evict(user.getPassword());
     }
 }
