@@ -1,5 +1,7 @@
 package com.mycompany.myapp.web.rest;
 
+import static tech.jhipster.config.JHipsterDefaults.Cache.Hazelcast.ManagementCenter.url;
+
 import com.mycompany.myapp.domain.User;
 import com.mycompany.myapp.repository.UserRepository;
 import com.mycompany.myapp.security.SecurityUtils;
@@ -11,12 +13,15 @@ import com.mycompany.myapp.web.rest.errors.*;
 import com.mycompany.myapp.web.rest.vm.KeyAndPasswordVM;
 import com.mycompany.myapp.web.rest.vm.LoginVM;
 import com.mycompany.myapp.web.rest.vm.ManagedUserVM;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import java.net.URI;
 import java.util.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -84,16 +89,24 @@ public class AccountResource {
      * @throws RuntimeException {@code 500 (Internal Server Error)} if the user couldn't be activated.
      */
     @GetMapping("/activate")
-    public ResponseEntity<AuthenticateController.JWTToken> activateAccount(@RequestParam(value = "key") String key) {
+    public ResponseEntity<?> activateAccount(@RequestParam(value = "key") String key) {
         Optional<User> activatedUser = userService.activateRegistration(key);
         LoginVM loginVM = new LoginVM();
+
         loginVM.setUsername(cacheManager.getCache("registeredUser").get("username").get().toString());
         loginVM.setPassword(cacheManager.getCache("registeredUser").get("password").get().toString());
+        System.out.println(loginVM.getUsername());
+        System.out.println(loginVM.getPassword());
+
         this.clearUserCaches(loginVM);
+        authenticateController.authorize(loginVM);
+
         if (!activatedUser.isPresent()) {
             throw new AccountResourceException("No user was found for this activation key");
         }
-        return authenticateController.authorize(loginVM);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(URI.create("http://localhost:3000"));
+        return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
     }
 
     /**
