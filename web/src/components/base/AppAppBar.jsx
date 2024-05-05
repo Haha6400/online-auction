@@ -42,8 +42,8 @@ export default function AppAppBar(props) {
   const [idToken, setIdToken] = React.useState(localStorage.getItem('id_token'));
 
   React.useEffect(() => {
-    const token = localStorage.getItem('id_token');
-    setIdToken(token);
+    const idToken = localStorage.getItem('id_token');
+    setIdToken(idToken);
   }, [idToken]);
 
   const handleLoginButtonClick = () => {
@@ -67,20 +67,6 @@ export default function AppAppBar(props) {
     setOpenDrawer(newOpen);
   };
 
-
-
-  // const handleOpenUserMenu = (event) => {
-  //   setAnchorElUser(event.currentTarget);
-  // };
-
-  // const handleCloseUserMenu = () => {
-  //   setAnchorElUser(null);
-  // if (setting) {
-  //   navigate(`/${setting}`);
-  // } else {
-  //   navigate(`/`);
-  // }
-  // };
 
   return (
     <div>
@@ -189,7 +175,6 @@ export default function AppAppBar(props) {
                 alignItems: "center",
               }}
             >
-
               {!idToken && (
                 <>
                   {/* <Button
@@ -285,22 +270,6 @@ export default function AppAppBar(props) {
                     flexGrow: 1,
                   }}
                 >
-                  {/* Toggle mode
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "end",
-                      flexGrow: 1,
-                    }}
-                  >
-                    <ToggleColorMode
-                      mode={mode}
-                      toggleColorMode={toggleColorMode}
-                    />
-                  </Box> */}
-
-                  {/* Links */}
                   <Link to="/">
                     <MenuItem
                       sx={{ my: 1, py: 1 }}
@@ -352,43 +321,57 @@ export default function AppAppBar(props) {
                       </Typography>
                     </MenuItem>
                   </Link>
-
-                  {/* Account buttons */}
-                  <Button
-                    color="primary"
-                    variant="outlined"
-                    sx={{ width: "100%" }}
-                    component="button"
-                    onClick={handleLoginButtonClick}
-                  >
-                    Đăng nhập
-                  </Button>
-                  <Dialog
-                    open={openLoginDialog}
-                    onClose={handleLoginDialogClose}
-                    aria-labelledby="scroll-dialog-title"
-                    aria-describedby="scroll-dialog-description"
-                  >
-                    <Login />
-                  </Dialog>
-                  <Link to="/register">
-                    <Button
-                      color="primary"
-                      variant="contained"
-                      sx={{ width: "100%", my: 1 }}
-                      component="button"
-                      onClick={handleRegisterButtonClick}
-                    >
-                      Đăng ký
-                    </Button>
-                  </Link>
-
+                  {!idToken && (
+                    <>
+                      {/* Account buttons */}
+                      < Button
+                        color="primary"
+                        variant="outlined"
+                        sx={{ width: "100%" }}
+                        component="button"
+                        onClick={handleLoginButtonClick}
+                      >
+                        Đăng nhập
+                      </Button>
+                      <Dialog
+                        open={openLoginDialog}
+                        onClose={handleLoginDialogClose}
+                        aria-labelledby="scroll-dialog-title"
+                        aria-describedby="scroll-dialog-description"
+                      >
+                        <Login handleLoginDialogClose={handleLoginDialogClose} />
+                      </Dialog>
+                      <Link to="/register">
+                        <Button
+                          color="primary"
+                          variant="contained"
+                          sx={{ width: "100%", my: 1 }}
+                          component="button"
+                          onClick={handleRegisterButtonClick}
+                        >
+                          Đăng ký
+                        </Button>
+                      </Link>
+                    </>
+                  )}
                 </Box>
+                {idToken && (
+                  <>
+                    <MenuItem sx={{ my: 1, py: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-end', backgroundColor: 'rgba(1, 84, 51, 0.2)', borderRadius: '0' }} >
+                      <div style={{ display: "flex", alignItems: "center" }}>
+                        <AccountMenu name={props.name} />
+                        <h4 style={{ color: "#015433", fontSize: "14px", marginRight: "8px" }}>{props.name}</h4>
+                      </div>
+                    </MenuItem>
+
+
+                  </>
+                )}
               </Drawer>
             </Box>
           </Toolbar>
         </Container>
-      </AppBar>
+      </AppBar >
     </div >
   );
 }

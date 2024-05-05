@@ -20,7 +20,7 @@ import HttpsIcon from '@mui/icons-material/Https';
 
 import Footer from "../../components/common/Footer";
 import AppAppBar from "../../components/base/AppAppBar";
-import AccountUpdate from "../../components/common/AccountUpdate";
+import Update from "../account/Update";
 
 const items = [
     {
@@ -174,7 +174,7 @@ export default function MyAccount() {
                                     </Typography>
                                     {items[selectedItemIndex].title === "Personal" && (
                                         <>
-                                            <AccountUpdate />
+                                            <Update />
                                         </>
                                     )}
 

@@ -216,7 +216,7 @@ export default function Plan() {
         backgroundRepeat: "no-repeat",
       }}
     >
-      <AppAppBar loginCheck="false" currentPage="plan" />
+      <AppAppBar name="Ha Nguyen" currentPage="plan" />
       <Box id="hero" sx={{ width: "100%" }}>
         <Container
           sx={{

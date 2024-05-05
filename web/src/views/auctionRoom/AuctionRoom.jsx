@@ -3,10 +3,11 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 
-import { Button, Card, Stack, Grid, alpha } from "@mui/material";
+import { Button, Card, Stack, Grid, alpha, Dialog } from "@mui/material";
 
-import AppAppBar from "../components/base/AppAppBar";
-import Footer from "../components/common/Footer";
+import AppAppBar from "../../components/base/AppAppBar";
+import Footer from "../../components/common/Footer";
+import CRUDialog from "../auctionRoom/CRUDialog"
 
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
@@ -15,6 +16,8 @@ import EventIcon from "@mui/icons-material/Event";
 import HourglassTopIcon from "@mui/icons-material/HourglassTop";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditNoteIcon from "@mui/icons-material/EditNote";
+
+
 
 const rows = [
   {
@@ -220,6 +223,15 @@ const rows = [
 ];
 
 export default function AuctionRoom() {
+  const [openCreateDialog, setOpenCreateDialog] = React.useState(false)
+  const handleCreateButtonClick = () => {
+    setOpenCreateDialog(true);
+  }
+  const handleCreateButtonClose = () => {
+    setOpenCreateDialog(false);
+  }
+
+
   return (
     <Stack
       sx={{
@@ -228,7 +240,7 @@ export default function AuctionRoom() {
         backgroundRepeat: "no-repeat",
       }}
     >
-      <AppAppBar loginCheck="false" currentPage="list_auction_room" />
+      <AppAppBar name="Ha Nguyen" currentPage="list_auction_room" />
       <Box id="hero" sx={{ width: "100%" }}>
         <Container
           sx={{
@@ -266,13 +278,22 @@ export default function AuctionRoom() {
               boxShadow: `0px 3.5px 5.5px rgba(0, 0, 0, 0.02)`,
             }}
           >
+
             <Button
               variant="contained"
               color="primary"
+              sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}
               startIcon={<PlaylistAddIcon />}
+              onClick={handleCreateButtonClick}
             >
               Tạo phòng
             </Button>
+            <Dialog
+              open={openCreateDialog}
+              onClose={handleCreateButtonClose}
+            >
+              <CRUDialog title="Tạo phòng đấu giá" close={handleCreateButtonClose} />
+            </Dialog>
 
             <Box sx={{ mt: 5 }}>
               <Grid container spacing={{ lg: 5, xs: 1 }}>

@@ -12,7 +12,7 @@ import EventIcon from "@mui/icons-material/Event";
 import HourglassTopIcon from "@mui/icons-material/HourglassTop";
 import { styled, lighten, darken } from '@mui/system';
 import { Button, Grid, Stack } from "@mui/material";
-import LicensePlateInput from "../common/LicensePlateInput";
+import LicensePlateInput from "../../components/common/LicensePlateInput";
 
 import { LPtype, LPprovinces } from '../../utils/constants/LicensePlate';
 

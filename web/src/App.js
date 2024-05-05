@@ -9,7 +9,7 @@ import { CssBaseline } from "@mui/material";
 import CustomThemeProvider from "./utils/ThemeContext";
 import Plan from "./views/Plan";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import AuctionRoom from "./views/AuctionRoom";
+import AuctionRoom from "./views/auctionRoom/AuctionRoom";
 import RegisterV2 from "./components/common/RegisterV2"
 
 

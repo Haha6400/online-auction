@@ -27,8 +27,8 @@ import { useThemeProvider } from "../../utils/ThemeContext";
 
 function stringAvatar(name, mode) {
     let sx = {
-        bgcolor: mode === "light" ? "007bff" : "rgba(0, 0, 0, 0.4)",
-        color: mode === "light" ? "#000" : "#007bff"
+        bgcolor: "007bff",
+        color: "#000"
     };
     return {
         sx: sx,

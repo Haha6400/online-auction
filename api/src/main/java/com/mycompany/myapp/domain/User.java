@@ -78,15 +78,14 @@ public class User extends AbstractAuditingEntity<Long> {
 
     @JsonIgnore
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(
-        name = "user_authority",
-        joinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "id") },
-        inverseJoinColumns = { @JoinColumn(name = "authority_name", referencedColumnName = "name") }
-    )
+    @JoinTable(name = "user_authority", joinColumns = {
+            @JoinColumn(name = "user_id", referencedColumnName = "id") }, inverseJoinColumns = {
+                    @JoinColumn(name = "authority_name", referencedColumnName = "name") })
     @BatchSize(size = 20)
     private Set<Authority> authorities = new HashSet<>();
 
-    public User() {}
+    public User() {
+    }
 
     public Long getId() {
         return id;
@@ -206,7 +205,8 @@ public class User extends AbstractAuditingEntity<Long> {
 
     @Override
     public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        // see
+        // https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
@@ -214,14 +214,14 @@ public class User extends AbstractAuditingEntity<Long> {
     @Override
     public String toString() {
         return "User{" +
-            "login='" + login + '\'' +
-            ", firstName='" + firstName + '\'' +
-            ", lastName='" + lastName + '\'' +
-            ", email='" + email + '\'' +
-            ", imageUrl='" + imageUrl + '\'' +
-            ", activated='" + activated + '\'' +
-            ", langKey='" + langKey + '\'' +
-            ", activationKey='" + activationKey + '\'' +
-            "}";
+                "login='" + login + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", activated='" + activated + '\'' +
+                ", langKey='" + langKey + '\'' +
+                ", activationKey='" + activationKey + '\'' +
+                "}";
     }
 }

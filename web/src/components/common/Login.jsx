@@ -10,7 +10,7 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import getLPTheme from '../../views/getLPTheme';
@@ -40,12 +40,13 @@ export default function Login({ handleLoginDialogClose }) {
       'username': data.get('username'),
       'password': data.get('password')
     }
+    console.log("values", values);
     try {
       const response = await axios.post(`http://localhost:8080/api/authenticate`, values);
       const id_token = response.data.id_token;
       localStorage.setItem('id_token', id_token);
       if (id_token) {
-        handleLoginDialogClose();
+        window.location.reload();
       }
     } catch (error) {
       setLoginError(true);
@@ -54,100 +55,121 @@ export default function Login({ handleLoginDialogClose }) {
   };
 
   return (
-    <ThemeProvider theme={LPtheme}>
-      <Container component="main" width='70%'>
-        <CssBaseline />
-        <Box
+    <Stack
+      sx={{
+        background: "url(/bgr.png)",
+        backgroundSize: "100% 100%",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
+      <Box id="hero" sx={{ width: "100%" }}>
+        <Container
           sx={{
-            marginTop: 8,
-            margin: 5,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            alignContent: 'center',
-
-          }}
-        >
-          <Typography component="h1" variant="h5">
-            Đăng nhập
-          </Typography>
-          <Box component="form" onSubmit={handleSubmit}>
-            <Typography >
-              Tên đăng nhập
-            </Typography>
-            <TextField
-              required
-              fullWidth
-              id="username"
-              name="username"
-              autoComplete="username"
-              autoFocus
-              sx={{
-                mt: 1, mb: 1,
-                boxShadow: `0px 3.5px 5.5px rgba(0, 0, 0, 0.2)`,
-                borderRadius: 3,
-              }}
-            />
-            <Typography >
-              Mật khẩu
-            </Typography>
-            <TextField
-              required
-              fullWidth
-              name="password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              sx={{
-                mt: 1, mb: 1,
-                boxShadow: `0px 3.5px 5.5px rgba(0, 0, 0, 0.2)`,
-                borderRadius: 3,
-              }}
-            />
-            <Grid item>
-              {loginError && (
-                <div style={{
-                  'color': 'red',
-                  'fontSize': '14px'
-
-                }}>
-                  Tên đăng nhập hoặc mật khẩu không hợp lệ!
-                </div>
-              )}
-              <Link href="#" variant="body2">
-                Quên mật khẩu?
-              </Link>
-            </Grid>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{
-                mt: 1, mb: 1, backgroundColor: "primary",
-                color: "white"
-              }}
-            >
-              Đăng nhập
-            </Button>
-            <Grid container justifyContent="center">
-
-              <Grid item >
-                <Button
-                  color="primary"
-                  variant="text"
-                  sx={{ width: "100%" }}
-                  component="button"
-                  onClick={handleRegisterClick}
-                >
-                  {"Không có tài khoản?"}
-                  <strong style={{ margin: "5px" }}>{"  Đăng ký"}</strong>
-                </Button>
-              </Grid>
-            </Grid>
-          </Box>
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}>
           <CssBaseline />
-        </Box>
-      </Container>
-    </ThemeProvider>
+          <Box
+            sx={{
+              margin: 3,
+              padding: 5,
+              alignSelf: "center",
+              width: "100%",
+              bgcolor: "rgba(255, 255, 255, 0.3)",
+              backgroundSize: "cover",
+              borderRadius: "10px",
+              boxShadow: `0px 3.5px 5.5px rgba(0, 0, 0, 0.02)`,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              alignContent: 'center',
+            }}
+          >
+            <Typography component="h1" variant="h5"
+              sx={{
+                mb: 1
+              }}>
+              Đăng nhập
+            </Typography>
+            <Box component="form" onSubmit={handleSubmit}>
+              <Typography >
+                Tên đăng nhập
+              </Typography>
+              <TextField
+                required
+                fullWidth
+                id="username"
+                name="username"
+                autoComplete="username"
+                autoFocus
+                sx={{
+                  mt: 1, mb: 1,
+                  boxShadow: `0px 3.5px 5.5px rgba(0, 0, 0, 0.2)`,
+                  borderRadius: 3,
+                }}
+              />
+              <Typography >
+                Mật khẩu
+              </Typography>
+              <TextField
+                required
+                fullWidth
+                name="password"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+                sx={{
+                  mt: 1, mb: 1,
+                  boxShadow: `0px 3.5px 5.5px rgba(0, 0, 0, 0.2)`,
+                  borderRadius: 3,
+                }}
+              />
+              <Grid item>
+                {loginError && (
+                  <div style={{
+                    'color': 'red',
+                    'fontSize': '14px'
+
+                  }}>
+                    Tên đăng nhập hoặc mật khẩu không hợp lệ!
+                  </div>
+                )}
+                <Link href="#" variant="body2">
+                  Quên mật khẩu?
+                </Link>
+              </Grid>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{
+                  mt: 1, mb: 1, backgroundColor: "primary",
+                  color: "white"
+                }}
+              >
+                Đăng nhập
+              </Button>
+              <Grid container justifyContent="center">
+
+                <Grid item >
+                  <Button
+                    color="primary"
+                    variant="text"
+                    sx={{ width: "100%" }}
+                    component="button"
+                    onClick={handleRegisterClick}
+                  >
+                    {"Không có tài khoản?"}
+                    <strong style={{ margin: "5px" }}>{"  Đăng ký"}</strong>
+                  </Button>
+                </Grid>
+              </Grid>
+            </Box>
+            <CssBaseline />
+          </Box>
+        </Container>
+      </Box>
+    </Stack >
   );
 }

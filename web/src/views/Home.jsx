@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import axios from 'axios';
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -281,10 +282,30 @@ function CustomizedTables() {
 
 export default function Home() {
   const [openRegisterDialog, setOpenRegisterDialog] = useState(false);
+  const [idToken, setIdToken] = useState(localStorage.getItem('id_token'));
+  const [account, setAccount] = useState({});
 
   const toggleRegisterDialog = () => {
     setOpenRegisterDialog(!openRegisterDialog);
   };
+
+  useEffect(() => {
+    const idToken = localStorage.getItem('id_token');
+    setIdToken(idToken);
+    console.log('idToken', idToken);
+    axios.get('http://localhost:8080/api/account', {
+      headers: {
+        'Authorization': `Bearer ${idToken}`
+      }
+    }).then(response => {
+      setAccount(response.data);
+      console.log("account", account);
+      console.log("response", response);
+    }).catch(error => {
+      console.dir("error", error);
+    });
+  }
+  )
 
   return (
     <Stack

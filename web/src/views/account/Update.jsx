@@ -20,7 +20,7 @@ const handleSubmit = (event) => {
     });
 };
 
-export default function AccountUpdate() {
+export default function Update() {
     return (
         <Container>
             <Box

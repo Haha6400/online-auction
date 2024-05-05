@@ -304,13 +304,13 @@ export default function getLPTheme(mode) {
             }),
             ...(ownerState.variant === "contained" &&
               ownerState.color === "primary" && {
+              color: "#FFFFFF",
+              backgroundColor: "#015433",
+              "&:hover": {
                 color: "#FFFFFF",
                 backgroundColor: "#015433",
-                "&:hover": {
-                  color: "#FFFFFF",
-                  backgroundColor: "#015433",
-                },
-              }),
+              },
+            }),
             ...(ownerState.variant === "outlined" && {
               // backgroundColor: alpha(brand[300], 0.1),
               borderColor: gray[800],
@@ -569,8 +569,8 @@ export default function getLPTheme(mode) {
             },
             "& .MuiOutlinedInput-root": {
               boxSizing: "border-box",
-              minWidth: 280,
               minHeight: 40,
+              minWidth: 0,
               height: "100%",
               borderRadius: "10px",
               border: "1px solid",
@@ -590,31 +590,7 @@ export default function getLPTheme(mode) {
                 // outlineColor: brand[200],
               },
             },
-            ...(theme.palette.mode === "dark" && {
-              "& .MuiOutlinedInput-root": {
-                boxSizing: "border-box",
-                minWidth: 280,
-                minHeight: 40,
-                height: "100%",
-                borderRadius: "10px",
-                border: "1px solid",
-                borderColor: gray[600],
-                transition: "border-color 120ms ease-in",
-                "& fieldset": {
-                  border: "none",
-                  boxShadow: " 0px 2px 4px rgba(0, 0, 0, 0.4)",
-                  background: `${alpha(gray[800], 0.4)}`,
-                },
-                "&:hover": {
-                  // borderColor: brand[300],
-                },
-                "&.Mui-focused": {
-                  // borderColor: brand[400],
-                  // outline: "4px solid",
-                  // outlineColor: alpha(brand[500], 0.5),
-                },
-              },
-            }),
+
           }),
         },
       },

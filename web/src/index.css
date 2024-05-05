@@ -33,3 +33,12 @@ a {
   font-weight: bold;
   line-height: 1;
 }
+
+
+.css-v0pjtz-MuiStack-root {
+  overflow: visible !important;
+}
+
+.custom-width {
+  max-width: 85% !important;
+}

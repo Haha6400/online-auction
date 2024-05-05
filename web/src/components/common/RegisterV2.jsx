@@ -14,6 +14,7 @@ import Button from '@mui/material/Button';
 import Stack from "@mui/material/Stack";
 import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
 import { TextField } from "formik-material-ui"
 import { Formik, Form, Field } from "formik"
 
@@ -69,6 +70,7 @@ export default function RegisterV2() {
     const [alertMessage, setAlertMessage] = React.useState('');
     const [showAlert, setShowAlert] = React.useState(false);
     const navigate = useNavigate();
+
 
     const handleLoginButtonClick = () => {
         setOpenLoginDialog(true);
