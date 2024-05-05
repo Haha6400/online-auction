@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A VehicleType.
@@ -19,14 +21,11 @@ public class VehicleType {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name", unique = true)
+    @Column(name = "name")
     private String name;
 
-    @JsonIgnoreProperties(value = { "auctionRoom", "vehicleType", "province" }, allowSetters = true)
-    //    @OneToOne(fetch = FetchType.LAZY, mappedBy = "vehicleType")
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "vehicleType")
-    //    private LicensePlate licensePlate;
-    private Set<LicensePlate> licensePlate = new HashSet<>();
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "vehicleType")
+    private Set<LicensePlate> licensePlates = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -56,39 +55,39 @@ public class VehicleType {
         this.name = name;
     }
 
-    //    public LicensePlate getLicensePlate() {
-    //        return this.licensePlate;
-    //    }
-    public Set<LicensePlate> getLicensePlate() {
-        return this.licensePlate;
+    public Set<LicensePlate> getLicensePlates() {
+        return this.licensePlates;
     }
 
-    //    public void setLicensePlate(LicensePlate licensePlate) {
-    //        if (this.licensePlate != null) {
-    //            this.licensePlate.setVehicleType(null);
-    //        }
-    //        if (licensePlate != null) {
-    //            licensePlate.setVehicleType(this);
-    //        }
-    //        this.licensePlate = licensePlate;
-    //    }
-
-    public void setLicensePlate(Set<LicensePlate> licensePlate) {
-        //        if (this.licensePlate != null) {
-        //            this.licensePlate.setVehicleType(null);
-        //        }
-        //        if (licensePlate != null) {
-        //            licensePlate.setVehicleType(this);
-        //        }
-        this.licensePlate = licensePlate;
+    public void setLicensePlates(Set<LicensePlate> licensePlates) {
+        if (this.licensePlates != null) {
+            this.licensePlates.forEach(i -> i.setVehicleType(null));
+        }
+        if (licensePlates != null) {
+            licensePlates.forEach(i -> i.setVehicleType(this));
+        }
+        this.licensePlates = licensePlates;
     }
 
-    //    public VehicleType licensePlate(LicensePlate licensePlate) {
-    //        this.setLicensePlate(licensePlate);
-    //        return this;
-    //    }
+    public VehicleType licensePlates(Set<LicensePlate> licensePlates) {
+        this.setLicensePlates(licensePlates);
+        return this;
+    }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+    public VehicleType addLicensePlate(LicensePlate licensePlate) {
+        this.licensePlates.add(licensePlate);
+        licensePlate.setVehicleType(this);
+        return this;
+    }
+
+    public VehicleType removeLicensePlate(LicensePlate licensePlate) {
+        this.licensePlates.remove(licensePlate);
+        licensePlate.setVehicleType(null);
+        return this;
+    }
+
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and
+    // setters here
 
     @Override
     public boolean equals(Object o) {
@@ -103,7 +102,8 @@ public class VehicleType {
 
     @Override
     public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        // see
+        // https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
@@ -111,8 +111,8 @@ public class VehicleType {
     @Override
     public String toString() {
         return "VehicleType{" +
-            "id=" + getId() +
-            ", name='" + getName() + "'" +
-            "}";
+                "id=" + getId() +
+                ", name='" + getName() + "'" +
+                "}";
     }
 }

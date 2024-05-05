@@ -12,7 +12,6 @@ import org.springframework.data.domain.Persistable;
  */
 @Entity
 @Table(name = "authority")
-@JsonIgnoreProperties(value = { "new", "id" })
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class Authority implements Persistable<String> {
 

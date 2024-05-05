@@ -90,19 +90,6 @@ public class AuctionRoomServiceImpl implements AuctionRoomService {
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
-    /**
-     *  Get all the auctionRooms where LicensePlate is {@code null}.
-     *  @return the list of entities.
-     */
-    @Transactional(readOnly = true)
-    public List<AuctionRoomDTO> findAllWhereLicensePlateIsNull() {
-        log.debug("Request to get all auctionRooms where LicensePlate is null");
-        return StreamSupport.stream(auctionRoomRepository.findAll().spliterator(), false)
-            .filter(auctionRoom -> auctionRoom.getLicensePlate() == null)
-            .map(auctionRoomMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
-    }
-
     @Override
     @Transactional(readOnly = true)
     public Optional<AuctionRoomDTO> findOne(Long id) {

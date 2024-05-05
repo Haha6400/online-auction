@@ -265,8 +265,6 @@ class WinningBidResourceIT {
         WinningBid partialUpdatedWinningBid = new WinningBid();
         partialUpdatedWinningBid.setId(winningBid.getId());
 
-        partialUpdatedWinningBid.paymentStatus(UPDATED_PAYMENT_STATUS);
-
         restWinningBidMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedWinningBid.getId())

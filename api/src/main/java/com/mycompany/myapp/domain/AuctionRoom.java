@@ -13,9 +13,7 @@ import java.util.Set;
 @Entity
 @Table(name = "auction_room")
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class AuctionRoom implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class AuctionRoom {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,8 +32,11 @@ public class AuctionRoom implements Serializable {
     @Column(name = "init_price")
     private Long initPrice;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(unique = true)
+    private LicensePlate licensePlate;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "auctionRoom")
-    @JsonIgnoreProperties(value = { "user", "winningBid", "auctionRoom" }, allowSetters = true)
     private Set<Bid> bids = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -46,13 +47,8 @@ public class AuctionRoom implements Serializable {
     )
     private Set<User> users = new HashSet<>();
 
-    @JsonIgnoreProperties(value = { "auctionRoom", "bid" }, allowSetters = true)
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "auctionRoom")
     private WinningBid winningBid;
-
-    @JsonIgnoreProperties(value = { "auctionRoom", "vehicleType", "province" }, allowSetters = true)
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "auctionRoom")
-    private LicensePlate licensePlate;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -119,6 +115,19 @@ public class AuctionRoom implements Serializable {
 
     public void setInitPrice(Long initPrice) {
         this.initPrice = initPrice;
+    }
+
+    public LicensePlate getLicensePlate() {
+        return this.licensePlate;
+    }
+
+    public void setLicensePlate(LicensePlate licensePlate) {
+        this.licensePlate = licensePlate;
+    }
+
+    public AuctionRoom licensePlate(LicensePlate licensePlate) {
+        this.setLicensePlate(licensePlate);
+        return this;
     }
 
     public Set<Bid> getBids() {
@@ -191,25 +200,6 @@ public class AuctionRoom implements Serializable {
 
     public AuctionRoom winningBid(WinningBid winningBid) {
         this.setWinningBid(winningBid);
-        return this;
-    }
-
-    public LicensePlate getLicensePlate() {
-        return this.licensePlate;
-    }
-
-    public void setLicensePlate(LicensePlate licensePlate) {
-        if (this.licensePlate != null) {
-            this.licensePlate.setAuctionRoom(null);
-        }
-        if (licensePlate != null) {
-            licensePlate.setAuctionRoom(this);
-        }
-        this.licensePlate = licensePlate;
-    }
-
-    public AuctionRoom licensePlate(LicensePlate licensePlate) {
-        this.setLicensePlate(licensePlate);
         return this;
     }
 

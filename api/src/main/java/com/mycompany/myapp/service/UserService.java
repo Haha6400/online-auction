@@ -110,6 +110,7 @@ public class UserService {
                     throw new EmailAlreadyUsedException();
                 }
             });
+
         User newUser = new User();
         String encryptedPassword = passwordEncoder.encode(password);
         newUser.setLogin(userDTO.getLogin().toLowerCase());
@@ -120,6 +121,7 @@ public class UserService {
         if (userDTO.getEmail() != null) {
             newUser.setEmail(userDTO.getEmail().toLowerCase());
         }
+        newUser.setPhoneNumber(userDTO.getPhoneNumber());
         newUser.setImageUrl(userDTO.getImageUrl());
         newUser.setLangKey("vn");
         // new user is not active
@@ -132,6 +134,9 @@ public class UserService {
         userRepository.save(newUser);
         this.clearUserCaches(newUser);
         log.debug("Created Information for User: {}", newUser);
+        Objects.requireNonNull(cacheManager.getCache("registeredUser")).put("username", userDTO.getLogin());
+        Objects.requireNonNull(cacheManager.getCache("registeredUser")).put("password", password);
+
         return newUser;
     }
 
@@ -153,6 +158,7 @@ public class UserService {
         if (userDTO.getEmail() != null) {
             user.setEmail(userDTO.getEmail().toLowerCase());
         }
+        user.setPhoneNumber(user.getPhoneNumber());
         user.setImageUrl(userDTO.getImageUrl());
         if (userDTO.getLangKey() == null) {
             user.setLangKey(Constants.DEFAULT_LANGUAGE); // default language
@@ -198,6 +204,7 @@ public class UserService {
                 if (userDTO.getEmail() != null) {
                     user.setEmail(userDTO.getEmail().toLowerCase());
                 }
+                user.setPhoneNumber(userDTO.getPhoneNumber());
                 user.setImageUrl(userDTO.getImageUrl());
                 user.setActivated(userDTO.isActivated());
                 user.setLangKey(userDTO.getLangKey());
@@ -237,7 +244,7 @@ public class UserService {
      * @param langKey   language key.
      * @param imageUrl  image URL of user.
      */
-    public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl) {
+    public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl, String phoneNumber) {
         SecurityUtils.getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
             .ifPresent(user -> {
@@ -246,6 +253,7 @@ public class UserService {
                 if (email != null) {
                     user.setEmail(email.toLowerCase());
                 }
+                user.setPhoneNumber(phoneNumber);
                 user.setLangKey(langKey);
                 user.setImageUrl(imageUrl);
                 userRepository.save(user);
@@ -287,7 +295,7 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public Optional<User> getUserWithAuthorities() {
-        return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithAuthoritiesByLogin);
+        return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneByLogin);
     }
 
     /**

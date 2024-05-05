@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
@@ -132,15 +131,10 @@ public class ProvinceResource {
     /**
      * {@code GET  /provinces} : get all the provinces.
      *
-     * @param filter the filter of the request.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of provinces in body.
      */
     @GetMapping("")
-    public List<ProvinceDTO> getAllProvinces(@RequestParam(name = "filter", required = false) String filter) {
-        if ("licenseplate-is-null".equals(filter)) {
-            log.debug("REST request to get all Provinces where licensePlate is null");
-            return provinceService.findAllWhereLicensePlateIsNull();
-        }
+    public List<ProvinceDTO> getAllProvinces() {
         log.debug("REST request to get all Provinces");
         return provinceService.findAll();
     }

@@ -17,14 +17,11 @@
             <column name="plate_number" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="auction_room_id" type="bigint">
-                <constraints nullable="true" unique="true" uniqueConstraintName="ux_license_plate__auction_room_id" />
-            </column>
             <column name="vehicle_type_id" type="bigint">
-                <constraints nullable="true" unique="true" uniqueConstraintName="ux_license_plate__vehicle_type_id" />
+                <constraints nullable="true"/>
             </column>
             <column name="province_id" type="bigint">
-                <constraints nullable="true" unique="true" uniqueConstraintName="ux_license_plate__province_id" />
+                <constraints nullable="true"/>
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>

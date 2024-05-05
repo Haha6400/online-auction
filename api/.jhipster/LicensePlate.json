@@ -17,22 +17,22 @@
       "otherEntityName": "auctionRoom",
       "otherEntityRelationshipName": "licensePlate",
       "relationshipName": "auctionRoom",
-      "relationshipSide": "left",
+      "relationshipSide": "right",
       "relationshipType": "one-to-one"
     },
     {
       "otherEntityName": "vehicleType",
       "otherEntityRelationshipName": "licensePlate",
       "relationshipName": "vehicleType",
-      "relationshipSide": "left",
-      "relationshipType": "one-to-one"
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
     },
     {
       "otherEntityName": "province",
       "otherEntityRelationshipName": "licensePlate",
       "relationshipName": "province",
-      "relationshipSide": "left",
-      "relationshipType": "one-to-one"
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
     }
   ],
   "searchEngine": "no",

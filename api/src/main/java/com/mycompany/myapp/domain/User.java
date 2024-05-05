@@ -46,6 +46,10 @@ public class User extends AbstractAuditingEntity<Long> {
     @Column(name = "last_name", length = 50)
     private String lastName;
 
+    @Size(max = 11)
+    @Column(name = "phone_number", length = 50)
+    private String phoneNumber;
+
     @Email
     @Size(min = 5, max = 254)
     @Column(length = 254, unique = true)
@@ -77,7 +81,7 @@ public class User extends AbstractAuditingEntity<Long> {
     private Instant resetDate = null;
 
     @JsonIgnore
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_authority", joinColumns = {
             @JoinColumn(name = "user_id", referencedColumnName = "id") }, inverseJoinColumns = {
                     @JoinColumn(name = "authority_name", referencedColumnName = "name") })
@@ -134,6 +138,14 @@ public class User extends AbstractAuditingEntity<Long> {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getImageUrl() {

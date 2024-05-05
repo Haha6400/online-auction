@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-import org.hibernate.validator.constraints.UniqueElements;
 
 /**
  * A Province.
@@ -17,15 +16,14 @@ public class Province {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    @Column(unique = true)
+    @Column(name = "name")
     private String name;
 
-    @JsonIgnoreProperties(value = { "auctionRoom", "vehicleType", "province" }, allowSetters = true)
-    //    @OneToOne(fetch = FetchType.LAZY, mappedBy = "province")
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "province")
-    private Set<LicensePlate> licensePlate = new HashSet<>();
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "province")
+    private Set<LicensePlate> licensePlates = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -55,26 +53,39 @@ public class Province {
         this.name = name;
     }
 
-    public Set<LicensePlate> getLicensePlate() {
-        return this.licensePlate;
+    public Set<LicensePlate> getLicensePlates() {
+        return this.licensePlates;
     }
 
-    public void setLicensePlate(Set<LicensePlate> licensePlate) {
-        //        if (this.licensePlate != null) {
-        //            this.licensePlate.setProvince(null);
-        //        }
-        //        if (licensePlate != null) {
-        //            licensePlate.setProvince(this);
-        //        }
-        this.licensePlate = licensePlate;
+    public void setLicensePlates(Set<LicensePlate> licensePlates) {
+        if (this.licensePlates != null) {
+            this.licensePlates.forEach(i -> i.setProvince(null));
+        }
+        if (licensePlates != null) {
+            licensePlates.forEach(i -> i.setProvince(this));
+        }
+        this.licensePlates = licensePlates;
     }
 
-    public Province licensePlate(LicensePlate licensePlate) {
-        //        this.setLicensePlate(licensePlate);
+    public Province licensePlates(Set<LicensePlate> licensePlates) {
+        this.setLicensePlates(licensePlates);
         return this;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+    public Province addLicensePlate(LicensePlate licensePlate) {
+        this.licensePlates.add(licensePlate);
+        licensePlate.setProvince(this);
+        return this;
+    }
+
+    public Province removeLicensePlate(LicensePlate licensePlate) {
+        this.licensePlates.remove(licensePlate);
+        licensePlate.setProvince(null);
+        return this;
+    }
+
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and
+    // setters here
 
     @Override
     public boolean equals(Object o) {
@@ -89,7 +100,8 @@ public class Province {
 
     @Override
     public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        // see
+        // https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
@@ -97,8 +109,8 @@ public class Province {
     @Override
     public String toString() {
         return "Province{" +
-            "id=" + getId() +
-            ", name='" + getName() + "'" +
-            "}";
+                "id=" + getId() +
+                ", name='" + getName() + "'" +
+                "}";
     }
 }

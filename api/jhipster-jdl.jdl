@@ -31,9 +31,7 @@ entity Province {
 relationship OneToOne {
     WinningBid to AuctionRoom
     WinningBid to Bid
-    LicensePlate to AuctionRoom
-    LicensePlate to VehicleType
-    LicensePlate to Province
+    AuctionRoom to LicensePlate
 }
 
 relationship ManyToOne {
@@ -43,7 +41,9 @@ relationship ManyToMany {
 	AuctionRoom{user(login)} to User with builtInEntity
 }
 relationship OneToMany {
+    VehicleType to LicensePlate
     AuctionRoom to Bid
+    Province to LicensePlate
 }
 
 // Set pagination options

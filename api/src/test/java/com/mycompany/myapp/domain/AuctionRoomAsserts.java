@@ -59,5 +59,9 @@ public class AuctionRoomAsserts {
      * @param expected the expected entity
      * @param actual the actual entity
      */
-    public static void assertAuctionRoomUpdatableRelationshipsEquals(AuctionRoom expected, AuctionRoom actual) {}
+    public static void assertAuctionRoomUpdatableRelationshipsEquals(AuctionRoom expected, AuctionRoom actual) {
+        assertThat(expected)
+            .as("Verify AuctionRoom relationships")
+            .satisfies(e -> assertThat(e.getLicensePlate()).as("check licensePlate").isEqualTo(actual.getLicensePlate()));
+    }
 }

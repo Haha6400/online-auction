@@ -28,6 +28,18 @@ class AuctionRoomTest {
     }
 
     @Test
+    void licensePlateTest() throws Exception {
+        AuctionRoom auctionRoom = getAuctionRoomRandomSampleGenerator();
+        LicensePlate licensePlateBack = getLicensePlateRandomSampleGenerator();
+
+        auctionRoom.setLicensePlate(licensePlateBack);
+        assertThat(auctionRoom.getLicensePlate()).isEqualTo(licensePlateBack);
+
+        auctionRoom.licensePlate(null);
+        assertThat(auctionRoom.getLicensePlate()).isNull();
+    }
+
+    @Test
     void bidTest() throws Exception {
         AuctionRoom auctionRoom = getAuctionRoomRandomSampleGenerator();
         Bid bidBack = getBidRandomSampleGenerator();
@@ -61,19 +73,5 @@ class AuctionRoomTest {
         auctionRoom.winningBid(null);
         assertThat(auctionRoom.getWinningBid()).isNull();
         assertThat(winningBidBack.getAuctionRoom()).isNull();
-    }
-
-    @Test
-    void licensePlateTest() throws Exception {
-        AuctionRoom auctionRoom = getAuctionRoomRandomSampleGenerator();
-        LicensePlate licensePlateBack = getLicensePlateRandomSampleGenerator();
-
-        auctionRoom.setLicensePlate(licensePlateBack);
-        assertThat(auctionRoom.getLicensePlate()).isEqualTo(licensePlateBack);
-        assertThat(licensePlateBack.getAuctionRoom()).isEqualTo(auctionRoom);
-
-        auctionRoom.licensePlate(null);
-        assertThat(auctionRoom.getLicensePlate()).isNull();
-        assertThat(licensePlateBack.getAuctionRoom()).isNull();
     }
 }

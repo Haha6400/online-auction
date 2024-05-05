@@ -7,7 +7,7 @@ import java.util.Objects;
  * A DTO for the {@link com.mycompany.myapp.domain.Province} entity.
  */
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class ProvinceDTO {
+public class ProvinceDTO implements Serializable {
 
     private Long id;
 

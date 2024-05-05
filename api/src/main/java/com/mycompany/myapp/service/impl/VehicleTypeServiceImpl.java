@@ -9,7 +9,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -34,7 +33,6 @@ public class VehicleTypeServiceImpl implements VehicleTypeService {
     }
 
     @Override
-    @Transactional
     public VehicleTypeDTO save(VehicleTypeDTO vehicleTypeDTO) {
         log.debug("Request to save VehicleType : {}", vehicleTypeDTO);
         VehicleType vehicleType = vehicleTypeMapper.toEntity(vehicleTypeDTO);
@@ -70,19 +68,6 @@ public class VehicleTypeServiceImpl implements VehicleTypeService {
     public List<VehicleTypeDTO> findAll() {
         log.debug("Request to get all VehicleTypes");
         return vehicleTypeRepository.findAll().stream().map(vehicleTypeMapper::toDto).collect(Collectors.toCollection(LinkedList::new));
-    }
-
-    /**
-     *  Get all the vehicleTypes where LicensePlate is {@code null}.
-     *  @return the list of entities.
-     */
-    @Transactional(readOnly = true)
-    public List<VehicleTypeDTO> findAllWhereLicensePlateIsNull() {
-        log.debug("Request to get all vehicleTypes where LicensePlate is null");
-        return StreamSupport.stream(vehicleTypeRepository.findAll().spliterator(), false)
-            .filter(vehicleType -> vehicleType.getLicensePlate() == null)
-            .map(vehicleTypeMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
     }
 
     @Override

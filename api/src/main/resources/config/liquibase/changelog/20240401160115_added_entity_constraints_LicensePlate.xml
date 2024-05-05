@@ -10,13 +10,6 @@
     -->
     <changeSet id="20240401160115-2" author="jhipster">
 
-        <addForeignKeyConstraint baseColumnNames="auction_room_id"
-                                 baseTableName="license_plate"
-                                 constraintName="fk_license_plate__auction_room_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="auction_room"
-                                 />
-
         <addForeignKeyConstraint baseColumnNames="vehicle_type_id"
                                  baseTableName="license_plate"
                                  constraintName="fk_license_plate__vehicle_type_id"

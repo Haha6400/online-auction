@@ -10,9 +10,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "license_plate")
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class LicensePlate implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class LicensePlate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,23 +20,15 @@ public class LicensePlate implements Serializable {
     @Column(name = "plate_number")
     private String plateNumber;
 
-    @JsonIgnoreProperties(value = { "bids", "users", "winningBid", "licensePlate" }, allowSetters = true)
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(unique = true)
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "licensePlate")
     private AuctionRoom auctionRoom;
 
-    @JsonIgnoreProperties(value = { "licensePlate" }, allowSetters = true)
-    //    @OneToOne(fetch = FetchType.LAZY)
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    //    @JoinColumn(unique = true)
+    @ManyToOne(fetch = FetchType.EAGER)
     private VehicleType vehicleType;
 
-    @JsonIgnoreProperties(value = { "licensePlate" }, allowSetters = true)
-    //    @OneToOne(fetch = FetchType.LAZY)
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    //    @JoinColumn(unique = true)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinTable(name = "license_plate_province", joinColumns = {
+            @JoinColumn(name = "license_plate_id") }, inverseJoinColumns = { @JoinColumn(name = "province_name") })
     private Province province;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -74,6 +64,12 @@ public class LicensePlate implements Serializable {
     }
 
     public void setAuctionRoom(AuctionRoom auctionRoom) {
+        if (this.auctionRoom != null) {
+            this.auctionRoom.setLicensePlate(null);
+        }
+        if (auctionRoom != null) {
+            auctionRoom.setLicensePlate(this);
+        }
         this.auctionRoom = auctionRoom;
     }
 
@@ -108,7 +104,8 @@ public class LicensePlate implements Serializable {
         return this;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and
+    // setters here
 
     @Override
     public boolean equals(Object o) {
@@ -123,7 +120,8 @@ public class LicensePlate implements Serializable {
 
     @Override
     public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        // see
+        // https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
@@ -131,8 +129,8 @@ public class LicensePlate implements Serializable {
     @Override
     public String toString() {
         return "LicensePlate{" +
-            "id=" + getId() +
-            ", plateNumber='" + getPlateNumber() + "'" +
-            "}";
+                "id=" + getId() +
+                ", plateNumber='" + getPlateNumber() + "'" +
+                "}";
     }
 }

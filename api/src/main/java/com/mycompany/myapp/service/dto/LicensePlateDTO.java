@@ -13,8 +13,6 @@ public class LicensePlateDTO implements Serializable {
 
     private String plateNumber;
 
-    private AuctionRoomDTO auctionRoom;
-
     private VehicleTypeDTO vehicleType;
 
     private ProvinceDTO province;
@@ -33,14 +31,6 @@ public class LicensePlateDTO implements Serializable {
 
     public void setPlateNumber(String plateNumber) {
         this.plateNumber = plateNumber;
-    }
-
-    public AuctionRoomDTO getAuctionRoom() {
-        return auctionRoom;
-    }
-
-    public void setAuctionRoom(AuctionRoomDTO auctionRoom) {
-        this.auctionRoom = auctionRoom;
     }
 
     public VehicleTypeDTO getVehicleType() {
@@ -86,7 +76,6 @@ public class LicensePlateDTO implements Serializable {
         return "LicensePlateDTO{" +
             "id=" + getId() +
             ", plateNumber='" + getPlateNumber() + "'" +
-            ", auctionRoom=" + getAuctionRoom() +
             ", vehicleType=" + getVehicleType() +
             ", province=" + getProvince() +
             "}";

@@ -40,13 +40,6 @@ public interface VehicleTypeService {
     List<VehicleTypeDTO> findAll();
 
     /**
-     * Get all the VehicleTypeDTO where LicensePlate is {@code null}.
-     *
-     * @return the {@link List} of entities.
-     */
-    List<VehicleTypeDTO> findAllWhereLicensePlateIsNull();
-
-    /**
      * Get the "id" vehicleType.
      *
      * @param id the id of the entity.

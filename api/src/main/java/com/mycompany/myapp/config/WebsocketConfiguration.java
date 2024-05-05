@@ -56,11 +56,6 @@ public class WebsocketConfiguration implements WebSocketMessageBrokerConfigurer 
         //            .setInterceptors(httpSessionHandshakeInterceptor());
     }
 
-    @Override
-    public void configureClientInboundChannel(ChannelRegistration registration) {
-        WebSocketMessageBrokerConfigurer.super.configureClientInboundChannel(registration);
-    }
-
     @Bean
     public HandshakeInterceptor httpSessionHandshakeInterceptor() {
         return new HandshakeInterceptor() {
