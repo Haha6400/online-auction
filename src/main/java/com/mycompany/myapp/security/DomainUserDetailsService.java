@@ -4,6 +4,7 @@ import com.mycompany.myapp.domain.Authority;
 import com.mycompany.myapp.domain.User;
 import com.mycompany.myapp.repository.UserRepository;
 import java.util.*;
+import org.hibernate.Hibernate;
 import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,15 +37,18 @@ public class DomainUserDetailsService implements UserDetailsService {
         if (new EmailValidator().isValid(login, null)) {
             Optional<User> userByEmailFromDatabase = userRepository.findOneByEmailIgnoreCase(login);
 
-            user = userByEmailFromDatabase.orElseThrow(() -> new UsernameNotFoundException("User with email " + login + " was not found in the database"));
+            user = userByEmailFromDatabase.orElseThrow(
+                () -> new UsernameNotFoundException("User with email " + login + " was not found in the database")
+            );
 
             return createSpringSecurityUser(login, user);
         }
 
         String lowercaseLogin = login.toLowerCase(Locale.ENGLISH);
         Optional<User> userByLoginFromDatabase = userRepository.findOneByLogin(lowercaseLogin);
-        user = userByLoginFromDatabase.orElseThrow(() -> new UsernameNotFoundException("User " + lowercaseLogin + " was not found in the database"));
-
+        user = userByLoginFromDatabase.orElseThrow(
+            () -> new UsernameNotFoundException("User " + lowercaseLogin + " was not found in the database")
+        );
         return createSpringSecurityUser(lowercaseLogin, user);
     }
 
