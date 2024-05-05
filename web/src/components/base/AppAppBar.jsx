@@ -40,10 +40,22 @@ export default function AppAppBar(props) {
   const [openLoginDialog, setOpenLoginDialog] = React.useState(false);
   const [openRegisterDialog, setOpenRegisterDialog] = React.useState(false);
   const [idToken, setIdToken] = React.useState(localStorage.getItem('id_token'));
+  const [accountUser, setAccountUser] = React.useState({});
 
-  React.useEffect(() => {
+  React.useEffect(async () => {
     const idToken = localStorage.getItem('id_token');
     setIdToken(idToken);
+    try {
+      const response = await axios.get(`http://localhost:8080/api/account`,
+        {
+          headers: { Authorization: `Bearer ${idToken}` }
+        });
+      setAccountUser(response.data)
+      console.log("accountUser", response.data)
+    } catch (error) {
+      console.dir('Get current account error:', error);
+    }
+
   }, [idToken]);
 
   const handleLoginButtonClick = () => {
@@ -236,7 +248,7 @@ export default function AppAppBar(props) {
               {idToken && (
                 <>
                   <h4 style={{ color: "#015433", 'fontSize': '14px' }}>
-                    {props.name}
+                    {accountUser.login}
                   </h4>
                   <AccountMenu name={props.name} />
                 </>

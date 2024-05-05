@@ -293,17 +293,6 @@ export default function Home() {
     const idToken = localStorage.getItem('id_token');
     setIdToken(idToken);
     console.log('idToken', idToken);
-    axios.get('http://localhost:8080/api/account', {
-      headers: {
-        'Authorization': `Bearer ${idToken}`
-      }
-    }).then(response => {
-      setAccount(response.data);
-      console.log("account", account);
-      console.log("response", response);
-    }).catch(error => {
-      console.dir("error", error);
-    });
   }
   )
 
