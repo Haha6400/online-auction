@@ -25,18 +25,7 @@ import AllInboxIcon from '@mui/icons-material/AllInbox';
 
 import { useThemeProvider } from "../../utils/ThemeContext";
 
-function stringAvatar(name, mode) {
-    let sx = {
-        bgcolor: "007bff",
-        color: "#000"
-    };
-    return {
-        sx: sx,
-        children: `${name.split(' ')[0][0]}`,
-    };
-}
-
-export default function AccountMenu(props) {
+export default function AccountMenu() {
     const { mode, toggleColorMode } = useThemeProvider();
     const navigate = useNavigate();
 
@@ -73,8 +62,9 @@ export default function AccountMenu(props) {
                     >
                         <Avatar style={{
                             backgroundColor: "rgba(9, 89, 170, 0.08)",
-                            textColor: "#015433"
-                        }} {...stringAvatar(props.name, mode)} />
+                            color: "#015433"
+                        }}
+                            src="/broken-image.jpg" />
                     </IconButton>
                 </Tooltip>
                 <Menu

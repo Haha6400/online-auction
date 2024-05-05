@@ -42,19 +42,19 @@ export default function AppAppBar(props) {
   const [idToken, setIdToken] = React.useState(localStorage.getItem('id_token'));
   const [accountUser, setAccountUser] = React.useState({});
 
-  React.useEffect(async () => {
+  React.useEffect(() => {
     const idToken = localStorage.getItem('id_token');
     setIdToken(idToken);
-    try {
-      const response = await axios.get(`http://localhost:8080/api/account`,
-        {
-          headers: { Authorization: `Bearer ${idToken}` }
-        });
-      setAccountUser(response.data)
-      console.log("accountUser", response.data)
-    } catch (error) {
-      console.dir('Get current account error:', error);
-    }
+    axios.get(`http://localhost:8080/api/account`,
+      {
+        headers: { Authorization: `Bearer ${idToken}` }
+      }).then(response => {
+        setAccountUser(response.data)
+        console.log("accountUser", response.data)
+      })
+      .catch(error => {
+        console.dir('Get current account error:', error);
+      });
 
   }, [idToken]);
 
@@ -250,7 +250,8 @@ export default function AppAppBar(props) {
                   <h4 style={{ color: "#015433", 'fontSize': '14px' }}>
                     {accountUser.login}
                   </h4>
-                  <AccountMenu name={props.name} />
+
+                  <AccountMenu />
                 </>
               )}
             </Box>
