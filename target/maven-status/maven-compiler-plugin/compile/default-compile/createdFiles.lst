@@ -1,0 +1,12 @@
+com\mycompany\myapp\domain\Bid_.class
+com\mycompany\myapp\domain\User_.class
+com\mycompany\myapp\domain\VehicleType_.class
+com\mycompany\myapp\domain\AuctionRoom_.class
+com\mycompany\myapp\domain\WinningBid_.class
+com\mycompany\myapp\domain\Province_.class
+com\mycompany\myapp\service\mapper\BidMapperImpl.class
+com\mycompany\myapp\domain\LicensePlate_.class
+com\mycompany\myapp\domain\Authority_.class
+com\mycompany\myapp\service\mapper\LicensePlateMapperImpl.class
+com\mycompany\myapp\service\mapper\ProvinceMapperImpl.class
+com\mycompany\myapp\domain\AbstractAuditingEntity_.class

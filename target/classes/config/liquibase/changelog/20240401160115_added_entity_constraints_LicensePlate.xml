@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    <!--
+        Added the constraints for entity LicensePlate.
+    -->
+    <changeSet id="20240401160115-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="vehicle_type_id"
+                                 baseTableName="license_plate"
+                                 constraintName="fk_license_plate__vehicle_type_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="vehicle_type"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="province_id"
+                                 baseTableName="license_plate"
+                                 constraintName="fk_license_plate__province_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="province"
+                                 />
+    </changeSet>
+</databaseChangeLog>
