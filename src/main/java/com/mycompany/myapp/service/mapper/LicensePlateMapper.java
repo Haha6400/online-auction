@@ -13,8 +13,8 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring")
 public interface LicensePlateMapper extends EntityMapper<LicensePlateDTO, LicensePlate> {
-    @Mapping(target = "vehicleType", source = "vehicleType", qualifiedByName = "vehicleTypeId")
-    @Mapping(target = "province", source = "province", qualifiedByName = "provinceId")
+    @Mapping(target = "vehicleType", source = "vehicleType")
+    @Mapping(target = "province", source = "province")
     LicensePlateDTO toDto(LicensePlate s);
 
     @Named("vehicleTypeId")

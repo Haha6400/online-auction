@@ -13,8 +13,8 @@ import org.mapstruct.*;
  */
 @Mapper(componentModel = "spring")
 public interface WinningBidMapper extends EntityMapper<WinningBidDTO, WinningBid> {
-    @Mapping(target = "auctionRoom", source = "auctionRoom", qualifiedByName = "auctionRoomId")
-    @Mapping(target = "bid", source = "bid", qualifiedByName = "bidId")
+    @Mapping(target = "auctionRoom", source = "auctionRoom")
+    @Mapping(target = "bid", source = "bid")
     WinningBidDTO toDto(WinningBid s);
 
     @Named("auctionRoomId")

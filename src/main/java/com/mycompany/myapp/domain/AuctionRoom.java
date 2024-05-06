@@ -1,6 +1,7 @@
 package com.mycompany.myapp.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.Instant;
@@ -36,10 +37,12 @@ public class AuctionRoom {
     @JoinColumn(unique = true)
     private LicensePlate licensePlate;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "auctionRoom")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "auctionRoom")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Set<Bid> bids = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JoinTable(
         name = "rel_auction_room__user",
         joinColumns = @JoinColumn(name = "auction_room_id"),

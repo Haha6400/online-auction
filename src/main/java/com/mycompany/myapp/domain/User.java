@@ -1,6 +1,7 @@
 package com.mycompany.myapp.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.mycompany.myapp.config.Constants;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -82,6 +83,7 @@ public class User extends AbstractAuditingEntity<Long> {
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JoinTable(
         name = "user_authority",
         joinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "id") },

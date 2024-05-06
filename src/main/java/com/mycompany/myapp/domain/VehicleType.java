@@ -1,6 +1,7 @@
 package com.mycompany.myapp.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -23,6 +24,7 @@ public class VehicleType {
     private String name;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "vehicleType")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Set<LicensePlate> licensePlates = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

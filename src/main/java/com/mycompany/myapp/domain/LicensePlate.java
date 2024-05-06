@@ -1,6 +1,7 @@
 package com.mycompany.myapp.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import java.io.Serializable;
 
@@ -21,12 +22,15 @@ public class LicensePlate {
     private String plateNumber;
 
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "licensePlate")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private AuctionRoom auctionRoom;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private VehicleType vehicleType;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JoinTable(
         name = "license_plate_province",
         joinColumns = { @JoinColumn(name = "license_plate_id") },
