@@ -1,7 +1,9 @@
 package com.mycompany.myapp.service.impl;
 
 import com.mycompany.myapp.domain.AuctionRoom;
+import com.mycompany.myapp.domain.LicensePlate;
 import com.mycompany.myapp.repository.AuctionRoomRepository;
+import com.mycompany.myapp.repository.LicensePlateRepository;
 import com.mycompany.myapp.service.AuctionRoomService;
 import com.mycompany.myapp.service.dto.AuctionRoomDTO;
 import com.mycompany.myapp.service.mapper.AuctionRoomMapper;
@@ -29,10 +31,16 @@ public class AuctionRoomServiceImpl implements AuctionRoomService {
     private final AuctionRoomRepository auctionRoomRepository;
 
     private final AuctionRoomMapper auctionRoomMapper;
+    private final LicensePlateRepository licensePlateRepository;
 
-    public AuctionRoomServiceImpl(AuctionRoomRepository auctionRoomRepository, AuctionRoomMapper auctionRoomMapper) {
+    public AuctionRoomServiceImpl(
+        AuctionRoomRepository auctionRoomRepository,
+        AuctionRoomMapper auctionRoomMapper,
+        LicensePlateRepository licensePlateRepository
+    ) {
         this.auctionRoomRepository = auctionRoomRepository;
         this.auctionRoomMapper = auctionRoomMapper;
+        this.licensePlateRepository = licensePlateRepository;
     }
 
     @Override
@@ -95,6 +103,13 @@ public class AuctionRoomServiceImpl implements AuctionRoomService {
     public Optional<AuctionRoomDTO> findOne(Long id) {
         log.debug("Request to get AuctionRoom : {}", id);
         return auctionRoomRepository.findOneWithEagerRelationships(id).map(auctionRoomMapper::toDto);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<AuctionRoomDTO> findOneByLicensePlate(String plateNumber) {
+        LicensePlate licensePlate = licensePlateRepository.findLicensePlateByPlateNumber(plateNumber);
+        return auctionRoomRepository.findAuctionRoomByLicensePlate(licensePlate).map(auctionRoomMapper::toDto);
     }
 
     @Override

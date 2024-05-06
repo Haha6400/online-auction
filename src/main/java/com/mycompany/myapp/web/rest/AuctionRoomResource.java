@@ -177,6 +177,19 @@ public class AuctionRoomResource {
     }
 
     /**
+     * {@code GET  /auction-rooms/:plate_number} : get the plateNumber attached to auctionRoom.
+     *
+     * @param plateNumber the plateNumber of the auctionRoomDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the auctionRoomDTO, or with status {@code 404 (Not Found)}.
+     */
+    //    @GetMapping("/{plate_number}")
+    //    public ResponseEntity<AuctionRoomDTO> getAuctionRoom(@PathVariable("plate_number") String plateNumber) {
+    //        log.debug("REST request to get AuctionRoom : {}", plateNumber);
+    //        Optional<AuctionRoomDTO> auctionRoomDTO = auctionRoomService.findOneByLicensePlate(plateNumber);
+    //        return ResponseUtil.wrapOrNotFound(auctionRoomDTO);
+    //    }
+
+    /**
      * {@code DELETE  /auction-rooms/:id} : delete the "id" auctionRoom.
      *
      * @param id the id of the auctionRoomDTO to delete.

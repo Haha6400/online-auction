@@ -1,6 +1,7 @@
 package com.mycompany.myapp.repository;
 
 import com.mycompany.myapp.domain.AuctionRoom;
+import com.mycompany.myapp.domain.LicensePlate;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -27,4 +28,6 @@ public interface AuctionRoomRepository extends AuctionRoomRepositoryWithBagRelat
     default Page<AuctionRoom> findAllWithEagerRelationships(Pageable pageable) {
         return this.fetchBagRelationships(this.findAll(pageable));
     }
+
+    Optional<AuctionRoom> findAuctionRoomByLicensePlate(LicensePlate licensePlate);
 }

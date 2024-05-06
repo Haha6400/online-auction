@@ -8,6 +8,14 @@
     {
       "fieldName": "plateNumber",
       "fieldType": "String"
+    },
+    {
+      "fieldName": "vehicleTypeName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "provinceName",
+      "fieldType": "String"
     }
   ],
   "name": "LicensePlate",
@@ -19,20 +27,6 @@
       "relationshipName": "auctionRoom",
       "relationshipSide": "right",
       "relationshipType": "one-to-one"
-    },
-    {
-      "otherEntityName": "vehicleType",
-      "otherEntityRelationshipName": "licensePlate",
-      "relationshipName": "vehicleType",
-      "relationshipSide": "right",
-      "relationshipType": "many-to-one"
-    },
-    {
-      "otherEntityName": "province",
-      "otherEntityRelationshipName": "licensePlate",
-      "relationshipName": "province",
-      "relationshipSide": "right",
-      "relationshipType": "many-to-one"
     }
   ],
   "searchEngine": "no",

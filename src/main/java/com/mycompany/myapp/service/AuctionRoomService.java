@@ -66,6 +66,14 @@ public interface AuctionRoomService {
     Optional<AuctionRoomDTO> findOne(Long id);
 
     /**
+     * Get the "plateNumber" auctionRoom.
+     *
+     * @param plateNumber the plateNumber of the entity.
+     * @return the entity.
+     */
+    Optional<AuctionRoomDTO> findOneByLicensePlate(String plateNumber);
+
+    /**
      * Delete the "id" auctionRoom.
      *
      * @param id the id of the entity.

@@ -17,14 +17,8 @@ entity WinningBid {
 
 entity LicensePlate {
 	plateNumber String
-}
-
-entity VehicleType {
-    name String
-}
-
-entity Province {
-    name String
+    vehicleTypeName String
+    provinceName String
 }
 
 // defining multiple oneToOne relationships
@@ -41,9 +35,7 @@ relationship ManyToMany {
 	AuctionRoom{user(login)} to User with builtInEntity
 }
 relationship OneToMany {
-    VehicleType to LicensePlate
     AuctionRoom to Bid
-    Province to LicensePlate
 }
 
 // Set pagination options
