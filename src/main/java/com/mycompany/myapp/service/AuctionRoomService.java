@@ -1,6 +1,7 @@
 package com.mycompany.myapp.service;
 
 import com.mycompany.myapp.service.dto.AuctionRoomDTO;
+import com.mycompany.myapp.service.dto.UserDTO;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -33,6 +34,7 @@ public interface AuctionRoomService {
      * @return the persisted entity.
      */
     Optional<AuctionRoomDTO> partialUpdate(AuctionRoomDTO auctionRoomDTO);
+    Optional<AuctionRoomDTO> addUserToAuctionRoom(Long id, UserDTO userDTO);
 
     /**
      * Get all the auctionRooms.

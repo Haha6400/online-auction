@@ -6,6 +6,7 @@ import com.mycompany.myapp.repository.AuctionRoomRepository;
 import com.mycompany.myapp.repository.LicensePlateRepository;
 import com.mycompany.myapp.service.AuctionRoomService;
 import com.mycompany.myapp.service.dto.AuctionRoomDTO;
+import com.mycompany.myapp.service.dto.UserDTO;
 import com.mycompany.myapp.service.mapper.AuctionRoomMapper;
 import java.util.LinkedList;
 import java.util.List;
@@ -67,6 +68,24 @@ public class AuctionRoomServiceImpl implements AuctionRoomService {
             .findById(auctionRoomDTO.getId())
             .map(existingAuctionRoom -> {
                 auctionRoomMapper.partialUpdate(existingAuctionRoom, auctionRoomDTO);
+
+                return existingAuctionRoom;
+            })
+            .map(auctionRoomRepository::save)
+            .map(auctionRoomMapper::toDto);
+    }
+
+    @Override
+    public Optional<AuctionRoomDTO> addUserToAuctionRoom(Long id, UserDTO userDTO) {
+        Optional<AuctionRoomDTO> auctionRoomDTO = auctionRoomRepository.findById(id).map(auctionRoomMapper::toDto);
+        if (auctionRoomDTO.isPresent()) {
+            auctionRoomDTO.get().getUsers().add(userDTO);
+            auctionRoomDTO.get().setUsers(auctionRoomDTO.get().getUsers());
+        }
+        return auctionRoomRepository
+            .findById(id)
+            .map(existingAuctionRoom -> {
+                auctionRoomMapper.partialUpdate(existingAuctionRoom, auctionRoomDTO.get());
 
                 return existingAuctionRoom;
             })

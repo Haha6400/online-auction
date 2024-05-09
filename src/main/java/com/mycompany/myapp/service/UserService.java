@@ -9,6 +9,7 @@ import com.mycompany.myapp.security.AuthoritiesConstants;
 import com.mycompany.myapp.security.SecurityUtils;
 import com.mycompany.myapp.service.dto.AdminUserDTO;
 import com.mycompany.myapp.service.dto.UserDTO;
+import com.mycompany.myapp.service.mapper.UserMapper;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -38,6 +39,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     private final AuthorityRepository authorityRepository;
+    private final UserMapper userMapper;
 
     private final CacheManager cacheManager;
 
@@ -45,11 +47,13 @@ public class UserService {
         UserRepository userRepository,
         PasswordEncoder passwordEncoder,
         AuthorityRepository authorityRepository,
+        UserMapper userMapper,
         CacheManager cacheManager
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
+        this.userMapper = userMapper;
         this.cacheManager = cacheManager;
     }
 
@@ -296,6 +300,11 @@ public class UserService {
     @Transactional(readOnly = true)
     public Optional<User> getUserWithAuthorities() {
         return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneByLogin);
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<UserDTO> getCurrentUserDTO() {
+        return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneByLogin).map(userMapper::userToUserDTO);
     }
 
     /**

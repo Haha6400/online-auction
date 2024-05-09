@@ -1,8 +1,11 @@
 package com.mycompany.myapp.web.rest;
 
 import com.mycompany.myapp.repository.AuctionRoomRepository;
+import com.mycompany.myapp.security.SecurityUtils;
 import com.mycompany.myapp.service.AuctionRoomService;
+import com.mycompany.myapp.service.UserService;
 import com.mycompany.myapp.service.dto.AuctionRoomDTO;
+import com.mycompany.myapp.service.dto.UserDTO;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -38,11 +41,17 @@ public class AuctionRoomResource {
     private String applicationName;
 
     private final AuctionRoomService auctionRoomService;
+    private final UserService userService;
 
     private final AuctionRoomRepository auctionRoomRepository;
 
-    public AuctionRoomResource(AuctionRoomService auctionRoomService, AuctionRoomRepository auctionRoomRepository) {
+    public AuctionRoomResource(
+        AuctionRoomService auctionRoomService,
+        UserService userService,
+        AuctionRoomRepository auctionRoomRepository
+    ) {
         this.auctionRoomService = auctionRoomService;
+        this.userService = userService;
         this.auctionRoomRepository = auctionRoomRepository;
     }
 
@@ -202,5 +211,17 @@ public class AuctionRoomResource {
         return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
             .build();
+    }
+
+    @PatchMapping(value = "/register/{id}")
+    public ResponseEntity<AuctionRoomDTO> addUserToAuctionRoom(@PathVariable(value = "id", required = false) final Long id)
+        throws URISyntaxException {
+        if (!auctionRoomRepository.existsById(id)) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
+
+        Optional<AuctionRoomDTO> result = auctionRoomService.addUserToAuctionRoom(id, userService.getCurrentUserDTO().get());
+
+        return ResponseUtil.wrapOrNotFound(result, HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, id.toString()));
     }
 }
