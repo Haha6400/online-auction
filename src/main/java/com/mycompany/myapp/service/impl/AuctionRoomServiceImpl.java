@@ -4,6 +4,7 @@ import com.mycompany.myapp.domain.AuctionRoom;
 import com.mycompany.myapp.domain.LicensePlate;
 import com.mycompany.myapp.repository.AuctionRoomRepository;
 import com.mycompany.myapp.repository.LicensePlateRepository;
+import com.mycompany.myapp.repository.UserRepository;
 import com.mycompany.myapp.service.AuctionRoomService;
 import com.mycompany.myapp.service.dto.AuctionRoomDTO;
 import com.mycompany.myapp.service.dto.UserDTO;
@@ -32,15 +33,19 @@ public class AuctionRoomServiceImpl implements AuctionRoomService {
     private final AuctionRoomRepository auctionRoomRepository;
 
     private final AuctionRoomMapper auctionRoomMapper;
+    private final UserRepository userRepository;
+
     private final LicensePlateRepository licensePlateRepository;
 
     public AuctionRoomServiceImpl(
         AuctionRoomRepository auctionRoomRepository,
         AuctionRoomMapper auctionRoomMapper,
+        UserRepository userRepository,
         LicensePlateRepository licensePlateRepository
     ) {
         this.auctionRoomRepository = auctionRoomRepository;
         this.auctionRoomMapper = auctionRoomMapper;
+        this.userRepository = userRepository;
         this.licensePlateRepository = licensePlateRepository;
     }
 
@@ -91,6 +96,11 @@ public class AuctionRoomServiceImpl implements AuctionRoomService {
             })
             .map(auctionRoomRepository::save)
             .map(auctionRoomMapper::toDto);
+    }
+
+    @Override
+    public List<AuctionRoomDTO> getAllByUser(UserDTO userDTO) {
+        return auctionRoomMapper.toDto(auctionRoomRepository.findAllByUsers(userRepository.findOneById(userDTO.getId())));
     }
 
     @Override

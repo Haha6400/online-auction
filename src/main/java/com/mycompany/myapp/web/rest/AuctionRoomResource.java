@@ -4,6 +4,7 @@ import com.mycompany.myapp.repository.AuctionRoomRepository;
 import com.mycompany.myapp.security.SecurityUtils;
 import com.mycompany.myapp.service.AuctionRoomService;
 import com.mycompany.myapp.service.UserService;
+import com.mycompany.myapp.service.dto.AdminUserDTO;
 import com.mycompany.myapp.service.dto.AuctionRoomDTO;
 import com.mycompany.myapp.service.dto.UserDTO;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
@@ -223,5 +224,10 @@ public class AuctionRoomResource {
         Optional<AuctionRoomDTO> result = auctionRoomService.addUserToAuctionRoom(id, userService.getCurrentUserDTO().get());
 
         return ResponseUtil.wrapOrNotFound(result, HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, id.toString()));
+    }
+
+    @GetMapping(value = "/self")
+    public List<AuctionRoomDTO> getAllOfCurrentUser() throws URISyntaxException {
+        return auctionRoomService.getAllByUser(userService.getCurrentUserDTO().get());
     }
 }

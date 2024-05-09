@@ -1,5 +1,6 @@
 package com.mycompany.myapp.service;
 
+import com.mycompany.myapp.service.dto.AdminUserDTO;
 import com.mycompany.myapp.service.dto.AuctionRoomDTO;
 import com.mycompany.myapp.service.dto.UserDTO;
 import java.util.List;
@@ -36,14 +37,7 @@ public interface AuctionRoomService {
     Optional<AuctionRoomDTO> partialUpdate(AuctionRoomDTO auctionRoomDTO);
     Optional<AuctionRoomDTO> addUserToAuctionRoom(Long id, UserDTO userDTO);
 
-    /**
-     * Get all the auctionRooms.
-     *
-     * @param pageable the pagination information.
-     * @return the list of entities.
-     */
-    Page<AuctionRoomDTO> findAll(Pageable pageable);
-
+    List<AuctionRoomDTO> getAllByUser(UserDTO userDTO);
     /**
      * Get all the AuctionRoomDTO where WinningBid is {@code null}.
      *
@@ -81,4 +75,5 @@ public interface AuctionRoomService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+    Page<AuctionRoomDTO> findAll(Pageable pageable);
 }
