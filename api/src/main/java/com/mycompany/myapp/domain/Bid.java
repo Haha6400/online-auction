@@ -1,7 +1,6 @@
 package com.mycompany.myapp.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.Instant;
@@ -12,7 +11,9 @@ import java.time.Instant;
 @Entity
 @Table(name = "bid")
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class Bid {
+public class Bid implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,16 +26,14 @@ public class Bid {
     @Column(name = "timestamp")
     private Instant timestamp;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
     @JsonIgnoreProperties(value = { "auctionRoom", "bid" }, allowSetters = true)
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "bid")
     private WinningBid winningBid;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = { "licensePlate", "bids", "users", "winningBid" }, allowSetters = true)
     private AuctionRoom auctionRoom;
 

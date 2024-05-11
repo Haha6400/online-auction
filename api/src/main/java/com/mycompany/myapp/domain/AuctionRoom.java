@@ -1,7 +1,6 @@
 package com.mycompany.myapp.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.Instant;
@@ -33,16 +32,16 @@ public class AuctionRoom {
     @Column(name = "init_price")
     private Long initPrice;
 
+    @JsonIgnoreProperties(value = { "auctionRoom", "vehicleType", "province" }, allowSetters = true)
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(unique = true)
     private LicensePlate licensePlate;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "auctionRoom")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "auctionRoom")
+    @JsonIgnoreProperties(value = { "user", "winningBid", "auctionRoom" }, allowSetters = true)
     private Set<Bid> bids = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
         name = "rel_auction_room__user",
         joinColumns = @JoinColumn(name = "auction_room_id"),
@@ -50,6 +49,7 @@ public class AuctionRoom {
     )
     private Set<User> users = new HashSet<>();
 
+    @JsonIgnoreProperties(value = { "auctionRoom", "bid" }, allowSetters = true)
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "auctionRoom")
     private WinningBid winningBid;
 

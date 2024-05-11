@@ -7,15 +7,15 @@ import java.util.Objects;
  * A DTO for the {@link com.mycompany.myapp.domain.LicensePlate} entity.
  */
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class LicensePlateDTO implements Serializable {
+public class LicensePlateDTO {
 
     private Long id;
 
     private String plateNumber;
 
-    private VehicleTypeDTO vehicleType;
+    private String vehicleType;
 
-    private ProvinceDTO province;
+    private String province;
 
     public Long getId() {
         return id;
@@ -33,19 +33,19 @@ public class LicensePlateDTO implements Serializable {
         this.plateNumber = plateNumber;
     }
 
-    public VehicleTypeDTO getVehicleType() {
+    public String getVehicleType() {
         return vehicleType;
     }
 
-    public void setVehicleType(VehicleTypeDTO vehicleType) {
+    public void setVehicleType(String vehicleType) {
         this.vehicleType = vehicleType;
     }
 
-    public ProvinceDTO getProvince() {
+    public String getProvince() {
         return province;
     }
 
-    public void setProvince(ProvinceDTO province) {
+    public void setProvince(String province) {
         this.province = province;
     }
 
@@ -76,8 +76,8 @@ public class LicensePlateDTO implements Serializable {
         return "LicensePlateDTO{" +
             "id=" + getId() +
             ", plateNumber='" + getPlateNumber() + "'" +
-            ", vehicleType=" + getVehicleType() +
-            ", province=" + getProvince() +
+            ", vehicleType='" + getVehicleType() + "'" +
+            ", province='" + getProvince() + "'" +
             "}";
     }
 }

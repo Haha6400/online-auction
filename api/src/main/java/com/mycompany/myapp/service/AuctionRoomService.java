@@ -1,6 +1,8 @@
 package com.mycompany.myapp.service;
 
+import com.mycompany.myapp.service.dto.AdminUserDTO;
 import com.mycompany.myapp.service.dto.AuctionRoomDTO;
+import com.mycompany.myapp.service.dto.UserDTO;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -33,15 +35,9 @@ public interface AuctionRoomService {
      * @return the persisted entity.
      */
     Optional<AuctionRoomDTO> partialUpdate(AuctionRoomDTO auctionRoomDTO);
+    Optional<AuctionRoomDTO> addUserToAuctionRoom(Long id, UserDTO userDTO);
 
-    /**
-     * Get all the auctionRooms.
-     *
-     * @param pageable the pagination information.
-     * @return the list of entities.
-     */
-    Page<AuctionRoomDTO> findAll(Pageable pageable);
-
+    List<AuctionRoomDTO> getAllByUser(UserDTO userDTO);
     /**
      * Get all the AuctionRoomDTO where WinningBid is {@code null}.
      *
@@ -66,9 +62,18 @@ public interface AuctionRoomService {
     Optional<AuctionRoomDTO> findOne(Long id);
 
     /**
+     * Get the "plateNumber" auctionRoom.
+     *
+     * @param plateNumber the plateNumber of the entity.
+     * @return the entity.
+     */
+    Optional<AuctionRoomDTO> findOneByLicensePlate(String plateNumber);
+
+    /**
      * Delete the "id" auctionRoom.
      *
      * @param id the id of the entity.
      */
     void delete(Long id);
+    Page<AuctionRoomDTO> findAll(Pageable pageable);
 }

@@ -1,9 +1,13 @@
 package com.mycompany.myapp.service.impl;
 
 import com.mycompany.myapp.domain.AuctionRoom;
+import com.mycompany.myapp.domain.LicensePlate;
 import com.mycompany.myapp.repository.AuctionRoomRepository;
+import com.mycompany.myapp.repository.LicensePlateRepository;
+import com.mycompany.myapp.repository.UserRepository;
 import com.mycompany.myapp.service.AuctionRoomService;
 import com.mycompany.myapp.service.dto.AuctionRoomDTO;
+import com.mycompany.myapp.service.dto.UserDTO;
 import com.mycompany.myapp.service.mapper.AuctionRoomMapper;
 import java.util.LinkedList;
 import java.util.List;
@@ -29,10 +33,20 @@ public class AuctionRoomServiceImpl implements AuctionRoomService {
     private final AuctionRoomRepository auctionRoomRepository;
 
     private final AuctionRoomMapper auctionRoomMapper;
+    private final UserRepository userRepository;
 
-    public AuctionRoomServiceImpl(AuctionRoomRepository auctionRoomRepository, AuctionRoomMapper auctionRoomMapper) {
+    private final LicensePlateRepository licensePlateRepository;
+
+    public AuctionRoomServiceImpl(
+        AuctionRoomRepository auctionRoomRepository,
+        AuctionRoomMapper auctionRoomMapper,
+        UserRepository userRepository,
+        LicensePlateRepository licensePlateRepository
+    ) {
         this.auctionRoomRepository = auctionRoomRepository;
         this.auctionRoomMapper = auctionRoomMapper;
+        this.userRepository = userRepository;
+        this.licensePlateRepository = licensePlateRepository;
     }
 
     @Override
@@ -67,6 +81,29 @@ public class AuctionRoomServiceImpl implements AuctionRoomService {
     }
 
     @Override
+    public Optional<AuctionRoomDTO> addUserToAuctionRoom(Long id, UserDTO userDTO) {
+        Optional<AuctionRoomDTO> auctionRoomDTO = auctionRoomRepository.findById(id).map(auctionRoomMapper::toDto);
+        if (auctionRoomDTO.isPresent()) {
+            auctionRoomDTO.get().getUsers().add(userDTO);
+            auctionRoomDTO.get().setUsers(auctionRoomDTO.get().getUsers());
+        }
+        return auctionRoomRepository
+            .findById(id)
+            .map(existingAuctionRoom -> {
+                auctionRoomMapper.partialUpdate(existingAuctionRoom, auctionRoomDTO.get());
+
+                return existingAuctionRoom;
+            })
+            .map(auctionRoomRepository::save)
+            .map(auctionRoomMapper::toDto);
+    }
+
+    @Override
+    public List<AuctionRoomDTO> getAllByUser(UserDTO userDTO) {
+        return auctionRoomMapper.toDto(auctionRoomRepository.findAllByUsers(userRepository.findOneById(userDTO.getId())));
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public Page<AuctionRoomDTO> findAll(Pageable pageable) {
         log.debug("Request to get all AuctionRooms");
@@ -95,6 +132,13 @@ public class AuctionRoomServiceImpl implements AuctionRoomService {
     public Optional<AuctionRoomDTO> findOne(Long id) {
         log.debug("Request to get AuctionRoom : {}", id);
         return auctionRoomRepository.findOneWithEagerRelationships(id).map(auctionRoomMapper::toDto);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<AuctionRoomDTO> findOneByLicensePlate(String plateNumber) {
+        LicensePlate licensePlate = licensePlateRepository.findLicensePlateByPlateNumber(plateNumber);
+        return auctionRoomRepository.findAuctionRoomByLicensePlate(licensePlate).map(auctionRoomMapper::toDto);
     }
 
     @Override

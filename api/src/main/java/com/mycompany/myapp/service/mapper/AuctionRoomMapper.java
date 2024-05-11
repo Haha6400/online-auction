@@ -16,7 +16,7 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring")
 public interface AuctionRoomMapper extends EntityMapper<AuctionRoomDTO, AuctionRoom> {
     @Mapping(target = "licensePlate", source = "licensePlate")
-    @Mapping(target = "users", source = "users", qualifiedByName = "userLoginSet")
+    @Mapping(target = "users", source = "users")
     AuctionRoomDTO toDto(AuctionRoom s);
 
     @Mapping(target = "removeUser", ignore = true)

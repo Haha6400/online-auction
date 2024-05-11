@@ -1,7 +1,6 @@
 package com.mycompany.myapp.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import java.io.Serializable;
 
@@ -21,22 +20,15 @@ public class LicensePlate {
     @Column(name = "plate_number")
     private String plateNumber;
 
+    @Column(name = "vehicle_type")
+    private String vehicleType;
+
+    @Column(name = "province_")
+    private String province;
+
+    @JsonIgnoreProperties(value = { "licensePlate", "bids", "users", "winningBid" }, allowSetters = true)
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "licensePlate")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private AuctionRoom auctionRoom;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private VehicleType vehicleType;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JoinTable(
-        name = "license_plate_province",
-        joinColumns = { @JoinColumn(name = "license_plate_id") },
-        inverseJoinColumns = { @JoinColumn(name = "province_name") }
-    )
-    private Province province;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -66,6 +58,22 @@ public class LicensePlate {
         this.plateNumber = plateNumber;
     }
 
+    public String getVehicleType() {
+        return vehicleType;
+    }
+
+    public void setVehicleType(String vehicleType) {
+        this.vehicleType = vehicleType;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
+    }
+
     public AuctionRoom getAuctionRoom() {
         return this.auctionRoom;
     }
@@ -82,32 +90,6 @@ public class LicensePlate {
 
     public LicensePlate auctionRoom(AuctionRoom auctionRoom) {
         this.setAuctionRoom(auctionRoom);
-        return this;
-    }
-
-    public VehicleType getVehicleType() {
-        return this.vehicleType;
-    }
-
-    public void setVehicleType(VehicleType vehicleType) {
-        this.vehicleType = vehicleType;
-    }
-
-    public LicensePlate vehicleType(VehicleType vehicleType) {
-        this.setVehicleType(vehicleType);
-        return this;
-    }
-
-    public Province getProvince() {
-        return this.province;
-    }
-
-    public void setProvince(Province province) {
-        this.province = province;
-    }
-
-    public LicensePlate province(Province province) {
-        this.setProvince(province);
         return this;
     }
 
@@ -136,6 +118,8 @@ public class LicensePlate {
         return "LicensePlate{" +
             "id=" + getId() +
             ", plateNumber='" + getPlateNumber() + "'" +
+            ", vehicleType='" + getVehicleType() + "'" +
+            ", province='" + getProvince() + "'" +
             "}";
     }
 }
