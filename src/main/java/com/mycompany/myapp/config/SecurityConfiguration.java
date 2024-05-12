@@ -55,6 +55,7 @@ public class SecurityConfiguration {
                         .requestMatchers(mvc.pattern("/api/activate")).permitAll()
                         .requestMatchers(mvc.pattern("/api/account/reset-password/init")).permitAll()
                         .requestMatchers(mvc.pattern("/api/account/reset-password/finish")).permitAll()
+                        .requestMatchers(mvc.pattern(HttpMethod.GET,"/api/auction-rooms")).permitAll()
                         .requestMatchers(mvc.pattern("/api/admin/**")).hasAuthority(AuthoritiesConstants.ADMIN)
                         .requestMatchers(mvc.pattern("/api/**")).authenticated()
                         .requestMatchers(mvc.pattern("/ws/**")).permitAll()
