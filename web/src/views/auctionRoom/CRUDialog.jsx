@@ -1,3 +1,4 @@
+//TODO: Select license plate number
 import * as React from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -6,33 +7,33 @@ import dayjs from 'dayjs';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Stack from '@mui/material/Stack';
 import EventIcon from '@mui/icons-material/Event';
-import Input from '@mui/material/Input';
-import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
-import CardContent from '@mui/material/CardContent';
-import CardActions from '@mui/material/CardActions';
+import Autocomplete from '@mui/material/Autocomplete';
 import Menu from '@mui/material/Menu';
-import { Formik, Form, Field } from "formik"
-
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import getLPTheme from '../getLPTheme';
 import DateAndTimePicker from '../../components/base/DateAndTimePicker';
 
 
 export default function CRUDialog(props) {
 
+
     const [startTime, setStartTime] = React.useState(null);
     const [startDate, setStartDate] = React.useState(dayjs((new Date()).$d).format('HH:mm DD/MM/YYYY'));
     const openStartTime = Boolean(startTime);
+    const licensePlateList = {
+        NO_1: '19A-125123',
+        NO_2: '20A-125123',
+    };
+    const licensePlateListProps = {
+        options: Object.values(licensePlateList),
+    };
 
     const handleOpenStartTime = (event) => {
         setStartTime(event.currentTarget);
@@ -50,6 +51,7 @@ export default function CRUDialog(props) {
     const openEndTime = Boolean(endTime);
     const [endDate, setEndDate] = React.useState(dayjs((new Date()).$d).format('HH:mm DD/MM/YYYY'));
 
+    const [licensePlateNumber, setLicensePlateNumber] = React.useState(null);
     const handleOpenEndTime = (event) => {
         setEndTime(event.currentTarget);
     };
@@ -62,6 +64,10 @@ export default function CRUDialog(props) {
         setEndDate(newDate);
     };
 
+    const handleLicensePlateNumberChange = (event, values) => {
+        setLicensePlateNumber(values)
+    }
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -72,6 +78,7 @@ export default function CRUDialog(props) {
             'startTime': dayjs(startTime, 'HH:mm DD/MM/YYYY').toISOString(),
             'endTime': dayjs(endTime, 'HH:mm DD/MM/YYYY').toISOString(),
             'description': data.get('description'),
+            'licensePlateNumber': licensePlateNumber
         }
         const idToken = localStorage.getItem('id_token');
         console.log("values", values);
@@ -127,24 +134,56 @@ export default function CRUDialog(props) {
                             {props.title}
                         </Typography>
                         <Box component="form" onSubmit={handleSubmit}>
-                            <Typography >
-                                Giá khởi điểm (VNĐ)
-                            </Typography>
+                            <Grid spacing={2}
+                                container
+                                direction="row"
+                                justifyContent="center"
+                                alignItems="stretch">
+                                <Grid item xs={6}>
+                                    <Typography >
+                                        Biển số xe
+                                    </Typography>
 
-                            <TextField
-                                required
-                                fullWidth
-                                type="number"
-                                id="initPrice"
-                                name="initPrice"
-                                autoComplete="initPrice"
-                                autoFocus
-                                sx={{
-                                    mt: 1, mb: 1,
-                                    boxShadow: `0px 3.5px 5.5px rgba(0, 0, 0, 0.2)`,
-                                    borderRadius: 3,
-                                }}
-                            />
+                                    <Autocomplete
+                                        {...licensePlateListProps}
+                                        id="licensePlateNumber"
+                                        name="licensePlateNumber"
+                                        onChange={handleLicensePlateNumberChange}
+                                        sx={{
+                                            mt: 1,
+                                            mb: 1,
+                                            boxShadow: `0px 3.5px 5.5px rgba(0, 0, 0, 0.2)`,
+                                            borderRadius: 3,
+                                        }}
+                                        renderInput={(params) => (
+                                            <TextField {...params} placeholder="Chọn biển số" />
+                                        )}
+                                    />
+
+
+
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <Typography >
+                                        Giá khởi điểm (VNĐ)
+                                    </Typography>
+
+                                    <TextField
+                                        required
+                                        fullWidth
+                                        type="number"
+                                        id="initPrice"
+                                        name="initPrice"
+                                        autoComplete="initPrice"
+                                        autoFocus
+                                        sx={{
+                                            mt: 1, mb: 1,
+                                            boxShadow: `0px 3.5px 5.5px rgba(0, 0, 0, 0.2)`,
+                                            borderRadius: 3,
+                                        }}
+                                    />
+                                </Grid>
+                            </Grid>
                             <Grid spacing={2}
                                 container
                                 direction="row"

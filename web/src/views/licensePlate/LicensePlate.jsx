@@ -10,7 +10,7 @@ import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import EventIcon from "@mui/icons-material/Event";
 import HourglassTopIcon from "@mui/icons-material/HourglassTop";
-import { styled, lighten, darken } from '@mui/system';
+import { styled } from '@mui/system';
 import { Button, Grid, Stack } from "@mui/material";
 import LicensePlateInput from "../../components/common/LicensePlateInput";
 

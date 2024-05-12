@@ -14,9 +14,11 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
 import Launch from "@mui/icons-material/Launch";
 import Search from "@mui/icons-material/Search";
+import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import Alert from '@mui/material/Alert';
 import carImage from "../assets/car.png";
 
@@ -26,103 +28,86 @@ import { FormControl, Select, MenuItem, Dialog } from "@mui/material";
 import Footer from "../components/common/Footer";
 import AppAppBar from "../components/base/AppAppBar";
 import Register from "../components/common/Register";
+import Login from "../components/common/Login";
 import AuctionRegisterModal from "../components/modals/AuctionRegisterModal";
+import { styled } from '@mui/system';
+import { useAuth } from "../hooks/AuthProvider";
+import { LPtype, LPprovinces } from "../utils/constants/LicensePlate";
 
-const rows = [
-  {
-    licensePlate: "30L-111.11",
-    time: "7/4/2024",
-    province: "Thành phố Hà Nội",
-    carType: "Xe con",
-    remainingTime: "1 ngày 20 giờ 24 phút",
-  },
-  {
-    licensePlate: "30L-222.22",
-    time: "7/4/2024",
-    province: "Thành phố Hà Nội",
-    carType: "Xe con",
-    remainingTime: "1 ngày 20 giờ 24 phút",
-  },
-  {
-    licensePlate: "30L-333.33",
-    time: "7/4/2024",
-    province: "Thành phố Hà Nội",
-    carType: "Xe con",
-    remainingTime: "1 ngày 20 giờ 24 phút",
-  },
-  {
-    licensePlate: "30L-444.44",
-    time: "7/4/2024",
-    province: "Thành phố Hà Nội",
-    carType: "Xe con",
-    remainingTime: "1 ngày 20 giờ 24 phút",
-  },
-  {
-    licensePlate: "30L-111.11",
-    time: "7/4/2024",
-    province: "Thành phố Hà Nội",
-    carType: "Xe con",
-    remainingTime: "1 ngày 20 giờ 24 phút",
-  },
-  {
-    licensePlate: "30L-222.22",
-    time: "7/4/2024",
-    province: "Thành phố Hà Nội",
-    carType: "Xe con",
-    remainingTime: "1 ngày 20 giờ 24 phút",
-  },
-  {
-    licensePlate: "30L-333.33",
-    time: "7/4/2024",
-    province: "Thành phố Hà Nội",
-    carType: "Xe con",
-    remainingTime: "1 ngày 20 giờ 24 phút",
-  },
-  {
-    licensePlate: "30L-444.44",
-    time: "7/4/2024",
-    province: "Thành phố Hà Nội",
-    carType: "Xe con",
-    remainingTime: "1 ngày 20 giờ 24 phút",
-  },
-  {
-    licensePlate: "30L-111.11",
-    time: "7/4/2024",
-    province: "Thành phố Hà Nội",
-    carType: "Xe con",
-    remainingTime: "1 ngày 20 giờ 24 phút",
-  },
-  {
-    licensePlate: "30L-222.22",
-    time: "7/4/2024",
-    province: "Thành phố Hà Nội",
-    carType: "Xe con",
-    remainingTime: "1 ngày 20 giờ 24 phút",
-  },
-  {
-    licensePlate: "30L-333.33",
-    time: "7/4/2024",
-    province: "Thành phố Hà Nội",
-    carType: "Xe con",
-    remainingTime: "1 ngày 20 giờ 24 phút",
-  },
-  {
-    licensePlate: "30L-444.44",
-    time: "7/4/2024",
-    province: "Thành phố Hà Nội",
-    carType: "Xe con",
-    remainingTime: "1 ngày 20 giờ 24 phút",
-  },
-];
+const GroupHeader = styled('div')(({ theme }) => ({
+  position: 'sticky',
+  top: '-8px',
+  padding: '4px 10px',
+  color: "black"
+}));
 
-function CustomizedTables() {
-  const [province, setProvince] = useState("");
-  const [carType, setCarType] = useState("");
+const GroupItems = styled('ul')({
+  padding: 0,
+});
+
+function CustomizedTables(props) {
+  const [idToken, setToken] = useState(localStorage.getItem("id_token") || "");
+  const [LPprovince, setLPprovince] = useState('');
+  const [vehicleType, setVehicleType] = useState("");
+  const [LPnumber, setLPnumber] = useState('');
   const [openAuctionRegisterModal, setOpenAuctionRegisterModal] = useState(false);
+  const [openLoginAlert, setOpenLoginAlert] = useState(false);
+  const [licensePlateList, setLicensePlateList] = useState(null);
+
+  const LPtypeProps = {
+    options: Object.values(LPtype),
+  };
+  const options = Object.keys(LPprovinces).map((key) => ({
+    title: LPprovinces[key], // Sử dụng giá trị của LPtype làm title cho option
+  }));
+  options.forEach((option) => {
+    const firstLetter = option.title[0].toUpperCase();
+    option.firstLetter = /[0-9]/.test(firstLetter) ? '0-9' : firstLetter;
+  });
+
+  const handleLPProvinceFilter = (event, values) => {
+    setLPprovince(values.title)
+  }
+  const handleVehicleTypeFilter = (event, values) => {
+    setVehicleType(values)
+  }
+  const handleLPNumberFilter = (event) => {
+    setLPnumber(event.target.value)
+  }
+
+
+  const getAllLicensePlate = async () => {
+    await axios.get(`http://localhost:8080/api/license-plates`).then(res => {
+      const licensePlateList = Object.values(res.data);
+      setLicensePlateList(licensePlateList)
+      console.log("list license plate: ", res.data)
+    }).catch(error => {
+      console.dir('Get all auction room error:', error);
+    });
+    return;
+  };
+  const filteredLicensePlateList = licensePlateList ? licensePlateList.filter(plate => {
+    const matchesLPprovince = !LPprovince || plate.province === LPprovince;
+    const matchesVehicleType = !vehicleType || plate.vehicleType === vehicleType;
+    const matchesPlateNumber = !LPnumber || plate.plateNumber.toLowerCase().includes(LPnumber.toLowerCase());
+    return matchesLPprovince && matchesVehicleType && matchesPlateNumber;
+  }) : [];
 
   const toggleAuctionRegisterMdal = () => {
     setOpenAuctionRegisterModal(!openAuctionRegisterModal);
   };
+  const handleLoginAlert = () => {
+    setOpenLoginAlert(!openLoginAlert);
+  };
+  const handleButtonClick = () => {
+    if (idToken) toggleAuctionRegisterMdal();
+    else handleLoginAlert();
+  }
+
+  useEffect(() => {
+    getAllLicensePlate();
+    console.log('accountUser', props.accountUser)
+  }, [props.accountUser]);
 
   return (
     <>
@@ -142,80 +127,63 @@ function CustomizedTables() {
           size="small"
           sx={{
             width: 250,
-            marginY: 2,
-            border: "1px solid #015433",
+            border: "2px solid #015433",
             borderRadius: 3,
+            color: "primary"
           }}
+          onChange={handleLPNumberFilter}
           startAdornment={
             <Search sx={{
               width: 20,
               color: "015433",
               mr: 1
-            }} />
+            }}
+            />
           }
         />
         <FormControl sx={{ minWidth: 250, marginY: 2 }} size="small">
-          <Select
-            autoWidth
-            displayEmpty
-            value={province}
-            onChange={(event) => {
-              setProvince(event.target.value);
-            }}
-            sx={{
-              width: 250,
-              border: "1px solid #015433",
-              borderRadius: 3,
-            }}
-          >
-            <MenuItem sx={{ borderRadius: 0, width: 250 }} value="">
-              Chọn tỉnh/thành phố
-            </MenuItem>
-            <MenuItem sx={{ borderRadius: 0, width: 250 }} value={1}>
-              Thành phố Hà Nội
-            </MenuItem>
-            <MenuItem sx={{ borderRadius: 0, width: 250 }} value={2}>
-              Thành phố Hồ Chí Minh
-            </MenuItem>
-          </Select>
+          <Stack>
+            <Autocomplete
+              options={options.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter))}
+              groupBy={(option) => option.firstLetter}
+              getOptionLabel={(option) => option.title}
+              sx={{
+                width: 250,
+                border: "2px solid #015433",
+                borderRadius: 3,
+                color: "primary"
+              }}
+              renderInput={(params) => <TextField {...params} placeholder="Chọn tỉnh thành" variant="outlined" />}
+              renderGroup={(params) => (
+                <li key={params.key}>
+                  <GroupHeader>{params.group}</GroupHeader>
+                  <GroupItems>{params.children}</GroupItems>
+                </li>
+              )}
+              onChange={handleLPProvinceFilter}
+            />
+          </Stack>
         </FormControl>
         <FormControl sx={{ minWidth: 250, marginY: 2 }} size="small">
-          <Select
-            autoWidth
-            displayEmpty
-            value={carType}
-            onChange={(event) => {
-              setCarType(event.target.value);
-            }}
-            sx={{
-              width: 250,
-              border: "1px solid #015433",
-              borderRadius: 3,
-            }}
-          >
-            <MenuItem sx={{ borderRadius: 0, width: 250 }} value="">
-              Chọn loại xe
-            </MenuItem>
-            <MenuItem sx={{ borderRadius: 0, width: 250 }} value={1}>
-              Xe con
-            </MenuItem>
-            <MenuItem sx={{ borderRadius: 0, width: 250 }} value={2}>
-              Xe tải
-            </MenuItem>
-          </Select>
+          <Stack>
+            <Autocomplete
+              {...LPtypeProps}
+              sx={{
+                width: 250,
+                border: "2px solid #015433",
+                borderRadius: 3,
+                color: "primary"
+              }}
+              value={vehicleType}
+              renderInput={(params) => (
+                <TextField {...params} placeholder="Chọn loại xe" variant="outlined" />
+              )}
+              onChange={handleVehicleTypeFilter}
+            />
+          </Stack>
+
         </FormControl>
-        <Button
-          variant="contained"
-          color="primary"
-          sx={{
-            whiteSpace: "nowrap", marginY: 2,
-            backgroundColor: "primary",
-            color: "white",
-          }}
-        >
-          Tìm kiếm
-        </Button>
-      </Box>
+      </Box >
       <TableContainer
         component={Paper}
         sx={{
@@ -237,36 +205,41 @@ function CustomizedTables() {
                 Loại xe
               </TableCell>
               <TableCell sx={{ fontWeight: 600 }} align="center">
-                Thời gian đăng ký còn lại
+                Thời điểm đấu giá
               </TableCell>
               <TableCell sx={{ fontWeight: 600 }}></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row, index) => (
-              <TableRow key={index}>
-                <TableCell align="center">{index + 1}</TableCell>
-                <TableCell>{row.licensePlate}</TableCell>
-                <TableCell>{row.province}</TableCell>
-                <TableCell>{row.carType}</TableCell>
-                <TableCell align="center">{row.remainingTime}</TableCell>
-                <TableCell>
-                  <Button
-                    onClick={toggleAuctionRegisterMdal}
-                    variant="contained"
-                    color="primary"
-                    size="small"
-                    sx={{
-                      whiteSpace: "nowrap",
-                      backgroundColor: "primary",
-                      color: "white"
-                    }}
-                  >
-                    Đăng ký đấu giá
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
+            {licensePlateList && (
+              <>
+                {filteredLicensePlateList.map((licensePlate, index) => (
+                  <TableRow key={index}>
+                    <TableCell align="center">{index + 1}</TableCell>
+                    <TableCell>{licensePlate.plateNumber}</TableCell>
+                    <TableCell>{licensePlate.province}</TableCell>
+                    <TableCell>{licensePlate.vehicleType}</TableCell>
+                    <TableCell align="center">{licensePlate.remainingTime}</TableCell>
+                    {/* TODO: Return auction room */}
+                    <TableCell>
+                      <Button
+                        onClick={handleButtonClick}
+                        variant="contained"
+                        color="primary"
+                        size="small"
+                        sx={{
+                          whiteSpace: "nowrap",
+                          backgroundColor: "primary",
+                          color: "white"
+                        }}
+                      >
+                        Đăng ký đấu giá
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </>
+            )}
           </TableBody>
         </Table>
       </TableContainer>
@@ -274,27 +247,35 @@ function CustomizedTables() {
         open={openAuctionRegisterModal}
         onClose={toggleAuctionRegisterMdal}
       >
-        <AuctionRegisterModal close={toggleAuctionRegisterMdal} />
+        <AuctionRegisterModal close={toggleAuctionRegisterMdal} accountUser={props.accountUser} />
+      </Dialog>
+      <Dialog
+        open={openLoginAlert}
+        onClose={handleLoginAlert}
+      >
+        <Login />
       </Dialog>
     </>
   );
 }
 
-export default function Home() {
+export default function Home(props) {
   const [openRegisterDialog, setOpenRegisterDialog] = useState(false);
-  const [idToken, setIdToken] = useState(localStorage.getItem('id_token'));
-  const [account, setAccount] = useState({});
+  const [accountUser, setAccountUser] = useState({});
+  const [idToken, setToken] = useState(localStorage.getItem("id_token") || "");
+  const auth = useAuth()
+
 
   const toggleRegisterDialog = () => {
     setOpenRegisterDialog(!openRegisterDialog);
   };
 
   useEffect(() => {
-    const idToken = localStorage.getItem('id_token');
-    setIdToken(idToken);
-    console.log('idToken', idToken);
-  }
-  )
+    if (auth.user) {
+      setAccountUser(auth.user);
+    }
+  }, [auth.user]);
+
 
   return (
     <Stack
@@ -304,7 +285,7 @@ export default function Home() {
         backgroundRepeat: "no-repeat",
       }}
     >
-      <AppAppBar name="Ha Nguyen" currentPage="home" />
+      <AppAppBar currentPage="home" />
       <Box
         id="hero"
         sx={{
@@ -361,7 +342,7 @@ export default function Home() {
                       color: "#015433",
                     }}
                   >
-                    OOAD
+                    OOAD {accountUser.login}
                   </Typography>
                 </Typography>
                 <Typography
@@ -443,7 +424,7 @@ export default function Home() {
             >
               DANH SÁCH BIỂN SỐ
             </Typography>
-            <CustomizedTables />
+            <CustomizedTables accountUser={accountUser} />
           </Box>
         </Container>
       </Box>

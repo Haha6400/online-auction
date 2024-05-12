@@ -11,7 +11,7 @@ import Plan from "./views/Plan";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import AuctionRoom from "./views/auctionRoom/AuctionRoom";
 import RegisterV2 from "./components/common/RegisterV2"
-
+import AuthProvider from "./hooks/AuthProvider";
 
 
 const router = createBrowserRouter([
@@ -41,11 +41,15 @@ const router = createBrowserRouter([
   },
 ]);
 
+
 function App() {
+
   return (
     <CustomThemeProvider>
       <CssBaseline />
-      <RouterProvider router={router} />
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
     </CustomThemeProvider>
   );
 }

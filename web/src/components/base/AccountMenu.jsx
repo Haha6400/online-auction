@@ -23,11 +23,13 @@ import Logout from '@mui/icons-material/Logout';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import AllInboxIcon from '@mui/icons-material/AllInbox';
 
-import { useThemeProvider } from "../../utils/ThemeContext";
+import { useAuth } from "../../hooks/AuthProvider";
+
 
 export default function AccountMenu() {
-    const { mode, toggleColorMode } = useThemeProvider();
     const navigate = useNavigate();
+    const auth = useAuth();
+
 
     const [anchorEl, setanchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
@@ -38,9 +40,16 @@ export default function AccountMenu() {
 
     const handleCloseUserMenu = (link) => {
         setanchorEl(null);
-        navigate(`/${link}`);
-    };
+        if (link) {
+            if (link == 'logout') {
+                auth.logoutAction();
+            } else {
+                setanchorEl(null);
+                navigate(`/${link}`);
+            }
+        }
 
+    };
 
     return (
         <div sx={{
@@ -120,7 +129,7 @@ export default function AccountMenu() {
                         </ListItemIcon>
                         My Auction
                     </MenuItem>
-                    <MenuItem onClick={handleCloseUserMenu}>
+                    <MenuItem onClick={() => handleCloseUserMenu("logout")}>
                         <ListItemIcon>
                             <Logout fontSize="small" />
                         </ListItemIcon>

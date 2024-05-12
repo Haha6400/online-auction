@@ -1,3 +1,4 @@
+import * as React from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
@@ -8,7 +9,14 @@ import EventIcon from "@mui/icons-material/Event";
 import HourglassTopIcon from "@mui/icons-material/HourglassTop";
 import { Button, Grid, Stack } from "@mui/material";
 
-export default function AuctionRegisterModal({ close }) {
+export default function AuctionRegisterModal(props) {
+
+  React.useEffect(() => {
+    if (props.accountUser) {
+      console.log("auction register", props.accountUser)
+    }
+  }, [props.accountUser]);
+
   return (
     <Container component="main">
       <Box
@@ -147,7 +155,7 @@ export default function AuctionRegisterModal({ close }) {
               variant="outlined"
               color="primary"
               sx={{ width: "100%" }}
-              onClick={close}
+              onClick={props.close}
             >
               Hủy bỏ
             </Button>

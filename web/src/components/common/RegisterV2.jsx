@@ -109,7 +109,7 @@ export default function RegisterV2() {
                 backgroundRepeat: "no-repeat",
             }}
         >
-            <AppAppBar loginCheck="false" currentPage="home" />
+            <AppAppBar currentPage="home" />
             <Box id="hero" sx={{ width: "100%" }}>
                 <Container
                     sx={{

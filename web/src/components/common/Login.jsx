@@ -14,12 +14,14 @@ import Stack from '@mui/material/Stack';
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import getLPTheme from '../../views/getLPTheme';
+import { useAuth } from '../../hooks/AuthProvider';
 
 
 
 export default function Login({ handleLoginDialogClose }) {
   const [mode, setMode] = React.useState(getInitialMode());
   const [loginError, setLoginError] = React.useState(false);
+  const auth = useAuth();
 
   const LPtheme = createTheme(getLPTheme(mode));
   const navigate = useNavigate();
@@ -41,17 +43,9 @@ export default function Login({ handleLoginDialogClose }) {
       'password': data.get('password')
     }
     console.log("values", values);
-    try {
-      const response = await axios.post(`http://localhost:8080/api/authenticate`, values);
-      const id_token = response.data.id_token;
-      localStorage.setItem('id_token', id_token);
-      if (id_token) {
-        window.location.reload();
-      }
-    } catch (error) {
-      setLoginError(true);
-      console.dir('Login error:', error);
-    }
+    auth.loginAction(values);
+
+    return;
   };
 
   return (

@@ -12,15 +12,14 @@ import MenuItem from "@mui/material/MenuItem";
 import Drawer from "@mui/material/Drawer";
 import MenuIcon from "@mui/icons-material/Menu";
 import Dialog from "@mui/material/Dialog";
-import { useThemeProvider } from "../../utils/ThemeContext";
+
 
 import Login from "../common/Login";
-import Register from "../common/Register";
-import RegisterV2 from "../common/RegisterV2";
 import AccountMenu from "../base/AccountMenu";
 
 
 import logo from "../../assets/logo.png";
+import { useAuth } from "../../hooks/AuthProvider";
 
 
 
@@ -33,51 +32,32 @@ const logoStyle = {
 };
 
 export default function AppAppBar(props) {
-  const { mode, toggleColorMode } = useThemeProvider();
 
   const [openDrawer, setOpenDrawer] = React.useState(false);
 
   const [openLoginDialog, setOpenLoginDialog] = React.useState(false);
-  const [openRegisterDialog, setOpenRegisterDialog] = React.useState(false);
   const [idToken, setIdToken] = React.useState(localStorage.getItem('id_token'));
   const [accountUser, setAccountUser] = React.useState({});
-
-  React.useEffect(() => {
-    const idToken = localStorage.getItem('id_token');
-    setIdToken(idToken);
-    axios.get(`http://localhost:8080/api/account`,
-      {
-        headers: { Authorization: `Bearer ${idToken}` }
-      }).then(response => {
-        setAccountUser(response.data)
-        console.log("accountUser", response.data)
-      })
-      .catch(error => {
-        console.dir('Get current account error:', error);
-      });
-
-  }, [idToken]);
+  const auth = useAuth();
 
   const handleLoginButtonClick = () => {
     setOpenLoginDialog(true);
-  };
-
-  const handleRegisterButtonClick = () => {
-    setOpenRegisterDialog(true);
-
   };
 
   const handleLoginDialogClose = () => {
     setOpenLoginDialog(false);
   };
 
-  const handleRegisterDialogClose = () => {
-    setOpenRegisterDialog(false);
-  };
 
   const toggleDrawer = (newOpen) => () => {
     setOpenDrawer(newOpen);
   };
+
+  React.useEffect(() => {
+    if (auth.user) {
+      setAccountUser(auth.user);
+    }
+  }, [auth.user]);
 
 
   return (
@@ -236,7 +216,6 @@ export default function AppAppBar(props) {
                       variant="contained"
                       size="small"
                       component="button"
-                      onClick={handleRegisterButtonClick}
                     >
                       Đăng ký
                     </Button>
@@ -245,13 +224,13 @@ export default function AppAppBar(props) {
                 </>
               )}
 
-              {idToken && (
+              {idToken && accountUser && (
                 <>
                   <h4 style={{ color: "#015433", 'fontSize': '14px' }}>
                     {accountUser.login}
                   </h4>
 
-                  <AccountMenu />
+                  <AccountMenu accountUser={accountUser} />
                 </>
               )}
             </Box>
@@ -360,7 +339,6 @@ export default function AppAppBar(props) {
                           variant="contained"
                           sx={{ width: "100%", my: 1 }}
                           component="button"
-                          onClick={handleRegisterButtonClick}
                         >
                           Đăng ký
                         </Button>
@@ -368,12 +346,12 @@ export default function AppAppBar(props) {
                     </>
                   )}
                 </Box>
-                {idToken && (
+                {idToken && accountUser && (
                   <>
                     <MenuItem sx={{ my: 1, py: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-end', backgroundColor: 'rgba(1, 84, 51, 0.2)', borderRadius: '0' }} >
                       <div style={{ display: "flex", alignItems: "center" }}>
-                        <AccountMenu name={props.name} />
-                        <h4 style={{ color: "#015433", fontSize: "14px", marginRight: "8px" }}>{props.name}</h4>
+                        <AccountMenu accountUser={accountUser} />
+                        <h4 style={{ color: "#015433", fontSize: "14px", marginRight: "8px" }}>{accountUser.login}</h4>
                       </div>
                     </MenuItem>
 
