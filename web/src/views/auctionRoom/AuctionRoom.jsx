@@ -5,11 +5,11 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 
-import { Button, Card, Stack, Grid, alpha, Dialog } from "@mui/material";
+import { Button, Card, Stack, Grid, Dialog } from "@mui/material";
 
 import AppAppBar from "../../components/base/AppAppBar";
 import Footer from "../../components/common/Footer";
-import CRUDialog from "../auctionRoom/CRUDialog"
+import CRUDialog from "../auctionRoom/CRUDialog";
 
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
@@ -32,7 +32,7 @@ export default function AuctionRoom() {
 
   const handleCreateButtonClick = () => {
     setOpenCreateDialog(true);
-  }
+  };
   const handleCreateButtonClose = () => {
     setOpenCreateDialog(false);
   }

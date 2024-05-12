@@ -22,12 +22,12 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 import DownloadIcon from "@mui/icons-material/Download";
 
-import AppAppBar from "../components/base/AppAppBar";
-import Footer from "../components/common/Footer";
+import AppAppBar from "../../components/base/AppAppBar";
+import Footer from "../../components/common/Footer";
 import Box from "@mui/material/Box";
 
 import FilterAltIcon from "@mui/icons-material/FilterAlt";
-import ViewPlanModal from "../components/modals/ViewPlanModal";
+import ViewPlanModal from "../../components/modals/ViewPlanModal";
 
 const rows = [
   {
@@ -147,7 +147,7 @@ function CustomizedTables() {
         component={Paper}
         sx={{
           mt: 2,
-          backgroundColor: "rgba(255, 255, 255, 0.15)"
+          backgroundColor: "rgba(255, 255, 255, 0.15)",
         }}
       >
         <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -251,7 +251,7 @@ export default function Plan() {
               bgcolor: "rgba(255, 255, 255, 0.3)",
               backgroundSize: "cover",
               borderRadius: "10px",
-              boxShadow: `0px 3.5px 5.5px rgba(0, 0, 0, 0.02)`
+              boxShadow: `0px 3.5px 5.5px rgba(0, 0, 0, 0.02)`,
             }}
           >
             <CustomizedTables />
