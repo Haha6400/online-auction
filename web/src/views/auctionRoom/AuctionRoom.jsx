@@ -3,11 +3,11 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 
-import { Button, Card, Stack, Grid, alpha, Dialog } from "@mui/material";
+import { Button, Card, Stack, Grid, Dialog } from "@mui/material";
 
 import AppAppBar from "../../components/base/AppAppBar";
 import Footer from "../../components/common/Footer";
-import CRUDialog from "../auctionRoom/CRUDialog"
+import CRUDialog from "../auctionRoom/CRUDialog";
 
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
@@ -16,8 +16,6 @@ import EventIcon from "@mui/icons-material/Event";
 import HourglassTopIcon from "@mui/icons-material/HourglassTop";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditNoteIcon from "@mui/icons-material/EditNote";
-
-
 
 const rows = [
   {
@@ -223,14 +221,13 @@ const rows = [
 ];
 
 export default function AuctionRoom() {
-  const [openCreateDialog, setOpenCreateDialog] = React.useState(false)
+  const [openCreateDialog, setOpenCreateDialog] = React.useState(false);
   const handleCreateButtonClick = () => {
     setOpenCreateDialog(true);
-  }
+  };
   const handleCreateButtonClose = () => {
     setOpenCreateDialog(false);
-  }
-
+  };
 
   return (
     <Stack
@@ -278,27 +275,30 @@ export default function AuctionRoom() {
               boxShadow: `0px 3.5px 5.5px rgba(0, 0, 0, 0.02)`,
             }}
           >
-
             <Button
               variant="contained"
               color="primary"
-              sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}
+              sx={{
+                display: "flex",
+                justifyContent: "flex-end",
+                alignItems: "center",
+              }}
               startIcon={<PlaylistAddIcon />}
               onClick={handleCreateButtonClick}
             >
               Tạo phòng
             </Button>
-            <Dialog
-              open={openCreateDialog}
-              onClose={handleCreateButtonClose}
-            >
-              <CRUDialog title="Tạo phòng đấu giá" close={handleCreateButtonClose} />
+            <Dialog open={openCreateDialog} onClose={handleCreateButtonClose}>
+              <CRUDialog
+                title="Tạo phòng đấu giá"
+                close={handleCreateButtonClose}
+              />
             </Dialog>
 
             <Box sx={{ mt: 5 }}>
               <Grid container spacing={{ lg: 5, xs: 1 }}>
                 {rows.map((row) => (
-                  <Grid item xs={12} sm={6} md={4} xl={3}>
+                  <Grid item xs={12} sm={6} md={4}>
                     <Card
                       sx={{
                         p: 2,
