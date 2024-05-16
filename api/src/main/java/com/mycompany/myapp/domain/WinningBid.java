@@ -10,9 +10,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "winning_bid")
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class WinningBid implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class WinningBid {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

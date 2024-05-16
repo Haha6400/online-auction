@@ -2,6 +2,7 @@ package com.mycompany.myapp.web.rest;
 
 import com.mycompany.myapp.repository.LicensePlateRepository;
 import com.mycompany.myapp.service.LicensePlateService;
+import com.mycompany.myapp.service.UserService;
 import com.mycompany.myapp.service.dto.LicensePlateDTO;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
@@ -40,10 +41,16 @@ public class LicensePlateResource {
     private final LicensePlateService licensePlateService;
 
     private final LicensePlateRepository licensePlateRepository;
+    private final UserService userService;
 
-    public LicensePlateResource(LicensePlateService licensePlateService, LicensePlateRepository licensePlateRepository) {
+    public LicensePlateResource(
+        LicensePlateService licensePlateService,
+        LicensePlateRepository licensePlateRepository,
+        UserService userService
+    ) {
         this.licensePlateService = licensePlateService;
         this.licensePlateRepository = licensePlateRepository;
+        this.userService = userService;
     }
 
     /**

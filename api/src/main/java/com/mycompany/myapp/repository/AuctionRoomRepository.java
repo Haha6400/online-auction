@@ -6,6 +6,7 @@ import com.mycompany.myapp.domain.User;
 import com.mycompany.myapp.service.dto.AdminUserDTO;
 import com.mycompany.myapp.service.dto.AuctionRoomDTO;
 import com.mycompany.myapp.service.dto.UserDTO;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -36,4 +37,10 @@ public interface AuctionRoomRepository extends AuctionRoomRepositoryWithBagRelat
     Optional<AuctionRoom> findAuctionRoomByLicensePlate(LicensePlate licensePlate);
 
     List<AuctionRoom> findAllByUsers(User user);
+    List<AuctionRoom> findAllByUsersAndEndTimeBefore(User user, Instant date);
+    List<AuctionRoom> findAllByUsersAndStartTimeAfter(User user, Instant date);
+    List<AuctionRoom> findAllByUsersAndStartTimeBeforeAndEndTimeAfterOrderByStartTimeDesc(User user, Instant start, Instant end);
+
+    List<AuctionRoom> findAllByUsersOrderByCreatedDateDesc(User user);
+    //    List<AuctionRoom> findAllByUsersAndWinningBid(User user);
 }

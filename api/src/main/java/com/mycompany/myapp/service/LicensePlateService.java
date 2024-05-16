@@ -1,6 +1,7 @@
 package com.mycompany.myapp.service;
 
 import com.mycompany.myapp.service.dto.LicensePlateDTO;
+import com.mycompany.myapp.service.dto.UserDTO;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -48,6 +49,7 @@ public interface LicensePlateService {
      * @return the {@link List} of entities.
      */
     List<LicensePlateDTO> findAllWhereAuctionRoomIsNull();
+    //    List<LicensePlateDTO> test(UserDTO userDTO);
 
     /**
      * Get the "id" licensePlate.

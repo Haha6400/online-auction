@@ -13,7 +13,7 @@ import java.util.Set;
 @Entity
 @Table(name = "auction_room")
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class AuctionRoom {
+public class AuctionRoom extends AbstractAuditingEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,7 +50,7 @@ public class AuctionRoom {
     private Set<User> users = new HashSet<>();
 
     @JsonIgnoreProperties(value = { "auctionRoom", "bid" }, allowSetters = true)
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "auctionRoom")
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "auctionRoom")
     private WinningBid winningBid;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

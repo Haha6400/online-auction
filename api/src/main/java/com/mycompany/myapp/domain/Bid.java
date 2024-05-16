@@ -11,9 +11,7 @@ import java.time.Instant;
 @Entity
 @Table(name = "bid")
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class Bid implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class Bid extends AbstractAuditingEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

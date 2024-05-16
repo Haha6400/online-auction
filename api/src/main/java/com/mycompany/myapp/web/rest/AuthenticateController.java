@@ -62,7 +62,7 @@ public class AuthenticateController {
         String jwt = this.createToken(authentication, loginVM.isRememberMe());
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setBearerAuth(jwt);
-        return new ResponseEntity<>(new JWTToken(jwt), httpHeaders, HttpStatus.OK);
+        return new ResponseEntity<>(new JWTToken(jwt, loginVM.getUsername()), httpHeaders, HttpStatus.OK);
     }
 
     /**
@@ -108,16 +108,24 @@ public class AuthenticateController {
     static class JWTToken {
 
         private String idToken;
+        private String userName;
 
-        JWTToken(String idToken) {
+        JWTToken(String idToken, String userName) {
             this.idToken = idToken;
+            this.userName = userName;
         }
 
         @JsonProperty("id_token")
         String getIdToken() {
             return idToken;
         }
-
+        @JsonProperty("userName")
+        String getUserName() {
+            return userName;
+        }
+        void setUserName(String userName) {
+            this.userName = userName;
+        }
         void setIdToken(String idToken) {
             this.idToken = idToken;
         }

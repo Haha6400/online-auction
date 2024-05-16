@@ -2,8 +2,10 @@ package com.mycompany.myapp.service.impl;
 
 import com.mycompany.myapp.domain.LicensePlate;
 import com.mycompany.myapp.repository.LicensePlateRepository;
+import com.mycompany.myapp.repository.UserRepository;
 import com.mycompany.myapp.service.LicensePlateService;
 import com.mycompany.myapp.service.dto.LicensePlateDTO;
+import com.mycompany.myapp.service.dto.UserDTO;
 import com.mycompany.myapp.service.mapper.LicensePlateMapper;
 import java.util.LinkedList;
 import java.util.List;
@@ -29,10 +31,16 @@ public class LicensePlateServiceImpl implements LicensePlateService {
     private final LicensePlateRepository licensePlateRepository;
 
     private final LicensePlateMapper licensePlateMapper;
+    private final UserRepository userRepository;
 
-    public LicensePlateServiceImpl(LicensePlateRepository licensePlateRepository, LicensePlateMapper licensePlateMapper) {
+    public LicensePlateServiceImpl(
+        LicensePlateRepository licensePlateRepository,
+        LicensePlateMapper licensePlateMapper,
+        UserRepository userRepository
+    ) {
         this.licensePlateRepository = licensePlateRepository;
         this.licensePlateMapper = licensePlateMapper;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -86,6 +94,17 @@ public class LicensePlateServiceImpl implements LicensePlateService {
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
+    //    @Transactional(readOnly = true)
+    //    public List<LicensePlateDTO> test(UserDTO userDTO) {
+    //        log.debug("Request to get all licensePlates where AuctionRoom is null");
+    //        return StreamSupport.stream(licensePlateRepository.findAll().spliterator(), false)
+    //            .filter(licensePlate ->
+    //                licensePlate.getAuctionRoom().getBids() != null)
+    //            .map(licensePlateMapper::toDto)
+    //            .collect(Collectors.toCollection(LinkedList::new));
+    //    }
+    //.getWinningBid().getBid().getUser()
+    //                    == userRepository.findOneByLogin(userDTO.getLogin()).get()
     @Override
     @Transactional(readOnly = true)
     public Optional<LicensePlateDTO> findOne(Long id) {

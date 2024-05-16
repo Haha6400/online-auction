@@ -1,7 +1,5 @@
 package com.mycompany.myapp.web.rest;
 
-import static tech.jhipster.config.JHipsterDefaults.Cache.Hazelcast.ManagementCenter.url;
-
 import com.mycompany.myapp.domain.User;
 import com.mycompany.myapp.repository.UserRepository;
 import com.mycompany.myapp.security.SecurityUtils;
@@ -14,7 +12,6 @@ import com.mycompany.myapp.web.rest.errors.*;
 import com.mycompany.myapp.web.rest.vm.KeyAndPasswordVM;
 import com.mycompany.myapp.web.rest.vm.LoginVM;
 import com.mycompany.myapp.web.rest.vm.ManagedUserVM;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.*;

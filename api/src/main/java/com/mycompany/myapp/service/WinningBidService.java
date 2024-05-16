@@ -1,5 +1,7 @@
 package com.mycompany.myapp.service;
 
+import com.mycompany.myapp.service.dto.LicensePlateDTO;
+import com.mycompany.myapp.service.dto.UserDTO;
 import com.mycompany.myapp.service.dto.WinningBidDTO;
 import java.util.List;
 import java.util.Optional;
@@ -38,6 +40,7 @@ public interface WinningBidService {
      * @return the list of entities.
      */
     List<WinningBidDTO> findAll();
+    List<LicensePlateDTO> findAllWinningLicenseByUsers(UserDTO userDTO);
 
     /**
      * Get the "id" winningBid.
