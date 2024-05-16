@@ -20,7 +20,7 @@ import carImage from "../../assets/car.png";
 import Login from "../../components/common/Login";
 
 export default function Home() {
-  const [idToken, setIdToken] = useState(localStorage.getItem("id_token"));
+  const [idToken] = useState(localStorage.getItem("id_token"));
   const [role, setRole] = useState();
 
   const [openLoginDialog, setOpenLoginDialog] = useState(false);

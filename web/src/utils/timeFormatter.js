@@ -11,3 +11,17 @@ export function formatTime(time) {
 
   return `${timeString} ${dateString}`;
 }
+
+export function formatTimeWithoutHour(time) {
+  const day = String(time.getDate()).padStart(2, "0");
+  const month = String(time.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
+  const year = time.getFullYear();
+
+  return `${day}/${month}/${year}`;
+}
+
+export function getNthDay(time, n) {
+  const nthDate = new Date();
+  nthDate.setDate(time.getDate() + n);
+  return nthDate;
+}
