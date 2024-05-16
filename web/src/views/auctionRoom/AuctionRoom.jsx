@@ -15,19 +15,22 @@ import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import EventIcon from "@mui/icons-material/Event";
-import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import HourglassTopIcon from "@mui/icons-material/HourglassTop";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 
 import { useAuth } from "../../hooks/AuthProvider";
+import { formatTime } from "../../utils/timeFormatter";
 
 export default function AuctionRoom() {
-  const [openCreateDialog, setOpenCreateDialog] = React.useState(false)
-  const [idToken, setIdToken] = React.useState(localStorage.getItem('id_token'));
+  const [openCreateDialog, setOpenCreateDialog] = React.useState(false);
+  const [idToken, setIdToken] = React.useState(
+    localStorage.getItem("id_token"),
+  );
   const [accountUser, setAccountUser] = React.useState({});
   const [auctionRoomList, setAuctionRoomList] = React.useState(null);
-  const auth = useAuth()
+  const auth = useAuth();
   const dateNow = new Date();
 
   const handleCreateButtonClick = () => {
@@ -35,30 +38,35 @@ export default function AuctionRoom() {
   };
   const handleCreateButtonClose = () => {
     setOpenCreateDialog(false);
-  }
+  };
   const getAllAuctionRoom = async () => {
-    await axios.get(`http://localhost:8080/api/auction-rooms`).then(res => {
-      const auctionRoomList = Object.values(res.data);
-      setAuctionRoomList(auctionRoomList)
-      console.log("list auction room: ", res.data)
-    }).catch(error => {
-      console.dir('Get all auction room error:', error);
-    });
+    await axios
+      .get(`http://localhost:8080/api/auction-rooms`)
+      .then((res) => {
+        const auctionRoomList = Object.values(res.data);
+        setAuctionRoomList(auctionRoomList);
+        console.log("list auction room: ", res.data);
+      })
+      .catch((error) => {
+        console.dir("Get all auction room error:", error);
+      });
     return;
   };
 
   React.useEffect(() => {
     if (auth.user) {
       setAccountUser(auth.user);
-      console.log(auth.user)
+      console.log(auth.user);
     }
   }, [auth.user]);
 
   React.useEffect(() => {
-    console.log("accountUser", accountUser)
-    if ((accountUser['authorities'] &&
-      accountUser['authorities'].includes('ROLE_ADMIN')) ||
-      !accountUser['authorities'])
+    console.log("accountUser", accountUser);
+    if (
+      (accountUser["authorities"] &&
+        accountUser["authorities"].includes("ROLE_ADMIN")) ||
+      !accountUser["authorities"]
+    )
       getAllAuctionRoom();
   }, [accountUser]);
 
@@ -108,32 +116,41 @@ export default function AuctionRoom() {
               boxShadow: `0px 3.5px 5.5px rgba(0, 0, 0, 0.02)`,
             }}
           >
-            {idToken && accountUser['authorities'] && accountUser['authorities'].includes('ROLE_ADMIN') && (
-              <>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}
-                  startIcon={<PlaylistAddIcon />}
-                  onClick={handleCreateButtonClick}
-                >
-                  Tạo phòng
-                </Button>
-                <Dialog
-                  open={openCreateDialog}
-                  onClose={handleCreateButtonClose}
-                >
-                  <CRUDialog title="Tạo phòng đấu giá" close={handleCreateButtonClose} />
-                </Dialog>
-              </>
-            )}
+            {idToken &&
+              accountUser["authorities"] &&
+              accountUser["authorities"].includes("ROLE_ADMIN") && (
+                <>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    sx={{
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      alignItems: "center",
+                    }}
+                    startIcon={<PlaylistAddIcon />}
+                    onClick={handleCreateButtonClick}
+                  >
+                    Tạo phòng
+                  </Button>
+                  <Dialog
+                    open={openCreateDialog}
+                    onClose={handleCreateButtonClose}
+                  >
+                    <CRUDialog
+                      title="Tạo phòng đấu giá"
+                      close={handleCreateButtonClose}
+                    />
+                  </Dialog>
+                </>
+              )}
 
             <Box sx={{ mt: 5 }}>
               <Grid container spacing={{ lg: 5, xs: 1 }}>
                 {auctionRoomList && (
                   <>
                     {auctionRoomList.map((auctionRoom) => (
-                      <Grid item xs={12} sm={6} md={4} xl={3} key={auctionRoom.id}>
+                      <Grid item xs={12} sm={6} md={4} key={auctionRoom.id}>
                         <Card
                           sx={{
                             p: 2,
@@ -152,8 +169,26 @@ export default function AuctionRoom() {
                               background: "#FFFFFF",
                             }}
                           >
-                            <Typography variant="h4" sx={{ fontWeight: 600, color: "#333" }}>
-                              {auctionRoom.licensePlate.plateNumber}
+                            <Typography
+                              variant="h4"
+                              sx={{ fontWeight: 700, color: "#333" }}
+                            >
+                              {auctionRoom.licensePlate.plateNumber.substring(
+                                0,
+                                auctionRoom.licensePlate.plateNumber.indexOf(
+                                  "-",
+                                ),
+                              )}
+                            </Typography>
+                            <Typography
+                              variant="h4"
+                              sx={{ fontWeight: 700, color: "#333" }}
+                            >
+                              {auctionRoom.licensePlate.plateNumber.substring(
+                                auctionRoom.licensePlate.plateNumber.indexOf(
+                                  "-",
+                                ) + 1,
+                              )}
                             </Typography>
                             {/* <Typography
                               variant="h4"
@@ -170,7 +205,11 @@ export default function AuctionRoom() {
                           </Box>
 
                           <Box
-                            sx={{ display: "flex", alignItems: "center", mb: 1 }}
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              mb: 1,
+                            }}
                           >
                             <Box
                               sx={{
@@ -186,7 +225,9 @@ export default function AuctionRoom() {
                               />
                             </Box>
                             <Stack>
-                              <Typography sx={{ fontSize: 12 }}>Loại xe</Typography>
+                              <Typography sx={{ fontSize: 12 }}>
+                                Loại xe
+                              </Typography>
                               <Typography sx={{ fontWeight: 600 }}>
                                 {auctionRoom.licensePlate.vehicleType}
                               </Typography>
@@ -194,7 +235,11 @@ export default function AuctionRoom() {
                           </Box>
 
                           <Box
-                            sx={{ display: "flex", alignItems: "center", mb: 1 }}
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              mb: 1,
+                            }}
                           >
                             <Box
                               sx={{
@@ -221,7 +266,11 @@ export default function AuctionRoom() {
                           </Box>
 
                           <Box
-                            sx={{ display: "flex", alignItems: "center", mb: 1 }}
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              mb: 1,
+                            }}
                           >
                             <Box
                               sx={{
@@ -233,20 +282,26 @@ export default function AuctionRoom() {
                                 background: "#F4FCF8",
                               }}
                             >
-                              <EventIcon sx={{ fontSize: 20, color: "#5DD397" }} />
+                              <EventIcon
+                                sx={{ fontSize: 20, color: "#5DD397" }}
+                              />
                             </Box>
                             <Stack>
                               <Typography sx={{ fontSize: 12 }}>
                                 Thời gian mở phòng
                               </Typography>
                               <Typography sx={{ fontWeight: 600 }}>
-                                {new Date(auctionRoom.startTime).toLocaleString()}
+                                {formatTime(new Date(auctionRoom.startTime))}
                               </Typography>
                             </Stack>
                           </Box>
 
                           <Box
-                            sx={{ display: "flex", alignItems: "center", mb: 1 }}
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              mb: 1,
+                            }}
                           >
                             <Box
                               sx={{
@@ -268,16 +323,11 @@ export default function AuctionRoom() {
                               </Typography>
                               <Typography sx={{ fontWeight: 600 }}>
                                 {dateNow < new Date(auctionRoom.startTime) && (
-                                  <>
-                                    Chưa bắt đầu
-                                  </>
+                                  <>Chưa bắt đầu</>
                                 )}
                                 {dateNow > new Date(auctionRoom.startTime) && (
-                                  <>
-                                    Đã kết thúc
-                                  </>
+                                  <>Đã kết thúc</>
                                 )}
-
                               </Typography>
                             </Stack>
                           </Box>
@@ -294,7 +344,11 @@ export default function AuctionRoom() {
                                       background: "#A0A0A0",
                                       whiteSpace: "nowrap",
                                     }}
-                                    startIcon={<VisibilityIcon style={{ fontSize: 14 }} />}
+                                    startIcon={
+                                      <VisibilityIcon
+                                        style={{ fontSize: 14 }}
+                                      />
+                                    }
                                   >
                                     Xem phòng
                                   </Button>
@@ -304,9 +358,11 @@ export default function AuctionRoom() {
 
                             {dateNow < new Date(auctionRoom.startTime) && (
                               <>
-                                {accountUser && accountUser['authorities'] && (
+                                {accountUser && accountUser["authorities"] && (
                                   <>
-                                    {accountUser['authorities'].includes('ROLE_ADMIN') && (
+                                    {accountUser["authorities"].includes(
+                                      "ROLE_ADMIN",
+                                    ) && (
                                       <>
                                         <Grid item xs={6}>
                                           <Button
@@ -317,7 +373,9 @@ export default function AuctionRoom() {
                                               whiteSpace: "nowrap",
                                             }}
                                             startIcon={
-                                              <EditNoteIcon style={{ fontSize: 16 }} />
+                                              <EditNoteIcon
+                                                style={{ fontSize: 16 }}
+                                              />
                                             }
                                           >
                                             Chỉnh sửa
@@ -332,7 +390,11 @@ export default function AuctionRoom() {
                                               background: "#e05757",
                                               whiteSpace: "nowrap",
                                             }}
-                                            startIcon={<DeleteIcon style={{ fontSize: 14 }} />}
+                                            startIcon={
+                                              <DeleteIcon
+                                                style={{ fontSize: 14 }}
+                                              />
+                                            }
                                           >
                                             Xóa phòng
                                           </Button>
@@ -341,7 +403,10 @@ export default function AuctionRoom() {
                                     )}
                                   </>
                                 )}
-                                {(!accountUser['authorities'] || !accountUser['authorities'].includes('ROLE_ADMIN')) && (
+                                {(!accountUser["authorities"] ||
+                                  !accountUser["authorities"].includes(
+                                    "ROLE_ADMIN",
+                                  )) && (
                                   <>
                                     <Grid item xs={12}>
                                       <Button
@@ -352,17 +417,19 @@ export default function AuctionRoom() {
                                           background: "#079455",
                                           whiteSpace: "nowrap",
                                         }}
-                                        startIcon={<VisibilityIcon style={{ fontSize: 14 }} />}
+                                        startIcon={
+                                          <VisibilityIcon
+                                            style={{ fontSize: 14 }}
+                                          />
+                                        }
                                       >
                                         Xem phòng
                                       </Button>
                                     </Grid>
                                   </>
                                 )}
-
                               </>
                             )}
-
                           </Grid>
                         </Card>
                       </Grid>

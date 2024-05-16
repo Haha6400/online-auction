@@ -22,7 +22,10 @@ import {
   Select,
   MenuItem,
   Dialog,
+  Typography,
 } from "@mui/material";
+
+import ManageSearchIcon from "@mui/icons-material/ManageSearch";
 
 import { LPprovinces, LPtype } from "../../utils/constants/LicensePlate";
 import {
@@ -36,7 +39,7 @@ import ResultModal from "./modals/ResultModal";
 export default function AdminTable({ idToken }) {
   const [LPSearchInput, setLPSearchInput] = useState("");
   const [province, setProvince] = useState("");
-  const [carType, setCarType] = useState("");
+  const [vehicleType, setVehicleType] = useState("");
 
   const [openCreateLPModal, setOpenCreateLPModal] = useState(false);
 
@@ -61,10 +64,17 @@ export default function AdminTable({ idToken }) {
   const toggleResultModal = () => {
     setOpenResultModal(!openResultModal);
   };
-
-  const searchLP = () => {
-    console.log(LPSearchInput, province, carType);
-  };
+  const filteredLicensePlates = licensePlates
+    ? licensePlates.filter((plate) => {
+        const matchesLPprovince = !province || plate.province === province;
+        const matchesVehicleType =
+          !vehicleType || plate.vehicleType === vehicleType;
+        const matchesPlateNumber =
+          !LPSearchInput ||
+          plate.plateNumber.toLowerCase().includes(LPSearchInput.toLowerCase());
+        return matchesLPprovince && matchesVehicleType && matchesPlateNumber;
+      })
+    : [];
 
   const fetchLicensePlates = async () => {
     const res = await getAllLicensePlate(idToken);
@@ -144,9 +154,9 @@ export default function AdminTable({ idToken }) {
           <Select
             autoWidth
             displayEmpty
-            value={carType}
+            value={vehicleType}
             onChange={(event) => {
-              setCarType(event.target.value);
+              setVehicleType(event.target.value);
             }}
             sx={{
               width: 250,
@@ -171,29 +181,15 @@ export default function AdminTable({ idToken }) {
         <Button
           variant="contained"
           color="primary"
-          sx={{
-            whiteSpace: "nowrap",
-            marginY: 2,
-            backgroundColor: "primary",
-            color: "white",
+          startIcon={<PlaylistAddIcon />}
+          onClick={() => {
+            setResultType("CREATE");
+            toggleCreateLPModal();
           }}
-          onClick={searchLP}
         >
-          Tìm kiếm
+          Tạo biển số
         </Button>
       </Box>
-
-      <Button
-        variant="contained"
-        style={{ background: "#00BC8D" }}
-        startIcon={<PlaylistAddIcon />}
-        onClick={() => {
-          setResultType("CREATE");
-          toggleCreateLPModal();
-        }}
-      >
-        Tạo biển số
-      </Button>
 
       <Dialog open={openCreateLPModal} onClose={toggleCreateLPModal}>
         <CreateLPModal
@@ -233,7 +229,7 @@ export default function AdminTable({ idToken }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {licensePlates.map((licensePlate, index) => (
+            {filteredLicensePlates.map((licensePlate, index) => (
               <TableRow key={licensePlate.id}>
                 <TableCell align="center">{index + 1}</TableCell>
                 <TableCell align="center">{licensePlate.plateNumber}</TableCell>
@@ -244,7 +240,7 @@ export default function AdminTable({ idToken }) {
                   <Button
                     variant="contained"
                     sx={{ mr: 2, ml: 5 }}
-                    style={{ background: "#33B5B9" }}
+                    style={{ background: "#079455" }}
                     startIcon={<EditNoteIcon style={{ fontSize: 16 }} />}
                     onClick={() => {
                       setCurrentLP(licensePlate);
@@ -278,6 +274,25 @@ export default function AdminTable({ idToken }) {
           </TableBody>
         </Table>
       </TableContainer>
+      {filteredLicensePlates.length === 0 && (
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            bgcolor: "#01543333",
+            color: "#555",
+            padding: 5,
+            borderBottomRightRadius: 10,
+            borderBottomLeftRadius: 10,
+          }}
+        >
+          <ManageSearchIcon style={{ fontSize: 70 }} />
+          <Typography sx={{ fontWeight: "600" }}>
+            Không tìm thấy biển số phù hợp
+          </Typography>
+        </Box>
+      )}
 
       <Dialog open={openUpdateLPModal} onClose={toggleUpdateLPModal}>
         <UpdateLPModal

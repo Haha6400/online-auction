@@ -17,14 +17,16 @@ import AdminTable from "./AdminTable";
 import ReadOnlyTable from "./ReadOnlyTable";
 
 import carImage from "../../assets/car.png";
+import Login from "../../components/common/Login";
 
 export default function Home() {
-  const [openRegisterDialog, setOpenRegisterDialog] = useState(false);
-  const [idToken, setIdToken] = useState(localStorage.getItem("id_token"));
+  const [idToken] = useState(localStorage.getItem("id_token"));
   const [role, setRole] = useState();
 
-  const toggleRegisterDialog = () => {
-    setOpenRegisterDialog(!openRegisterDialog);
+  const [openLoginDialog, setOpenLoginDialog] = useState(false);
+
+  const toggleLoginDialog = () => {
+    setOpenLoginDialog(!openLoginDialog);
   };
 
   useEffect(() => {
@@ -50,7 +52,7 @@ export default function Home() {
         backgroundRepeat: "no-repeat",
       }}
     >
-      <AppAppBar name="Ha Nguyen" currentPage="home" />
+      <AppAppBar currentPage="home" login={toggleLoginDialog} />
       <Box
         id="hero"
         sx={{
@@ -67,7 +69,7 @@ export default function Home() {
           }}
         >
           {/* Hero section */}
-          {!idToken && (
+          {!(role && role.includes("ROLE_ADMIN")) && (
             <Box
               sx={{
                 display: "flex",
@@ -112,9 +114,9 @@ export default function Home() {
                     </Typography>
                   </Typography>
                   <Typography
-                    color="#727584"
+                    color=""
                     sx={{
-                      marginTop: 5,
+                      marginTop: 2,
                       fontSize: "18px",
                     }}
                   >
@@ -122,30 +124,25 @@ export default function Home() {
                   </Typography>
 
                   <Box>
-                    <Button
-                      variant="contained"
-                      size="large"
-                      sx={{
-                        mt: 5,
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 1,
-                        width: { xs: "100%", lg: "auto" },
-                        backgroundColor: "primary",
-                        color: "white",
-                      }}
-                      onClick={toggleRegisterDialog}
-                    >
-                      Đăng ký ngay
-                      <Launch />
-                    </Button>
-                    <Dialog
-                      open={openRegisterDialog}
-                      onClose={toggleRegisterDialog}
-                      aria-labelledby="scroll-dialog-title"
-                      aria-describedby="scroll-dialog-description"
-                    >
-                      <Register />
+                    <a href={idToken && "#LPTable"}>
+                      <Button
+                        variant="contained"
+                        size="large"
+                        sx={{
+                          mt: 2,
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 1,
+                          width: { xs: "100%", lg: "auto" },
+                        }}
+                        onClick={!idToken ? toggleLoginDialog : () => {}}
+                      >
+                        Đăng ký ngay
+                        <Launch />
+                      </Button>
+                    </a>
+                    <Dialog open={openLoginDialog} onClose={toggleLoginDialog}>
+                      <Login handleLoginDialogClose={toggleLoginDialog} />
                     </Dialog>
                   </Box>
                 </Stack>
@@ -170,6 +167,7 @@ export default function Home() {
           )}
 
           {/* List of license plate */}
+          {/* <div id="LPTable"> */}
           <Box
             sx={{
               // mt: { xs: 8, sm: 10 },
@@ -181,6 +179,7 @@ export default function Home() {
               borderRadius: "10px",
               boxShadow: `0px 3.5px 5.5px rgba(0, 0, 0, 0.02)`,
             }}
+            id="LPTable"
           >
             <Typography
               component="h2"
@@ -194,9 +193,10 @@ export default function Home() {
             {role && role.includes("ROLE_ADMIN") ? (
               <AdminTable idToken={idToken} />
             ) : (
-              <ReadOnlyTable />
+              <ReadOnlyTable idToken={idToken} login={toggleLoginDialog} />
             )}
           </Box>
+          {/* </div> */}
         </Container>
       </Box>
       <Footer />

@@ -1,22 +1,20 @@
-import * as React from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import * as React from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import Stack from '@mui/material/Stack';
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import Link from "@mui/material/Link";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import Stack from "@mui/material/Stack";
 
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import getLPTheme from '../../views/getLPTheme';
-import { useAuth } from '../../hooks/AuthProvider';
-
-
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import getLPTheme from "../../views/getLPTheme";
+import { useAuth } from "../../hooks/AuthProvider";
 
 export default function Login({ handleLoginDialogClose }) {
   const [mode, setMode] = React.useState(getInitialMode());
@@ -27,23 +25,23 @@ export default function Login({ handleLoginDialogClose }) {
   const navigate = useNavigate();
 
   const handleRegisterClick = () => {
-    navigate('/register'); // Navigate to the registration page
+    navigate("/register"); // Navigate to the registration page
   };
 
-
   function getInitialMode() {
-    const savedMode = JSON.parse(localStorage.getItem('mode'));
-    return savedMode || 'light';
+    const savedMode = JSON.parse(localStorage.getItem("mode"));
+    return savedMode || "light";
   }
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const values = {
-      'username': data.get('username'),
-      'password': data.get('password')
-    }
+      username: data.get("username"),
+      password: data.get("password"),
+    };
     console.log("values", values);
     auth.loginAction(values);
+    navigate("/");
 
     return;
   };
@@ -62,7 +60,8 @@ export default function Login({ handleLoginDialogClose }) {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-          }}>
+          }}
+        >
           <CssBaseline />
           <Box
             sx={{
@@ -74,22 +73,23 @@ export default function Login({ handleLoginDialogClose }) {
               backgroundSize: "cover",
               borderRadius: "10px",
               boxShadow: `0px 3.5px 5.5px rgba(0, 0, 0, 0.02)`,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              alignContent: 'center',
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              alignContent: "center",
             }}
           >
-            <Typography component="h1" variant="h5"
+            <Typography
+              component="h1"
+              variant="h5"
               sx={{
-                mb: 1
-              }}>
+                mb: 1,
+              }}
+            >
               Đăng nhập
             </Typography>
             <Box component="form" onSubmit={handleSubmit}>
-              <Typography >
-                Tên đăng nhập
-              </Typography>
+              <Typography>Tên đăng nhập</Typography>
               <TextField
                 required
                 fullWidth
@@ -98,14 +98,13 @@ export default function Login({ handleLoginDialogClose }) {
                 autoComplete="username"
                 autoFocus
                 sx={{
-                  mt: 1, mb: 1,
+                  mt: 1,
+                  mb: 1,
                   boxShadow: `0px 3.5px 5.5px rgba(0, 0, 0, 0.2)`,
                   borderRadius: 3,
                 }}
               />
-              <Typography >
-                Mật khẩu
-              </Typography>
+              <Typography>Mật khẩu</Typography>
               <TextField
                 required
                 fullWidth
@@ -114,18 +113,20 @@ export default function Login({ handleLoginDialogClose }) {
                 id="password"
                 autoComplete="current-password"
                 sx={{
-                  mt: 1, mb: 1,
+                  mt: 1,
+                  mb: 1,
                   boxShadow: `0px 3.5px 5.5px rgba(0, 0, 0, 0.2)`,
                   borderRadius: 3,
                 }}
               />
               <Grid item>
                 {loginError && (
-                  <div style={{
-                    'color': 'red',
-                    'fontSize': '14px'
-
-                  }}>
+                  <div
+                    style={{
+                      color: "red",
+                      fontSize: "14px",
+                    }}
+                  >
                     Tên đăng nhập hoặc mật khẩu không hợp lệ!
                   </div>
                 )}
@@ -138,15 +139,16 @@ export default function Login({ handleLoginDialogClose }) {
                 fullWidth
                 variant="contained"
                 sx={{
-                  mt: 1, mb: 1, backgroundColor: "primary",
-                  color: "white"
+                  mt: 1,
+                  mb: 1,
+                  backgroundColor: "primary",
+                  color: "white",
                 }}
               >
                 Đăng nhập
               </Button>
               <Grid container justifyContent="center">
-
-                <Grid item >
+                <Grid item>
                   <Button
                     color="primary"
                     variant="text"
@@ -164,6 +166,6 @@ export default function Login({ handleLoginDialogClose }) {
           </Box>
         </Container>
       </Box>
-    </Stack >
+    </Stack>
   );
 }

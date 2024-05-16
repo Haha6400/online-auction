@@ -12,6 +12,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 
 import Search from "@mui/icons-material/Search";
+import ManageSearchIcon from "@mui/icons-material/ManageSearch";
 
 import {
   OutlinedInput,
@@ -19,34 +20,67 @@ import {
   Select,
   MenuItem,
   Dialog,
+  Typography,
 } from "@mui/material";
 import AuctionRegisterModal from "./modals/AuctionRegisterModal";
 
 import { LPprovinces, LPtype } from "../../utils/constants/LicensePlate";
+import { getAllAuctionRoom } from "../../service/user/licensePlateAPI";
+import { formatTime } from "../../utils/timeFormatter";
+import { useNavigate } from "react-router-dom";
 
-export default function ReadOnlyTable({ idToken }) {
+export default function ReadOnlyTable({ idToken, login }) {
   const [LPSearchInput, setLPSearchInput] = useState("");
   const [province, setProvince] = useState("");
-  const [carType, setCarType] = useState("");
+  const [vehicleType, setVehicleType] = useState("");
   const [openAuctionRegisterModal, setOpenAuctionRegisterModal] =
     useState(false);
 
-  const [licensePlates, setLicensePlates] = useState([
-    {
-      id: 1,
-      plateNumber: "50A-12345",
-      vehicleType: "Xe tải",
-      province: "TP Hồ Chí Minh",
-    },
-  ]);
+  const [licensePlates, setLicensePlates] = useState([]);
+
+  const [currentLP, setCurrentLP] = useState({});
+
+  const navigate = useNavigate();
+
+  const filteredLicensePlates = licensePlates
+    ? licensePlates.filter((plate) => {
+        const matchesLPprovince = !province || plate.province === province;
+        const matchesVehicleType =
+          !vehicleType || plate.vehicleType === vehicleType;
+        const matchesPlateNumber =
+          !LPSearchInput ||
+          plate.plateNumber.toLowerCase().includes(LPSearchInput.toLowerCase());
+        return matchesLPprovince && matchesVehicleType && matchesPlateNumber;
+      })
+    : [];
 
   const toggleAuctionRegisterMdal = () => {
     setOpenAuctionRegisterModal(!openAuctionRegisterModal);
   };
 
-  const searchLP = () => {
-    console.log(LPSearchInput, province, carType);
+  const fetchLicensePlates = async () => {
+    const res = await getAllAuctionRoom();
+
+    const comingAuctionRooms = res.filter(
+      (auctionRoom) => new Date(auctionRoom.startTime) > new Date(),
+    );
+
+    setLicensePlates(
+      comingAuctionRooms.map((auctionRoom) => {
+        return {
+          ...auctionRoom.licensePlate,
+          startTime: formatTime(new Date(auctionRoom.startTime)),
+          endTime: formatTime(new Date(auctionRoom.endTime)),
+          description: auctionRoom.description,
+          initPrice: auctionRoom.initPrice,
+        };
+      }),
+    );
   };
+
+  useEffect(() => {
+    fetchLicensePlates();
+  }, []);
 
   return (
     <>
@@ -116,9 +150,9 @@ export default function ReadOnlyTable({ idToken }) {
           <Select
             autoWidth
             displayEmpty
-            value={carType}
+            value={vehicleType}
             onChange={(event) => {
-              setCarType(event.target.value);
+              setVehicleType(event.target.value);
             }}
             sx={{
               width: 250,
@@ -140,19 +174,6 @@ export default function ReadOnlyTable({ idToken }) {
             ))}
           </Select>
         </FormControl>
-        <Button
-          variant="contained"
-          color="primary"
-          sx={{
-            whiteSpace: "nowrap",
-            marginY: 2,
-            backgroundColor: "primary",
-            color: "white",
-          }}
-          onClick={searchLP}
-        >
-          Tìm kiếm
-        </Button>
       </Box>
 
       <TableContainer
@@ -190,21 +211,27 @@ export default function ReadOnlyTable({ idToken }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {licensePlates.map((licensePlate, index) => (
+            {filteredLicensePlates.map((licensePlate, index) => (
               <TableRow key={licensePlate.id}>
                 <TableCell align="center">{index + 1}</TableCell>
                 <TableCell align="center">{licensePlate.plateNumber}</TableCell>
                 <TableCell align="center">{licensePlate.province}</TableCell>
                 <TableCell align="center">{licensePlate.vehicleType}</TableCell>
 
-                <TableCell
-                  sx={{ whiteSpace: "nowrap" }}
-                  align="center"
-                ></TableCell>
+                <TableCell sx={{ whiteSpace: "nowrap" }} align="center">
+                  {licensePlate.startTime}
+                </TableCell>
 
                 <TableCell width={200}>
                   <Button
-                    onClick={toggleAuctionRegisterMdal}
+                    onClick={() => {
+                      if (idToken) {
+                        setCurrentLP(licensePlate);
+                        toggleAuctionRegisterMdal();
+                      } else {
+                        login();
+                      }
+                    }}
                     variant="contained"
                     color="primary"
                     size="small"
@@ -222,11 +249,34 @@ export default function ReadOnlyTable({ idToken }) {
           </TableBody>
         </Table>
       </TableContainer>
+      {filteredLicensePlates.length === 0 && (
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            bgcolor: "#01543333",
+            color: "#555",
+            padding: 5,
+            borderBottomRightRadius: 10,
+            borderBottomLeftRadius: 10,
+          }}
+        >
+          <ManageSearchIcon style={{ fontSize: 70 }} />
+          <Typography sx={{ fontWeight: "600" }}>
+            Không tìm thấy biển số phù hợp
+          </Typography>
+        </Box>
+      )}
+
       <Dialog
         open={openAuctionRegisterModal}
         onClose={toggleAuctionRegisterMdal}
       >
-        <AuctionRegisterModal close={toggleAuctionRegisterMdal} />
+        <AuctionRegisterModal
+          licensePlate={currentLP}
+          close={toggleAuctionRegisterMdal}
+        />
       </Dialog>
     </>
   );

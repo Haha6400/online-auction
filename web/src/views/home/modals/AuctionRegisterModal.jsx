@@ -2,21 +2,17 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import { Button, Grid, Stack } from "@mui/material";
 
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import EventIcon from "@mui/icons-material/Event";
-import HourglassTopIcon from "@mui/icons-material/HourglassTop";
-import { Button, Grid, Stack } from "@mui/material";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import PaidIcon from "@mui/icons-material/Paid";
+import DescriptionIcon from "@mui/icons-material/Description";
 
-export default function AuctionRegisterModal(props) {
-
-  React.useEffect(() => {
-    if (props.accountUser) {
-      console.log("auction register", props.accountUser)
-    }
-  }, [props.accountUser]);
-
+export default function AuctionRegisterModal({ licensePlate, close }) {
+  console.log(licensePlate);
   return (
     <Container component="main">
       <Box
@@ -52,11 +48,16 @@ export default function AuctionRegisterModal(props) {
                 background: "#FFFFFF",
               }}
             >
-              <Typography variant="h4" sx={{ fontWeight: 600, color: "#333" }}>
-                98A
+              <Typography variant="h4" sx={{ fontWeight: 700, color: "#333" }}>
+                {licensePlate.plateNumber.substring(
+                  0,
+                  licensePlate.plateNumber.indexOf("-"),
+                )}
               </Typography>
-              <Typography variant="h4" sx={{ fontWeight: 600, color: "#333" }}>
-                961.73
+              <Typography variant="h4" sx={{ fontWeight: 700, color: "#333" }}>
+                {licensePlate.plateNumber.substring(
+                  licensePlate.plateNumber.indexOf("-") + 1,
+                )}
               </Typography>
             </Box>
           </Grid>
@@ -76,7 +77,9 @@ export default function AuctionRegisterModal(props) {
               </Box>
               <Stack>
                 <Typography>Loại xe</Typography>
-                <Typography sx={{ fontWeight: 600 }}>Xe con</Typography>
+                <Typography sx={{ fontWeight: 600 }}>
+                  {licensePlate.vehicleType}
+                </Typography>
               </Stack>
             </Box>
           </Grid>
@@ -97,7 +100,9 @@ export default function AuctionRegisterModal(props) {
               </Box>
               <Stack>
                 <Typography>Tỉnh, thành phố</Typography>
-                <Typography sx={{ fontWeight: 600 }}>Tỉnh Bắc Giang</Typography>
+                <Typography sx={{ fontWeight: 600 }}>
+                  {licensePlate.province}
+                </Typography>
               </Stack>
             </Box>
           </Grid>
@@ -117,9 +122,9 @@ export default function AuctionRegisterModal(props) {
                 <EventIcon sx={{ fontSize: 25, color: "#5DD397" }} />
               </Box>
               <Stack>
-                <Typography>Thời gian đấu giá</Typography>
+                <Typography>Thời gian bắt đầu</Typography>
                 <Typography sx={{ fontWeight: 600 }}>
-                  20h00 15/04/2024
+                  {licensePlate.startTime}
                 </Typography>
               </Stack>
             </Box>
@@ -137,25 +142,75 @@ export default function AuctionRegisterModal(props) {
                   background: "#F4FCF8",
                 }}
               >
-                <HourglassTopIcon sx={{ fontSize: 25, color: "#5DD397" }} />
+                <AccessTimeIcon sx={{ fontSize: 25, color: "#5DD397" }} />
               </Box>
               <Stack>
-                <Typography>Thời gian đăng ký còn lại</Typography>
+                <Typography>Thời gian kết thúc</Typography>
                 <Typography sx={{ fontWeight: 600 }}>
-                  1 ngày 20 giờ 24 phút
+                  {licensePlate.endTime}
+                </Typography>
+              </Stack>
+            </Box>
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+              <Box
+                sx={{
+                  mr: 1,
+                  pt: 1.5,
+                  pb: 0.5,
+                  px: 1.5,
+                  borderRadius: "50%",
+                  background: "#F4FCF8",
+                }}
+              >
+                <PaidIcon sx={{ fontSize: 25, color: "#5DD397" }} />
+              </Box>
+              <Stack>
+                <Typography>Giá khởi điểm</Typography>
+                <Typography sx={{ fontWeight: 600 }}>
+                  {new Intl.NumberFormat("vi-VN", {
+                    style: "currency",
+                    currency: "VND",
+                  }).format(licensePlate.initPrice)}
+                </Typography>
+              </Stack>
+            </Box>
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Box
+                sx={{
+                  mr: 1,
+                  pt: 1.5,
+                  pb: 0.5,
+                  px: 1.5,
+                  borderRadius: "50%",
+                  background: "#F4FCF8",
+                }}
+              >
+                <DescriptionIcon sx={{ fontSize: 25, color: "#5DD397" }} />
+              </Box>
+              <Stack>
+                <Typography>Ghi chú</Typography>
+                <Typography sx={{ fontWeight: 600 }}>
+                  {licensePlate.description}
                 </Typography>
               </Stack>
             </Box>
           </Grid>
         </Grid>
 
+        {/* Action button */}
         <Grid container spacing={3} sx={{ mt: 0.5 }}>
           <Grid item xs={6}>
             <Button
               variant="outlined"
               color="primary"
               sx={{ width: "100%" }}
-              onClick={props.close}
+              onClick={close}
             >
               Hủy bỏ
             </Button>
