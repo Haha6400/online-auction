@@ -15,31 +15,33 @@ import Grid from '@mui/material/Grid';
 import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
 import SettingsIcon from '@mui/icons-material/Settings';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import PaidIcon from '@mui/icons-material/Paid';
-import HttpsIcon from '@mui/icons-material/Https';
+import HistoryIcon from '@mui/icons-material/History';
+import ListIcon from '@mui/icons-material/List';
 
 import Footer from "../../components/common/Footer";
 import AppAppBar from "../../components/base/AppAppBar";
 import Update from "../account/Update";
 
+
 const items = [
     {
         icon: <AccountCircleIcon />,
-        title: 'Personal',
+        title: 'Thông tin cá nhân',
     },
     {
-        icon: <PaidIcon />,
-        title: 'Payment',
+        icon: <HistoryIcon />,
+        title: 'Lịch sử đấu giá',
     },
     {
-        icon: <HttpsIcon />,
-        title: 'Security',
+        icon: <ListIcon />,
+        title: 'Danh sách chờ',
     },
 
 
 ];
 
 export default function MyAccount() {
+
     const [selectedItemIndex, setSelectedItemIndex] = React.useState(0);
 
     const handleItemClick = (index) => {
@@ -47,16 +49,23 @@ export default function MyAccount() {
     };
 
     const selectItem = items[selectedItemIndex];
+
+
+
+
     return (
-        <>
-            <AppAppBar loginCheck="true" name="Ha Nguyen" />
+        <Stack
+            sx={{
+                background: "url(/bgr.png)",
+                backgroundSize: "100% 100%",
+                backgroundRepeat: "no-repeat",
+            }}
+        >
+            <AppAppBar />
             <Box
                 id="hero"
                 sx={{
                     width: "100%",
-                    backgroundImage: "linear-gradient(180deg, #CEE5FD, #FFF)",
-                    backgroundSize: "100% 20%",
-                    backgroundRepeat: "no-repeat"
                 }}
             >
                 <Container id="myAccount" sx={{ py: { xs: 8, sm: 16 } }}>
@@ -82,10 +91,10 @@ export default function MyAccount() {
                                             width: '100%',
                                             background: 'none',
                                             backgroundColor:
-                                                selectedItemIndex === index ? 'action.selected' : undefined,
+                                                selectedItemIndex === index ? 'rgba(255, 255, 255, 0.3)' : "rgba(255, 255, 255, 0.1)",
                                             borderColor: selectedItemIndex === index
                                                 ? 'primary.light'
-                                                : 'grey.200'
+                                                : 'rgba(255, 255, 255, 0.2)',
                                         }}
                                     >
                                         <Box
@@ -100,9 +109,7 @@ export default function MyAccount() {
                                         >
                                             <Box
                                                 sx={{
-                                                    color: selectedItemIndex === index
-                                                        ? 'primary.main'
-                                                        : 'grey.300',
+                                                    color: 'primary.main',
                                                     display: 'flex', alignItems: 'center', textTransform: 'none'
                                                 }}
 
@@ -114,7 +121,7 @@ export default function MyAccount() {
                                                     color="text.primary"
                                                     variant="body2"
                                                     fontWeight="bold"
-                                                    sx={{ display: 'flex', alignItems: 'center', textTransform: 'none' }}
+                                                    sx={{ display: 'flex', alignItems: 'center', textTransform: 'none', color: 'primary.main' }}
                                                 >
                                                     {title}
                                                     <ChevronRightRoundedIcon
@@ -144,47 +151,116 @@ export default function MyAccount() {
                                 ))}
                             </Stack>
                         </Grid>
-                        <Grid
+                        {/* <Grid
                             item
                             xs={14}
                             md={8}
                             sx={{ display: { xs: 'none', sm: 'flex' }, width: '100%' }}
                         >
-                            <Card
+                            <Box
+                                sx={{
+                                    // mt: { xs: 8, sm: 10 },
+                                    padding: 5,
+                                    alignSelf: "center",
+                                    width: "100%",
+                                    bgcolor: "rgba(255, 255, 255, 0.3)",
+                                    backgroundSize: "cover",
+                                    borderRadius: "10px",
+                                    boxShadow: `0px 3.5px 5.5px rgba(0, 0, 0, 0.02)`,
+                                }}
+                                id="LPTable"
+                            >
+                                <Typography
+                                    component="h1" variant="h5"
+
+                                    color="text.secondary"
+                                    sx={{ fontWeight: 700, fontSize: 24, textAlign: "center" }}
+                                >
+                                    {items[selectedItemIndex].title}
+                                </Typography>
+                            </Box> */}
+                        {/* <Card
                                 variant="outlined"
                                 sx={{
                                     height: '100%',
                                     width: '100%',
                                     display: { xs: 'none', sm: 'flex' },
+                                    boxShadow: `0px 3.5px 5.5px rgba(0, 0, 0, 0.02)`,
+                                    backgroundColor: 'red'
+                                }}
+                            > */}
+
+                        {/* <Box
+                                sx={{
+                                    m: 'auto',
+                                    width: '95%',
+                                    height: 500,
+                                    backgroundSize: 'contain',
+                                    backgroundColor: 'rgba(255, 255, 255, 0.3)'
                                 }}
                             >
+                                <Typography component="h1" variant="h5" sx={{
+                                    margin: 3
+                                }}>
+                                    {items[selectedItemIndex].title}
+                                </Typography>
+                                {items[selectedItemIndex].title === "Thông tin cá nhân" && (
+                                    <>
+                                        <Update />
+                                    </>
+                                )}
 
-                                <Box
-                                    sx={{
-                                        m: 'auto',
-                                        width: '95%',
-                                        height: 500,
-                                        backgroundSize: 'contain',
-                                    }}
+                            </Box> */}
+                        {/* </Card> */}
+                        {/* </Grid> */}
+                        <Grid
+                            item
+                            xs={14}
+                            md={8}
+                            sx={{ display: { xs: 'none', sm: 'flex' }, width: '100%', flexDirection: 'column', gap: 2 }}
+                        >
+                            <Box
+                                sx={{
+                                    padding: 3,
+                                    alignSelf: "center",
+                                    width: "100%",
+                                    bgcolor: "rgba(255, 255, 255, 0.3)",
+                                    backgroundSize: "cover",
+                                    borderRadius: "10px",
+                                    boxShadow: `0px 3.5px 5.5px rgba(0, 0, 0, 0.02)`,
+                                }}
+                            >
+                                <Typography
+                                    component="h1" variant="h5"
+                                    sx={{ paddingLeft: 2, color: 'primary.main' }}
                                 >
-                                    <Typography component="h1" variant="h5" sx={{
-                                        margin: 3
-                                    }}>
-                                        {items[selectedItemIndex].title} Information
-                                    </Typography>
-                                    {items[selectedItemIndex].title === "Personal" && (
-                                        <>
-                                            <Update />
-                                        </>
-                                    )}
-
-                                </Box>
-                            </Card>
+                                    {items[selectedItemIndex].title}
+                                </Typography>
+                            </Box>
+                            <Box
+                                sx={{
+                                    padding: 2,
+                                    alignSelf: "center",
+                                    width: "100%",
+                                    bgcolor: "rgba(255, 255, 255, 0.3)",
+                                    backgroundSize: "cover",
+                                    borderRadius: "10px",
+                                    boxShadow: `0px 3.5px 5.5px rgba(0, 0, 0, 0.02)`
+                                }}
+                            >
+                                {items[selectedItemIndex].title === "Thông tin cá nhân" && (
+                                    <>
+                                        <Update />
+                                    </>
+                                )}
+                            </Box>
                         </Grid>
+
                     </Grid>
                 </Container>
-            </Box >
+            </Box>
+
             <Footer />
-        </>
+        </Stack >
     );
 }

@@ -3,15 +3,15 @@ import { red } from "@mui/material/colors";
 
 export const brand = {
   50: "#F0F7FF",
-  100: "#CEE5FD",
-  200: "#9CCCFC",
+  100: "#CEF6D7",
+  200: "#57E095",
   300: "#55A6F6",
   400: "#0A66C2",
-  500: "#0959AA",
+  500: "#00623B",
   600: "#064079",
   700: "#033363",
   800: "#02294F",
-  900: "#021F3B",
+  900: "#015433",
 };
 
 export const secondary = {
@@ -226,7 +226,7 @@ export default function getLPTheme(mode) {
           root: ({ theme }) => ({
             border: "none",
             borderRadius: 8,
-            "&:hover": { backgroundColor: gray[100] },
+            "&:hover": { backgroundColor: `FFFFFF` },
             ...(theme.palette.mode === "dark" && {
               "&:hover": { backgroundColor: gray[800] },
             }),
@@ -316,10 +316,8 @@ export default function getLPTheme(mode) {
               borderColor: gray[800],
               color: gray[800],
               "&:hover": {
-                backgroundColor: alpha(gray[300], 0.3),
+                backgroundColor: alpha(`#FFFFFF`, 0.3),
                 borderColor: gray[800],
-                // backgroundColor: alpha(brand[300], 0.3),
-                // borderColor: brand[200],
               },
             }),
             ...(ownerState.variant === "text" && {
@@ -327,27 +325,9 @@ export default function getLPTheme(mode) {
               "&:hover": {
                 // backgroundColor: alpha(brand[300], 0.3),
                 // backgroundColor: alpha("#4FD1C5", 0.3)
-                backgroundColor: alpha(gray[300], 0.3),
+                backgroundColor: alpha('#FFFFFF', 0.1),
                 borderColor: brand[200],
               },
-            }),
-            ...(theme.palette.mode === "dark" && {
-              ...(ownerState.variant === "outlined" && {
-                backgroundColor: alpha(brand[600], 0.1),
-                borderColor: brand[700],
-                color: brand[300],
-                "&:hover": {
-                  backgroundColor: alpha(brand[600], 0.3),
-                  borderColor: brand[700],
-                },
-              }),
-              ...(ownerState.variant === "text" && {
-                color: brand[300],
-                "&:hover": {
-                  backgroundColor: alpha(brand[600], 0.3),
-                  borderColor: brand[700],
-                },
-              }),
             }),
           }),
         },
@@ -363,7 +343,7 @@ export default function getLPTheme(mode) {
             ...(ownerState.variant === "outlined" && {
               background: `linear-gradient(to bottom, #FFF, ${gray[50]})`,
               "&:hover": {
-                borderColor: brand[300],
+                borderColor: `#FFFFFF`,
                 boxShadow: `0 0 24px ${brand[100]}`,
               },
             }),

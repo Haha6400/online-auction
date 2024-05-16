@@ -114,7 +114,7 @@ export default function AccountMenu() {
                         <ListItemIcon>
                             <Avatar fontSize="small" />
                         </ListItemIcon>
-                        My Account
+                        Trang cá nhân
                     </MenuItem>
                     <Divider />
                     <MenuItem onClick={() => handleCloseUserMenu("setting")}>
