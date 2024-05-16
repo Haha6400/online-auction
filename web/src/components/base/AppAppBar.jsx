@@ -13,15 +13,11 @@ import Drawer from "@mui/material/Drawer";
 import MenuIcon from "@mui/icons-material/Menu";
 import Dialog from "@mui/material/Dialog";
 
-
 import Login from "../common/Login";
 import AccountMenu from "../base/AccountMenu";
 
-
 import logo from "../../assets/logo.png";
 import { useAuth } from "../../hooks/AuthProvider";
-
-
 
 const logoStyle = {
   width: "40px",
@@ -31,12 +27,13 @@ const logoStyle = {
   marginRight: "5px",
 };
 
-export default function AppAppBar(props) {
-
+export default function AppAppBar({ currentPage, login }) {
   const [openDrawer, setOpenDrawer] = React.useState(false);
 
   const [openLoginDialog, setOpenLoginDialog] = React.useState(false);
-  const [idToken, setIdToken] = React.useState(localStorage.getItem('id_token'));
+  const [idToken, setIdToken] = React.useState(
+    localStorage.getItem("id_token"),
+  );
   const [accountUser, setAccountUser] = React.useState({});
   const auth = useAuth();
 
@@ -48,7 +45,6 @@ export default function AppAppBar(props) {
     setOpenLoginDialog(false);
   };
 
-
   const toggleDrawer = (newOpen) => () => {
     setOpenDrawer(newOpen);
   };
@@ -58,7 +54,6 @@ export default function AppAppBar(props) {
       setAccountUser(auth.user);
     }
   }, [auth.user]);
-
 
   return (
     <div>
@@ -108,12 +103,12 @@ export default function AppAppBar(props) {
                 <Link to="/">
                   <MenuItem
                     sx={{ py: "6px", px: "12px", ml: "10px" }}
-                    selected={props.currentPage === "home"}
+                    selected={currentPage === "home"}
                   >
                     <Typography
                       variant="navbar"
                       color={
-                        props.currentPage === "home"
+                        currentPage === "home"
                           ? "text.primary"
                           : "text.secondary"
                       }
@@ -125,12 +120,12 @@ export default function AppAppBar(props) {
                 <Link to="/plan">
                   <MenuItem
                     sx={{ py: "6px", px: "12px", ml: "10px" }}
-                    selected={props.currentPage === "plan"}
+                    selected={currentPage === "plan"}
                   >
                     <Typography
                       variant="navbar"
                       color={
-                        props.currentPage === "plan"
+                        currentPage === "plan"
                           ? "text.primary"
                           : "text.secondary"
                       }
@@ -139,15 +134,16 @@ export default function AppAppBar(props) {
                     </Typography>
                   </MenuItem>
                 </Link>
-                <Link to="/list-auction-room">
+                <Link to={idToken && "/list-auction-room"}>
                   <MenuItem
                     sx={{ py: "6px", px: "12px", ml: "10px" }}
-                    selected={props.currentPage === "list_auction_room"}
+                    selected={currentPage === "list_auction_room"}
+                    onClick={!idToken ? login : () => {}}
                   >
                     <Typography
                       variant="navbar"
                       color={
-                        props.currentPage === "list_auction_room"
+                        currentPage === "list_auction_room"
                           ? "text.primary"
                           : "text.secondary"
                       }
@@ -220,13 +216,12 @@ export default function AppAppBar(props) {
                       Đăng ký
                     </Button>
                   </Link>
-
                 </>
               )}
 
               {idToken && accountUser && (
                 <>
-                  <h4 style={{ color: "#015433", 'fontSize': '14px' }}>
+                  <h4 style={{ color: "#015433", fontSize: "14px" }}>
                     {accountUser.login}
                   </h4>
 
@@ -265,12 +260,12 @@ export default function AppAppBar(props) {
                   <Link to="/">
                     <MenuItem
                       sx={{ my: 1, py: 1 }}
-                      selected={props.currentPage === "home"}
+                      selected={currentPage === "home"}
                     >
                       <Typography
                         variant="navbar"
                         color={
-                          props.currentPage === "home"
+                          currentPage === "home"
                             ? "text.primary"
                             : "text.secondary"
                         }
@@ -282,12 +277,12 @@ export default function AppAppBar(props) {
                   <Link to="/plan">
                     <MenuItem
                       sx={{ my: 1, py: 1 }}
-                      selected={props.currentPage === "plan"}
+                      selected={currentPage === "plan"}
                     >
                       <Typography
                         variant="navbar"
                         color={
-                          props.currentPage === "plan"
+                          currentPage === "plan"
                             ? "text.primary"
                             : "text.secondary"
                         }
@@ -296,15 +291,16 @@ export default function AppAppBar(props) {
                       </Typography>
                     </MenuItem>
                   </Link>
-                  <Link to="/list-auction-room">
+                  <Link to={idToken && "/list-auction-room"}>
                     <MenuItem
                       sx={{ my: 1, py: 1 }}
-                      selected={props.currentPage === "list_auction_room"}
+                      selected={currentPage === "list_auction_room"}
+                      onClick={!idToken ? login : () => {}}
                     >
                       <Typography
                         variant="navbar"
                         color={
-                          props.currentPage === "list_auction_room"
+                          currentPage === "list_auction_room"
                             ? "text.primary"
                             : "text.secondary"
                         }
@@ -316,7 +312,7 @@ export default function AppAppBar(props) {
                   {!idToken && (
                     <>
                       {/* Account buttons */}
-                      < Button
+                      <Button
                         color="primary"
                         variant="outlined"
                         sx={{ width: "100%" }}
@@ -331,7 +327,9 @@ export default function AppAppBar(props) {
                         aria-labelledby="scroll-dialog-title"
                         aria-describedby="scroll-dialog-description"
                       >
-                        <Login handleLoginDialogClose={handleLoginDialogClose} />
+                        <Login
+                          handleLoginDialogClose={handleLoginDialogClose}
+                        />
                       </Dialog>
                       <Link to="/register">
                         <Button
@@ -348,21 +346,37 @@ export default function AppAppBar(props) {
                 </Box>
                 {idToken && accountUser && (
                   <>
-                    <MenuItem sx={{ my: 1, py: 1, display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-end', backgroundColor: 'rgba(1, 84, 51, 0.2)', borderRadius: '0' }} >
+                    <MenuItem
+                      sx={{
+                        my: 1,
+                        py: 1,
+                        display: "flex",
+                        justifyContent: "flex-start",
+                        alignItems: "flex-end",
+                        backgroundColor: "rgba(1, 84, 51, 0.2)",
+                        borderRadius: "0",
+                      }}
+                    >
                       <div style={{ display: "flex", alignItems: "center" }}>
                         <AccountMenu accountUser={accountUser} />
-                        <h4 style={{ color: "#015433", fontSize: "14px", marginRight: "8px" }}>{accountUser.login}</h4>
+                        <h4
+                          style={{
+                            color: "#015433",
+                            fontSize: "14px",
+                            marginRight: "8px",
+                          }}
+                        >
+                          {accountUser.login}
+                        </h4>
                       </div>
                     </MenuItem>
-
-
                   </>
                 )}
               </Drawer>
             </Box>
           </Toolbar>
         </Container>
-      </AppBar >
-    </div >
+      </AppBar>
+    </div>
   );
 }
