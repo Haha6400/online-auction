@@ -1,15 +1,13 @@
 package com.mycompany.myapp.web.rest;
 
 import com.mycompany.myapp.repository.AuctionRoomRepository;
-import com.mycompany.myapp.security.SecurityUtils;
 import com.mycompany.myapp.service.AuctionRoomService;
 import com.mycompany.myapp.service.UserService;
-import com.mycompany.myapp.service.dto.AdminUserDTO;
 import com.mycompany.myapp.service.dto.AuctionRoomDTO;
-import com.mycompany.myapp.service.dto.UserDTO;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -226,8 +224,29 @@ public class AuctionRoomResource {
         return ResponseUtil.wrapOrNotFound(result, HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, id.toString()));
     }
 
-    @GetMapping(value = "/self")
-    public List<AuctionRoomDTO> getAllOfCurrentUser() throws URISyntaxException {
-        return auctionRoomService.getAllByUser(userService.getCurrentUserDTO().get());
+    @GetMapping(value = "/self/all")
+    public ResponseEntity<List<AuctionRoomDTO>> getAllOfCurrentUser(@RequestParam(name = "filter", required = false) String filter)
+        throws URISyntaxException {
+        if ("waitlist".equals(filter)) {
+            return new ResponseEntity<>(
+                auctionRoomService.getAuctionWaitlistByUser(userService.getCurrentUserDTO().get(), Instant.now()),
+                HttpStatus.OK
+            );
+        } else if ("history".equals(filter)) {
+            return new ResponseEntity<>(
+                auctionRoomService.getAllHistoryAuctionByUser(userService.getCurrentUserDTO().get(), Instant.now()),
+                HttpStatus.OK
+            );
+        } else if ("current".equals(filter)) {
+            return new ResponseEntity<>(
+                auctionRoomService.getAuctionsInProgressByUser(userService.getCurrentUserDTO().get(), Instant.now()),
+                HttpStatus.OK
+            );
+        }
+        return new ResponseEntity<>(auctionRoomService.getAllOrderByCreatedDateDESC(userService.getCurrentUserDTO().get()), HttpStatus.OK);
     }
+    //    @GetMapping(value = "/created-date/asc")
+    //    public List<AuctionRoomDTO> getAllOrderByCreatedDateASC() throws URISyntaxException {
+    //        return auctionRoomService.getAllOrderedByCreatedDateASC();
+    //    }
 }

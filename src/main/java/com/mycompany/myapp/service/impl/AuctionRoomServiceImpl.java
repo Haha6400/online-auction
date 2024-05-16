@@ -9,6 +9,7 @@ import com.mycompany.myapp.service.AuctionRoomService;
 import com.mycompany.myapp.service.dto.AuctionRoomDTO;
 import com.mycompany.myapp.service.dto.UserDTO;
 import com.mycompany.myapp.service.mapper.AuctionRoomMapper;
+import java.time.Instant;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -101,6 +102,38 @@ public class AuctionRoomServiceImpl implements AuctionRoomService {
     @Override
     public List<AuctionRoomDTO> getAllByUser(UserDTO userDTO) {
         return auctionRoomMapper.toDto(auctionRoomRepository.findAllByUsers(userRepository.findOneById(userDTO.getId())));
+    }
+
+    @Override
+    public List<AuctionRoomDTO> getAllHistoryAuctionByUser(UserDTO userDTO, Instant date) {
+        return auctionRoomMapper.toDto(
+            auctionRoomRepository.findAllByUsersAndEndTimeBefore(userRepository.findOneById(userDTO.getId()), date)
+        );
+    }
+
+    @Override
+    public List<AuctionRoomDTO> getAuctionWaitlistByUser(UserDTO userDTO, Instant date) {
+        return auctionRoomMapper.toDto(
+            auctionRoomRepository.findAllByUsersAndStartTimeAfter(userRepository.findOneById(userDTO.getId()), date)
+        );
+    }
+
+    @Override
+    public List<AuctionRoomDTO> getAuctionsInProgressByUser(UserDTO userDTO, Instant date) {
+        return auctionRoomMapper.toDto(
+            auctionRoomRepository.findAllByUsersAndStartTimeBeforeAndEndTimeAfterOrderByStartTimeDesc(
+                userRepository.findOneById(userDTO.getId()),
+                date,
+                date
+            )
+        );
+    }
+
+    @Override
+    public List<AuctionRoomDTO> getAllOrderByCreatedDateDESC(UserDTO userDTO) {
+        return auctionRoomMapper.toDto(
+            auctionRoomRepository.findAllByUsersOrderByCreatedDateDesc(userRepository.findOneById(userDTO.getId()))
+        );
     }
 
     @Override

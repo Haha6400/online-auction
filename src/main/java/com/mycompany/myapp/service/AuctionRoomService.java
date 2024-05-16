@@ -3,6 +3,7 @@ package com.mycompany.myapp.service;
 import com.mycompany.myapp.service.dto.AdminUserDTO;
 import com.mycompany.myapp.service.dto.AuctionRoomDTO;
 import com.mycompany.myapp.service.dto.UserDTO;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -38,6 +39,12 @@ public interface AuctionRoomService {
     Optional<AuctionRoomDTO> addUserToAuctionRoom(Long id, UserDTO userDTO);
 
     List<AuctionRoomDTO> getAllByUser(UserDTO userDTO);
+    List<AuctionRoomDTO> getAllHistoryAuctionByUser(UserDTO userDTO, Instant date);
+    List<AuctionRoomDTO> getAuctionWaitlistByUser(UserDTO userDTO, Instant date);
+
+    List<AuctionRoomDTO> getAuctionsInProgressByUser(UserDTO userDTO, Instant date);
+
+    List<AuctionRoomDTO> getAllOrderByCreatedDateDESC(UserDTO userDTO);
     /**
      * Get all the AuctionRoomDTO where WinningBid is {@code null}.
      *

@@ -1,14 +1,19 @@
 package com.mycompany.myapp.service.impl;
 
 import com.mycompany.myapp.domain.WinningBid;
+import com.mycompany.myapp.repository.UserRepository;
 import com.mycompany.myapp.repository.WinningBidRepository;
 import com.mycompany.myapp.service.WinningBidService;
+import com.mycompany.myapp.service.dto.LicensePlateDTO;
+import com.mycompany.myapp.service.dto.UserDTO;
 import com.mycompany.myapp.service.dto.WinningBidDTO;
 import com.mycompany.myapp.service.mapper.WinningBidMapper;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -26,10 +31,16 @@ public class WinningBidServiceImpl implements WinningBidService {
     private final WinningBidRepository winningBidRepository;
 
     private final WinningBidMapper winningBidMapper;
+    private final UserRepository userRepository;
 
-    public WinningBidServiceImpl(WinningBidRepository winningBidRepository, WinningBidMapper winningBidMapper) {
+    public WinningBidServiceImpl(
+        WinningBidRepository winningBidRepository,
+        WinningBidMapper winningBidMapper,
+        UserRepository userRepository
+    ) {
         this.winningBidRepository = winningBidRepository;
         this.winningBidMapper = winningBidMapper;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -68,6 +79,21 @@ public class WinningBidServiceImpl implements WinningBidService {
     public List<WinningBidDTO> findAll() {
         log.debug("Request to get all WinningBids");
         return winningBidRepository.findAll().stream().map(winningBidMapper::toDto).collect(Collectors.toCollection(LinkedList::new));
+    }
+
+    @Override
+    public List<LicensePlateDTO> findAllWinningLicenseByUsers(UserDTO userDTO) {
+        List<LicensePlateDTO> result = new ArrayList<>();
+        List<WinningBidDTO> tmp = winningBidRepository
+            .findAllByBid_User(userRepository.findOneById(userDTO.getId()))
+            .stream()
+            .map(winningBidMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
+
+        for (WinningBidDTO w : tmp) {
+            result.add(w.getAuctionRoom().getLicensePlate());
+        }
+        return result;
     }
 
     @Override
