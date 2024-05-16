@@ -30,6 +30,7 @@ export default function CRUDialog(props) {
     const licensePlateList = {
         NO_1: '19A-125123',
         NO_2: '20A-125123',
+        NO_3: '64A-64203',
     };
     const licensePlateListProps = {
         options: Object.values(licensePlateList),

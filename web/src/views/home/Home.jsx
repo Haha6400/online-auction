@@ -34,7 +34,7 @@ export default function Home() {
           headers: { Authorization: `Bearer ${idToken}` },
         })
         .then((response) => {
-          setRole(response.data.authorities[0]);
+          setRole(response.data.authorities);
         })
         .catch((error) => {
           console.log(error);
@@ -191,7 +191,7 @@ export default function Home() {
               DANH SÁCH BIỂN SỐ
             </Typography>
 
-            {role === "ROLE_ADMIN" ? (
+            {role && role.includes("ROLE_ADMIN") ? (
               <AdminTable idToken={idToken} />
             ) : (
               <ReadOnlyTable />
