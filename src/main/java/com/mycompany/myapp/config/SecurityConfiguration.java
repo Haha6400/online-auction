@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,6 +16,7 @@ import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthen
 import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
+import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 import tech.jhipster.config.JHipsterProperties;
 
@@ -23,9 +25,11 @@ import tech.jhipster.config.JHipsterProperties;
 public class SecurityConfiguration {
 
     private final JHipsterProperties jHipsterProperties;
+    private final CorsFilter corsFilter;
 
-    public SecurityConfiguration(JHipsterProperties jHipsterProperties) {
+    public SecurityConfiguration(JHipsterProperties jHipsterProperties, CorsFilter corsFilter) {
         this.jHipsterProperties = jHipsterProperties;
+        this.corsFilter = corsFilter;
     }
 
     @Bean
@@ -37,7 +41,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http, MvcRequestMatcher.Builder mvc) throws Exception {
         http
             .cors(withDefaults())
-            .csrf(csrf -> csrf.disable())
+            .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(
                 authz ->
                     // prettier-ignore
@@ -48,6 +52,7 @@ public class SecurityConfiguration {
                     .requestMatchers(mvc.pattern("/api/activate")).permitAll()
                     .requestMatchers(mvc.pattern("/api/account/reset-password/init")).permitAll()
                     .requestMatchers(mvc.pattern("/api/account/reset-password/finish")).permitAll()
+                    .requestMatchers(mvc.pattern(HttpMethod.GET,"/api/auction-rooms")).permitAll()
                     .requestMatchers(mvc.pattern("/api/admin/**")).hasAuthority(AuthoritiesConstants.ADMIN)
                     .requestMatchers(mvc.pattern("/api/**")).authenticated()
                     .requestMatchers(mvc.pattern("/websocket/**")).authenticated()
@@ -59,6 +64,7 @@ public class SecurityConfiguration {
                     .requestMatchers(mvc.pattern("/management/**")).hasAuthority(AuthoritiesConstants.ADMIN)
             )
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .addFilterBefore(corsFilter, CorsFilter.class)
             .exceptionHandling(
                 exceptions ->
                     exceptions

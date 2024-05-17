@@ -9,6 +9,7 @@ import com.mycompany.myapp.security.AuthoritiesConstants;
 import com.mycompany.myapp.security.SecurityUtils;
 import com.mycompany.myapp.service.dto.AdminUserDTO;
 import com.mycompany.myapp.service.dto.UserDTO;
+import com.mycompany.myapp.service.mapper.UserMapper;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -37,11 +38,18 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     private final AuthorityRepository authorityRepository;
+    private final UserMapper userMapper;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository) {
+    public UserService(
+        UserRepository userRepository,
+        PasswordEncoder passwordEncoder,
+        AuthorityRepository authorityRepository,
+        UserMapper userMapper
+    ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
+        this.userMapper = userMapper;
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -109,7 +117,7 @@ public class UserService {
             newUser.setEmail(userDTO.getEmail().toLowerCase());
         }
         newUser.setImageUrl(userDTO.getImageUrl());
-        newUser.setLangKey(userDTO.getLangKey());
+        newUser.setLangKey("vn");
         // new user is not active
         newUser.setActivated(false);
         // new user gets registration key
@@ -292,5 +300,10 @@ public class UserService {
     @Transactional(readOnly = true)
     public List<String> getAuthorities() {
         return authorityRepository.findAll().stream().map(Authority::getName).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<UserDTO> getCurrentUserDTO() {
+        return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneByLogin).map(userMapper::userToUserDTO);
     }
 }

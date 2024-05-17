@@ -108,6 +108,8 @@ spring:
       repositories:
         bootstrap-mode: deferred
   jpa:
+    show-sql: true
+    generate-ddl: true
     open-in-view: false
     properties:
       hibernate.jdbc.time_zone: UTC
