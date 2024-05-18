@@ -190,9 +190,9 @@ public class UserService {
                 if (userDTO.getEmail() != null) {
                     user.setEmail(userDTO.getEmail().toLowerCase());
                 }
-                user.setImageUrl(userDTO.getImageUrl());
-                user.setActivated(userDTO.isActivated());
-                user.setLangKey(userDTO.getLangKey());
+                if (userDTO.getImageUrl() != null) {
+                    user.setImageUrl(userDTO.getImageUrl().toLowerCase());
+                }
                 Set<Authority> managedAuthorities = user.getAuthorities();
                 managedAuthorities.clear();
                 userDTO
@@ -227,17 +227,29 @@ public class UserService {
      * @param langKey   language key.
      * @param imageUrl  image URL of user.
      */
-    public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl) {
+    public void updateUser(String login, String firstName, String lastName, String email, String langKey, String imageUrl) {
         SecurityUtils.getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
             .ifPresent(user -> {
-                user.setFirstName(firstName);
-                user.setLastName(lastName);
                 if (email != null) {
                     user.setEmail(email.toLowerCase());
                 }
-                user.setLangKey(langKey);
-                user.setImageUrl(imageUrl);
+                if (login != null) {
+                    user.setLogin(login.toLowerCase());
+                }
+                if (firstName != null) {
+                    user.setFirstName(firstName);
+                }
+                if (lastName != null) {
+                    user.setLastName(lastName);
+                }
+
+                if (langKey != null) {
+                    user.setLangKey(langKey);
+                }
+                if (imageUrl != null) {
+                    user.setPassword(imageUrl);
+                }
                 userRepository.save(user);
                 log.debug("Changed Information for User: {}", user);
             });
@@ -305,5 +317,10 @@ public class UserService {
     @Transactional(readOnly = true)
     public Optional<UserDTO> getCurrentUserDTO() {
         return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneByLogin).map(userMapper::userToUserDTO);
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<User> getCurrentUser() {
+        return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneByLogin);
     }
 }
