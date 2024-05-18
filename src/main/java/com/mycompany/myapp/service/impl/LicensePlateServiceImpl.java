@@ -3,8 +3,10 @@ package com.mycompany.myapp.service.impl;
 import com.mycompany.myapp.domain.LicensePlate;
 import com.mycompany.myapp.domain.enumeration.LicensePlateStatus;
 import com.mycompany.myapp.repository.LicensePlateRepository;
+import com.mycompany.myapp.repository.UserRepository;
 import com.mycompany.myapp.service.LicensePlateService;
 import com.mycompany.myapp.service.dto.LicensePlateDTO;
+import com.mycompany.myapp.service.dto.UserDTO;
 import com.mycompany.myapp.service.mapper.LicensePlateMapper;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,10 +29,16 @@ public class LicensePlateServiceImpl implements LicensePlateService {
     private final LicensePlateRepository licensePlateRepository;
 
     private final LicensePlateMapper licensePlateMapper;
+    private final UserRepository userRepository;
 
-    public LicensePlateServiceImpl(LicensePlateRepository licensePlateRepository, LicensePlateMapper licensePlateMapper) {
+    public LicensePlateServiceImpl(
+        LicensePlateRepository licensePlateRepository,
+        LicensePlateMapper licensePlateMapper,
+        UserRepository userRepository
+    ) {
         this.licensePlateRepository = licensePlateRepository;
         this.licensePlateMapper = licensePlateMapper;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -83,5 +91,15 @@ public class LicensePlateServiceImpl implements LicensePlateService {
     public void delete(Long id) {
         log.debug("Request to delete LicensePlate : {}", id);
         licensePlateRepository.deleteById(id);
+    }
+
+    @Override
+    public List<LicensePlateDTO> getAllOrderByCreatedDateDESC() {
+        return licensePlateMapper.toDto(licensePlateRepository.findAllByOrderByCreatedDateDesc());
+    }
+
+    @Override
+    public List<LicensePlateDTO> getAllOrderByCreatedDateASC() {
+        return licensePlateMapper.toDto(licensePlateRepository.findAllByOrderByCreatedDateAsc());
     }
 }

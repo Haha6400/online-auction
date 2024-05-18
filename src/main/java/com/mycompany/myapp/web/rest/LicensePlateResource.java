@@ -134,8 +134,12 @@ public class LicensePlateResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of licensePlates in body.
      */
     @GetMapping("")
-    public List<LicensePlateDTO> getAllLicensePlates() {
-        log.debug("REST request to get all LicensePlates");
+    public List<LicensePlateDTO> getAllLicensePlates(@RequestParam(name = "filter", required = false) String filter) {
+        if ("desc".equals(filter)) {
+            return licensePlateService.getAllOrderByCreatedDateDESC();
+        } else if ("asc".equals(filter)) {
+            return licensePlateService.getAllOrderByCreatedDateASC();
+        }
         return licensePlateService.findAll();
     }
 

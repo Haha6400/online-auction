@@ -113,6 +113,16 @@ public class AuctionRoomServiceImpl implements AuctionRoomService {
     }
 
     @Override
+    public List<AuctionRoomDTO> getAllOrderByCreatedDateDesc() {
+        return auctionRoomMapper.toDto(auctionRoomRepository.findAllByOrderByCreatedDateDesc());
+    }
+
+    @Override
+    public List<AuctionRoomDTO> getAllOrderByCreatedDateAsc() {
+        return auctionRoomMapper.toDto(auctionRoomRepository.findAllByOrderByCreatedDateAsc());
+    }
+
+    @Override
     public List<AuctionRoomDTO> getAllHistoryAuctionByUser(UserDTO userDTO, Instant date) {
         return auctionRoomMapper.toDto(
             auctionRoomRepository.findAllByUsersAndEndTimeBefore(userRepository.findOneById(userDTO.getId()), date)

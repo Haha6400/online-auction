@@ -72,6 +72,8 @@ public interface AuctionRoomService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+    List<AuctionRoomDTO> getAllOrderByCreatedDateDesc();
+    List<AuctionRoomDTO> getAllOrderByCreatedDateAsc();
 
     List<AuctionRoomDTO> getAllHistoryAuctionByUser(UserDTO userDTO, Instant date);
     List<AuctionRoomDTO> getAuctionWaitlistByUser(UserDTO userDTO, Instant date);

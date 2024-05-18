@@ -30,6 +30,8 @@ public interface AuctionRoomRepository extends AuctionRoomRepositoryWithBagRelat
         return this.fetchBagRelationships(this.findAll(pageable));
     }
 
+    List<AuctionRoom> findAllByOrderByCreatedDateDesc();
+    List<AuctionRoom> findAllByOrderByCreatedDateAsc();
     List<AuctionRoom> findAllByUsers(User user);
     List<AuctionRoom> findAllByUsersAndEndTimeBefore(User user, Instant date);
     List<AuctionRoom> findAllByUsersAndStartTimeAfter(User user, Instant date);

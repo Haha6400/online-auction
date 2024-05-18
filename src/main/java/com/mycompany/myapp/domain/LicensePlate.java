@@ -10,7 +10,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "license_plate")
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class LicensePlate {
+public class LicensePlate extends AbstractAuditingEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

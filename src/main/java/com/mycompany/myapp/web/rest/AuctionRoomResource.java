@@ -152,6 +152,10 @@ public class AuctionRoomResource {
         if ("winningbid-is-null".equals(filter)) {
             log.debug("REST request to get all AuctionRooms where winningBid is null");
             return auctionRoomService.findAllWhereWinningBidIsNull();
+        } else if ("desc".equals(filter)) {
+            return auctionRoomService.getAllOrderByCreatedDateDesc();
+        } else if ("asc".equals(filter)) {
+            return auctionRoomService.getAllOrderByCreatedDateAsc();
         }
         log.debug("REST request to get all AuctionRooms");
         return auctionRoomService.findAll();
