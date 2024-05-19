@@ -1,13 +1,20 @@
 package com.mycompany.myapp.service.impl;
 
 import com.mycompany.myapp.domain.AuctionRoom;
+import com.mycompany.myapp.domain.Bid;
+import com.mycompany.myapp.domain.User;
+import com.mycompany.myapp.domain.enumeration.LicensePlateStatus;
 import com.mycompany.myapp.repository.AuctionRoomRepository;
 import com.mycompany.myapp.repository.UserRepository;
 import com.mycompany.myapp.service.AuctionRoomService;
+import com.mycompany.myapp.service.LicensePlateService;
+import com.mycompany.myapp.service.UserService;
 import com.mycompany.myapp.service.dto.AuctionRoomDTO;
 import com.mycompany.myapp.service.dto.UserDTO;
 import com.mycompany.myapp.service.mapper.AuctionRoomMapper;
+import com.mycompany.myapp.web.rest.vm.CustomAuctionResult;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -33,30 +40,43 @@ public class AuctionRoomServiceImpl implements AuctionRoomService {
 
     private final AuctionRoomMapper auctionRoomMapper;
     private final UserRepository userRepository;
+    private final LicensePlateService licensePlateService;
+    private List<CustomAuctionResult> res;
 
     public AuctionRoomServiceImpl(
         AuctionRoomRepository auctionRoomRepository,
         AuctionRoomMapper auctionRoomMapper,
-        UserRepository userRepository
+        UserRepository userRepository,
+        LicensePlateService licensePlateService
     ) {
         this.auctionRoomRepository = auctionRoomRepository;
         this.auctionRoomMapper = auctionRoomMapper;
         this.userRepository = userRepository;
+        this.licensePlateService = licensePlateService;
     }
 
     @Override
     public AuctionRoomDTO save(AuctionRoomDTO auctionRoomDTO) {
         log.debug("Request to save AuctionRoom : {}", auctionRoomDTO);
-        AuctionRoom auctionRoom = auctionRoomMapper.toEntity(auctionRoomDTO);
-        auctionRoom = auctionRoomRepository.save(auctionRoom);
-        return auctionRoomMapper.toDto(auctionRoom);
+        if (
+            licensePlateService.findOne(auctionRoomDTO.getLicensePlate().getId()).get().getStatus() != LicensePlateStatus.NOT_YET_AUCTIONED
+        ) {
+            throw new RuntimeException("License Plate is in progress");
+        } else {
+            AuctionRoom auctionRoom = auctionRoomMapper.toEntity(auctionRoomDTO);
+            licensePlateService.setStatus(auctionRoomDTO.getLicensePlate().getId(), LicensePlateStatus.AWAITING_AUCTION);
+            auctionRoom = auctionRoomRepository.save(auctionRoom);
+            return auctionRoomMapper.toDto(auctionRoom);
+        }
     }
 
     @Override
     public AuctionRoomDTO update(AuctionRoomDTO auctionRoomDTO) {
         log.debug("Request to update AuctionRoom : {}", auctionRoomDTO);
         AuctionRoom auctionRoom = auctionRoomMapper.toEntity(auctionRoomDTO);
+        licensePlateService.setStatus(auctionRoomDTO.getLicensePlate().getId(), auctionRoomDTO.getLicensePlate().getStatus());
         auctionRoom = auctionRoomRepository.save(auctionRoom);
+
         return auctionRoomMapper.toDto(auctionRoom);
     }
 
@@ -77,9 +97,19 @@ public class AuctionRoomServiceImpl implements AuctionRoomService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<AuctionRoomDTO> findAll() {
+    public List<CustomAuctionResult> findAll() {
         log.debug("Request to get all AuctionRooms");
-        return auctionRoomRepository.findAll().stream().map(auctionRoomMapper::toDto).collect(Collectors.toCollection(LinkedList::new));
+        List<CustomAuctionResult> res = new ArrayList<>();
+        auctionRoomRepository
+            .findAll()
+            .forEach(auctionRoomDTO -> {
+                AuctionRoom auctionRoom = auctionRoomRepository.findById(auctionRoomDTO.getId()).get();
+                Bid bid = auctionRoom.getWinningBid().getBid();
+                Float finalPrice = bid.getPriceBeforeBidding() + bid.getPriceStep() * bid.getPriceBeforeBidding();
+
+                res.add(setCustomResult(auctionRoom, finalPrice));
+            });
+        return res;
     }
 
     public Page<AuctionRoomDTO> findAllWithEagerRelationships(Pageable pageable) {
@@ -87,8 +117,9 @@ public class AuctionRoomServiceImpl implements AuctionRoomService {
     }
 
     /**
-     *  Get all the auctionRooms where WinningBid is {@code null}.
-     *  @return the list of entities.
+     * Get all the auctionRooms where WinningBid is {@code null}.
+     *
+     * @return the list of entities.
      */
     @Transactional(readOnly = true)
     public List<AuctionRoomDTO> findAllWhereWinningBidIsNull() {
@@ -113,13 +144,35 @@ public class AuctionRoomServiceImpl implements AuctionRoomService {
     }
 
     @Override
-    public List<AuctionRoomDTO> getAllOrderByCreatedDateDesc() {
-        return auctionRoomMapper.toDto(auctionRoomRepository.findAllByOrderByCreatedDateDesc());
+    public List<CustomAuctionResult> getAllOrderByCreatedDateDesc() {
+        res = new ArrayList<>();
+
+        auctionRoomRepository
+            .findAllByOrderByCreatedDateDesc()
+            .forEach(auctionRoomDTO -> {
+                AuctionRoom auctionRoom = auctionRoomRepository.findById(auctionRoomDTO.getId()).get();
+                Bid bid = auctionRoom.getWinningBid().getBid();
+                Float finalPrice = bid.getPriceBeforeBidding() + bid.getPriceStep() * bid.getPriceBeforeBidding();
+
+                res.add(setCustomResult(auctionRoom, finalPrice));
+            });
+        return res;
     }
 
     @Override
-    public List<AuctionRoomDTO> getAllOrderByCreatedDateAsc() {
-        return auctionRoomMapper.toDto(auctionRoomRepository.findAllByOrderByCreatedDateAsc());
+    public List<CustomAuctionResult> getAllOrderByCreatedDateAsc() {
+        res = new ArrayList<>();
+
+        auctionRoomRepository
+            .findAllByOrderByCreatedDateAsc()
+            .forEach(auctionRoomDTO -> {
+                AuctionRoom auctionRoom = auctionRoomRepository.findById(auctionRoomDTO.getId()).get();
+                Bid bid = auctionRoom.getWinningBid().getBid();
+                Float finalPrice = bid.getPriceBeforeBidding() + bid.getPriceStep() * bid.getPriceBeforeBidding();
+
+                res.add(setCustomResult(auctionRoom, finalPrice));
+            });
+        return res;
     }
 
     @Override
@@ -170,5 +223,34 @@ public class AuctionRoomServiceImpl implements AuctionRoomService {
             })
             .map(auctionRoomRepository::save)
             .map(auctionRoomMapper::toDto);
+    }
+
+    @Override
+    public List<AuctionRoomDTO> getCurrentUserWonAuction(UserDTO userDTO) {
+        return auctionRoomRepository
+            .findAllByUsers(userRepository.findOneById(userDTO.getId()))
+            .stream()
+            .filter(auctionRoom -> auctionRoom.getWinningBid().getBid().getUser() == userRepository.findOneById(userDTO.getId()))
+            .map(auctionRoomMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
+    }
+
+    @Override
+    public List<AuctionRoomDTO> getCurrentUserLostAuction(UserDTO userDTO) {
+        return auctionRoomRepository
+            .findAllByUsers(userRepository.findOneById(userDTO.getId()))
+            .stream()
+            .filter(auctionRoom -> auctionRoom.getWinningBid().getBid().getUser() != userRepository.findOneById(userDTO.getId()))
+            .map(auctionRoomMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
+    }
+
+    public CustomAuctionResult setCustomResult(AuctionRoom auctionRoom, Float finalPrice) {
+        CustomAuctionResult auctionResult = new CustomAuctionResult();
+
+        auctionResult.setAuctionRoomDTO(auctionRoomMapper.toDto(auctionRoom));
+        auctionResult.setUserDTO(new UserDTO(auctionRoom.getWinningBid().getBid().getUser()));
+        auctionResult.setFinalPrice(finalPrice);
+        return auctionResult;
     }
 }

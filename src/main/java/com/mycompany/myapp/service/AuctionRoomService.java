@@ -2,6 +2,7 @@ package com.mycompany.myapp.service;
 
 import com.mycompany.myapp.service.dto.AuctionRoomDTO;
 import com.mycompany.myapp.service.dto.UserDTO;
+import com.mycompany.myapp.web.rest.vm.CustomAuctionResult;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -41,7 +42,7 @@ public interface AuctionRoomService {
      *
      * @return the list of entities.
      */
-    List<AuctionRoomDTO> findAll();
+    List<CustomAuctionResult> findAll();
 
     /**
      * Get all the AuctionRoomDTO where WinningBid is {@code null}.
@@ -72,8 +73,8 @@ public interface AuctionRoomService {
      * @param id the id of the entity.
      */
     void delete(Long id);
-    List<AuctionRoomDTO> getAllOrderByCreatedDateDesc();
-    List<AuctionRoomDTO> getAllOrderByCreatedDateAsc();
+    List<CustomAuctionResult> getAllOrderByCreatedDateDesc();
+    List<CustomAuctionResult> getAllOrderByCreatedDateAsc();
 
     List<AuctionRoomDTO> getAllHistoryAuctionByUser(UserDTO userDTO, Instant date);
     List<AuctionRoomDTO> getAuctionWaitlistByUser(UserDTO userDTO, Instant date);
@@ -82,4 +83,6 @@ public interface AuctionRoomService {
 
     List<AuctionRoomDTO> getAllOrderByCreatedDateDESC(UserDTO userDTO);
     Optional<AuctionRoomDTO> addUserToAuctionRoom(Long id, UserDTO userDTO);
+    List<AuctionRoomDTO> getCurrentUserWonAuction(UserDTO userDTO);
+    List<AuctionRoomDTO> getCurrentUserLostAuction(UserDTO userDTO);
 }

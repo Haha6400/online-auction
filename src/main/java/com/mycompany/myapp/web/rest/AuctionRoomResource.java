@@ -1,16 +1,18 @@
 package com.mycompany.myapp.web.rest;
 
+import com.mycompany.myapp.domain.AuctionRoom;
+import com.mycompany.myapp.domain.Bid;
 import com.mycompany.myapp.repository.AuctionRoomRepository;
 import com.mycompany.myapp.service.AuctionRoomService;
 import com.mycompany.myapp.service.UserService;
 import com.mycompany.myapp.service.dto.AuctionRoomDTO;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
+import com.mycompany.myapp.web.rest.vm.CustomAuctionResult;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.Instant;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -145,14 +147,12 @@ public class AuctionRoomResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of auctionRooms in body.
      */
     @GetMapping("")
-    public List<AuctionRoomDTO> getAllAuctionRooms(
+    public List<CustomAuctionResult> getAllAuctionRooms(
         @RequestParam(name = "filter", required = false) String filter,
         @RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload
     ) {
-        if ("winningbid-is-null".equals(filter)) {
-            log.debug("REST request to get all AuctionRooms where winningBid is null");
-            return auctionRoomService.findAllWhereWinningBidIsNull();
-        } else if ("desc".equals(filter)) {
+        List<CustomAuctionResult> res = new ArrayList<>();
+        if ("desc".equals(filter)) {
             return auctionRoomService.getAllOrderByCreatedDateDesc();
         } else if ("asc".equals(filter)) {
             return auctionRoomService.getAllOrderByCreatedDateAsc();
@@ -207,7 +207,12 @@ public class AuctionRoomResource {
                 auctionRoomService.getAuctionsInProgressByUser(userService.getCurrentUserDTO().get(), Instant.now()),
                 HttpStatus.OK
             );
+        } else if ("win".equals(filter)) {
+            return new ResponseEntity<>(auctionRoomService.getCurrentUserWonAuction(userService.getCurrentUserDTO().get()), HttpStatus.OK);
+        } else if ("lose".equals(filter)) {
+            return new ResponseEntity<>(auctionRoomService.getCurrentUserLostAuction(userService.getCurrentUserDTO().get()), HttpStatus.OK);
         }
+
         return new ResponseEntity<>(auctionRoomService.getAllOrderByCreatedDateDESC(userService.getCurrentUserDTO().get()), HttpStatus.OK);
     }
 

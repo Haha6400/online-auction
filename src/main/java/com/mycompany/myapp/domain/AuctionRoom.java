@@ -39,7 +39,7 @@ public class AuctionRoom extends AbstractAuditingEntity<Long> {
     @JsonIgnoreProperties(value = { "user", "auctionRoom", "winningBid" }, allowSetters = true)
     private Set<Bid> bids = new HashSet<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private LicensePlate licensePlate;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -51,7 +51,7 @@ public class AuctionRoom extends AbstractAuditingEntity<Long> {
     private Set<User> users = new HashSet<>();
 
     @JsonIgnoreProperties(value = { "bid", "auctionRoom" }, allowSetters = true)
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "auctionRoom")
+    @OneToOne(fetch = FetchType.EAGER, mappedBy = "auctionRoom")
     private WinningBid winningBid;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

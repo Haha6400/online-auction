@@ -3,6 +3,7 @@ package com.mycompany.myapp.domain;
 import com.mycompany.myapp.domain.enumeration.LicensePlateStatus;
 import jakarta.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * A LicensePlate.
