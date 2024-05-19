@@ -29,8 +29,7 @@ import { formatTime } from "../../utils/timeFormatter";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/AuthProvider";
 
-export default function MyAuction() {
-    const [accountUser, setAccountUser] = useState({});
+export default function WaitingList() {
     const [idToken, setIdToken] = useState(
         localStorage.getItem("id_token"),
     );
@@ -44,8 +43,6 @@ export default function MyAuction() {
     const [currentLP, setCurrentLP] = useState({});
 
     const navigate = useNavigate();
-
-    const auth = useAuth();
 
     const filteredLicensePlates = licensePlates
         ? licensePlates.filter((plate) => {
@@ -66,7 +63,7 @@ export default function MyAuction() {
         const res = await getAllAuctionRoom();
 
         const comingAuctionRooms = res.filter(
-            (auctionRoom) => auctionRoom.users.some(user => user.id == accountUser.id)
+            (auctionRoom) => new Date(auctionRoom.startTime) > new Date()
         );
 
         setLicensePlates(
@@ -81,16 +78,9 @@ export default function MyAuction() {
             }),
         );
     };
-
     useEffect(() => {
         fetchLicensePlates();
     }, []);
-
-    useEffect(() => {
-        if (auth.user) {
-            setAccountUser(auth.user);
-        }
-    }, [auth.user]);
 
     return (
         <>
@@ -174,32 +164,34 @@ export default function MyAuction() {
                             <TableCell sx={{ fontWeight: 600 }} align="center">
                                 Biển số
                             </TableCell>
+                            <TableCell sx={{ fontWeight: 600 }} align="center">
+                                Tỉnh, Thành phố
+                            </TableCell>
+                            <TableCell
+                                sx={{ fontWeight: 600, whiteSpace: "nowrap" }}
+                                align="center"
+                            >
+                                Loại xe
+                            </TableCell>
                             <TableCell
                                 sx={{ fontWeight: 600, whiteSpace: "nowrap" }}
                                 align="center"
                             >
                                 Thời gian đấu giá
                             </TableCell>
-                            <TableCell
-                                sx={{ fontWeight: 600, whiteSpace: "nowrap" }}
-                                align="center"
-                            >
-                                Trạng thái
-                            </TableCell>
                             <TableCell sx={{ fontWeight: 600 }}></TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {filteredLicensePlates.map((licensePlate, index) => (
-                            <TableRow key={licensePlate.id} style={{ backgroundColor: licensePlate.id === 2 ? 'rgba(128, 128, 128, 0.3)' : 'inherit' }}>
+                            <TableRow key={licensePlate.id}>
                                 <TableCell align="center">{index + 1}</TableCell>
                                 <TableCell align="center">{licensePlate.plateNumber}</TableCell>
+                                <TableCell align="center">{licensePlate.province}</TableCell>
+                                <TableCell align="center">{licensePlate.vehicleType}</TableCell>
 
                                 <TableCell sx={{ whiteSpace: "nowrap" }} align="center">
                                     {licensePlate.startTime}
-                                </TableCell>
-                                <TableCell sx={{ whiteSpace: "nowrap" }} align="center">
-                                    Đấu giá thành công
                                 </TableCell>
 
                                 <TableCell width={200}>
@@ -252,7 +244,7 @@ export default function MyAuction() {
                 onClose={toggleAuctionRegisterMdal}
             >
                 <AuctionRegisterModal
-                    auctionRoom={currentLP}
+                    licensePlate={currentLP}
                     close={toggleAuctionRegisterMdal}
                 />
             </Dialog>

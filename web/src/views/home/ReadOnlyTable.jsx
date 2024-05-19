@@ -22,8 +22,8 @@ import {
   Dialog,
   Typography,
 } from "@mui/material";
-import AuctionRegisterModal from "./modals/AuctionRegisterModal";
 
+import AuctionRegisterModal from "../../components/base/AuctionRegisterModal";
 import { LPprovinces, LPtype } from "../../utils/constants/LicensePlate";
 import { getAllAuctionRoom } from "../../service/user/licensePlateAPI";
 import { formatTime } from "../../utils/timeFormatter";
@@ -44,14 +44,14 @@ export default function ReadOnlyTable({ idToken, login }) {
 
   const filteredLicensePlates = licensePlates
     ? licensePlates.filter((plate) => {
-        const matchesLPprovince = !province || plate.province === province;
-        const matchesVehicleType =
-          !vehicleType || plate.vehicleType === vehicleType;
-        const matchesPlateNumber =
-          !LPSearchInput ||
-          plate.plateNumber.toLowerCase().includes(LPSearchInput.toLowerCase());
-        return matchesLPprovince && matchesVehicleType && matchesPlateNumber;
-      })
+      const matchesLPprovince = !province || plate.province === province;
+      const matchesVehicleType =
+        !vehicleType || plate.vehicleType === vehicleType;
+      const matchesPlateNumber =
+        !LPSearchInput ||
+        plate.plateNumber.toLowerCase().includes(LPSearchInput.toLowerCase());
+      return matchesLPprovince && matchesVehicleType && matchesPlateNumber;
+    })
     : [];
 
   const toggleAuctionRegisterMdal = () => {
@@ -60,7 +60,6 @@ export default function ReadOnlyTable({ idToken, login }) {
 
   const fetchLicensePlates = async () => {
     const res = await getAllAuctionRoom();
-
     const comingAuctionRooms = res.filter(
       (auctionRoom) => new Date(auctionRoom.startTime) > new Date(),
     );
@@ -68,11 +67,9 @@ export default function ReadOnlyTable({ idToken, login }) {
     setLicensePlates(
       comingAuctionRooms.map((auctionRoom) => {
         return {
-          ...auctionRoom.licensePlate,
-          startTime: formatTime(new Date(auctionRoom.startTime)),
-          endTime: formatTime(new Date(auctionRoom.endTime)),
-          description: auctionRoom.description,
-          initPrice: auctionRoom.initPrice,
+          ...auctionRoom,
+          'startTime': formatTime(new Date(auctionRoom.startTime)),
+          'endTime': formatTime(new Date(auctionRoom.endTime))
         };
       }),
     );
@@ -214,11 +211,12 @@ export default function ReadOnlyTable({ idToken, login }) {
             {filteredLicensePlates.map((licensePlate, index) => (
               <TableRow key={licensePlate.id}>
                 <TableCell align="center">{index + 1}</TableCell>
-                <TableCell align="center">{licensePlate.plateNumber}</TableCell>
-                <TableCell align="center">{licensePlate.province}</TableCell>
-                <TableCell align="center">{licensePlate.vehicleType}</TableCell>
+                <TableCell align="center">{licensePlate.licensePlate['plateNumber']}</TableCell>
+                <TableCell align="center">{licensePlate.licensePlate['province']}</TableCell>
+                <TableCell align="center">{licensePlate.licensePlate['vehicleType']}</TableCell>
 
                 <TableCell sx={{ whiteSpace: "nowrap" }} align="center">
+
                   {licensePlate.startTime}
                 </TableCell>
 
@@ -274,7 +272,8 @@ export default function ReadOnlyTable({ idToken, login }) {
         onClose={toggleAuctionRegisterMdal}
       >
         <AuctionRegisterModal
-          licensePlate={currentLP}
+          title="XÁC NHẬN ĐĂNG KÝ ĐẤU GIÁ"
+          auctionRoom={currentLP}
           close={toggleAuctionRegisterMdal}
         />
       </Dialog>

@@ -34,7 +34,7 @@ import {
 } from "../../service/admin/licensePlateAPI";
 import CreateLPModal from "./modals/CreateLPModal";
 import UpdateLPModal from "./modals/UpdateLPModal";
-import ResultModal from "./modals/ResultModal";
+import ResultModal from "../../components/base/ResultModal";
 
 export default function AdminTable({ idToken }) {
   const [LPSearchInput, setLPSearchInput] = useState("");
@@ -66,14 +66,14 @@ export default function AdminTable({ idToken }) {
   };
   const filteredLicensePlates = licensePlates
     ? licensePlates.filter((plate) => {
-        const matchesLPprovince = !province || plate.province === province;
-        const matchesVehicleType =
-          !vehicleType || plate.vehicleType === vehicleType;
-        const matchesPlateNumber =
-          !LPSearchInput ||
-          plate.plateNumber.toLowerCase().includes(LPSearchInput.toLowerCase());
-        return matchesLPprovince && matchesVehicleType && matchesPlateNumber;
-      })
+      const matchesLPprovince = !province || plate.province === province;
+      const matchesVehicleType =
+        !vehicleType || plate.vehicleType === vehicleType;
+      const matchesPlateNumber =
+        !LPSearchInput ||
+        plate.plateNumber.toLowerCase().includes(LPSearchInput.toLowerCase());
+      return matchesLPprovince && matchesVehicleType && matchesPlateNumber;
+    })
     : [];
 
   const fetchLicensePlates = async () => {
@@ -225,6 +225,12 @@ export default function AdminTable({ idToken }) {
               >
                 Loại xe
               </TableCell>
+              <TableCell
+                sx={{ fontWeight: 600, whiteSpace: "nowrap" }}
+                align="center"
+              >
+                Thời gian đấu giá
+              </TableCell>
               <TableCell sx={{ fontWeight: 600 }}></TableCell>
             </TableRow>
           </TableHead>
@@ -235,6 +241,7 @@ export default function AdminTable({ idToken }) {
                 <TableCell align="center">{licensePlate.plateNumber}</TableCell>
                 <TableCell align="center">{licensePlate.province}</TableCell>
                 <TableCell align="center">{licensePlate.vehicleType}</TableCell>
+
 
                 <TableCell width={300}>
                   <Button

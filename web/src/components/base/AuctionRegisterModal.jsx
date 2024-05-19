@@ -1,8 +1,9 @@
 import * as React from "react";
+import axios from "axios";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { Button, Grid, Stack } from "@mui/material";
+import { Button, Grid, Stack, Dialog } from "@mui/material";
 
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
@@ -10,9 +11,48 @@ import EventIcon from "@mui/icons-material/Event";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import PaidIcon from "@mui/icons-material/Paid";
 import DescriptionIcon from "@mui/icons-material/Description";
+import { useAuth } from "../../hooks/AuthProvider";
+import ResultModal from "./ResultModal";
 
-export default function AuctionRegisterModal({ licensePlate, close }) {
-  console.log(licensePlate);
+export default function AuctionRegisterModal({ title, auctionRoom, close }) {
+  const [accountUser, setAccountUser] = React.useState({});
+  const [idToken, setIdToken] = React.useState(
+    localStorage.getItem("id_token"),
+  );
+  const [openSuccessModal, setOpenSuccessModal] = React.useState(false);
+  const [openFailModal, setOpenFailModal] = React.useState(false);
+  const auth = useAuth();
+
+  const toggleSuccessModal = () => {
+    setOpenSuccessModal(!openSuccessModal);
+    axios.patch(`http://localhost:8080/api/auction-rooms/register/${auctionRoom.id}`, {},
+      {
+        headers: { Authorization: `Bearer ${idToken}` }
+      })
+  };
+  const toggleFailModal = () => {
+    setOpenFailModal(!openFailModal);
+  };
+
+  const handleRegisterButton = async () => { //Return true if account user can not register
+    let registerCheck = false;
+    if (auctionRoom.users.length > 0) {
+
+      registerCheck = auctionRoom.users.some(user => {
+        console.log(user.id === accountUser.id)
+        return user.id === accountUser.id
+      });
+    }
+    if (registerCheck) toggleFailModal()
+    else toggleSuccessModal();
+  }
+
+  React.useEffect(() => {
+    if (auth.user) {
+      setAccountUser(auth.user);
+    }
+  }, [auth.user]);
+
   return (
     <Container component="main">
       <Box
@@ -29,7 +69,7 @@ export default function AuctionRegisterModal({ licensePlate, close }) {
           color="text.secondary"
           sx={{ fontWeight: 700, fontSize: 20, textAlign: "center", mb: 2 }}
         >
-          XÁC NHẬN ĐĂNG KÝ ĐẤU GIÁ
+          {title}
         </Typography>
 
         <Grid container spacing={0.5} justifyContent="center">
@@ -49,14 +89,14 @@ export default function AuctionRegisterModal({ licensePlate, close }) {
               }}
             >
               <Typography variant="h4" sx={{ fontWeight: 700, color: "#333" }}>
-                {licensePlate.plateNumber.substring(
+                {auctionRoom.licensePlate['plateNumber'].substring(
                   0,
-                  licensePlate.plateNumber.indexOf("-"),
+                  auctionRoom.licensePlate['plateNumber'].indexOf("-"),
                 )}
               </Typography>
               <Typography variant="h4" sx={{ fontWeight: 700, color: "#333" }}>
-                {licensePlate.plateNumber.substring(
-                  licensePlate.plateNumber.indexOf("-") + 1,
+                {auctionRoom.licensePlate['plateNumber'].substring(
+                  auctionRoom.licensePlate['plateNumber'].indexOf("-") + 1,
                 )}
               </Typography>
             </Box>
@@ -78,7 +118,7 @@ export default function AuctionRegisterModal({ licensePlate, close }) {
               <Stack>
                 <Typography>Loại xe</Typography>
                 <Typography sx={{ fontWeight: 600 }}>
-                  {licensePlate.vehicleType}
+                  {auctionRoom.licensePlate['vehicleType']}
                 </Typography>
               </Stack>
             </Box>
@@ -101,7 +141,7 @@ export default function AuctionRegisterModal({ licensePlate, close }) {
               <Stack>
                 <Typography>Tỉnh, thành phố</Typography>
                 <Typography sx={{ fontWeight: 600 }}>
-                  {licensePlate.province}
+                  {auctionRoom.licensePlate['province']}
                 </Typography>
               </Stack>
             </Box>
@@ -124,7 +164,7 @@ export default function AuctionRegisterModal({ licensePlate, close }) {
               <Stack>
                 <Typography>Thời gian bắt đầu</Typography>
                 <Typography sx={{ fontWeight: 600 }}>
-                  {licensePlate.startTime}
+                  {auctionRoom.startTime}
                 </Typography>
               </Stack>
             </Box>
@@ -147,7 +187,7 @@ export default function AuctionRegisterModal({ licensePlate, close }) {
               <Stack>
                 <Typography>Thời gian kết thúc</Typography>
                 <Typography sx={{ fontWeight: 600 }}>
-                  {licensePlate.endTime}
+                  {auctionRoom.endTime}
                 </Typography>
               </Stack>
             </Box>
@@ -173,7 +213,7 @@ export default function AuctionRegisterModal({ licensePlate, close }) {
                   {new Intl.NumberFormat("vi-VN", {
                     style: "currency",
                     currency: "VND",
-                  }).format(licensePlate.initPrice)}
+                  }).format(auctionRoom.initPrice)}
                 </Typography>
               </Stack>
             </Box>
@@ -196,7 +236,7 @@ export default function AuctionRegisterModal({ licensePlate, close }) {
               <Stack>
                 <Typography>Ghi chú</Typography>
                 <Typography sx={{ fontWeight: 600 }}>
-                  {licensePlate.description}
+                  {auctionRoom.description}
                 </Typography>
               </Stack>
             </Box>
@@ -205,28 +245,50 @@ export default function AuctionRegisterModal({ licensePlate, close }) {
 
         {/* Action button */}
         <Grid container spacing={3} sx={{ mt: 0.5 }}>
-          <Grid item xs={6}>
-            <Button
-              variant="outlined"
-              color="primary"
-              sx={{ width: "100%" }}
-              onClick={close}
-            >
-              Hủy bỏ
-            </Button>
-          </Grid>
-          <Grid item xs={6}>
-            <Button
-              variant="contained"
-              sx={{ width: "100%", background: "#079455" }}
-            >
-              Đăng ký
-            </Button>
-          </Grid>
+          {(title !== "XEM PHÒNG ĐẤU GIÁ") && (
+            <>
+              <Grid item xs={6}>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  sx={{ width: "100%" }}
+                  onClick={close}
+                >
+                  Hủy bỏ
+                </Button>
+              </Grid>
+              <Grid item xs={6}>
+                <Button
+                  variant="contained"
+                  sx={{ width: "100%", background: "#079455" }}
+                  onClick={handleRegisterButton}
+                >
+                  Đăng ký
+                </Button>
+                <Dialog open={openSuccessModal} onClose={toggleSuccessModal}>
+                  <ResultModal type="REGISTER_AUCTION_SUCCESS" close={toggleSuccessModal} />
+                </Dialog>
+                <Dialog open={openFailModal} onClose={toggleFailModal}>
+                  <ResultModal type="REGISTER_AUCTION_FAIL" close={toggleFailModal} />
+                </Dialog>
+              </Grid>
+            </>
+          )}
+          {(title === "XEM PHÒNG ĐẤU GIÁ") && (
+            <>
+              <Button
+                variant="contained"
+                sx={{ width: "100%", background: "#079455" }}
+                onClick={close}
+              >
+                Đóng
+              </Button>
+            </>
+          )}
         </Grid>
 
         <Box sx={{ display: "flex" }}></Box>
       </Box>
-    </Container>
+    </Container >
   );
 }

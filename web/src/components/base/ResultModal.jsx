@@ -24,11 +24,29 @@ export default function ResultModal({ type, close }) {
           THÔNG BÁO
         </Typography>
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-          <CheckCircleIcon sx={{ color: "green" }} />
+          {(type === "DELETE" || type === "CREATE" || type === "UPDATE") && (
+            <>
+              <CheckCircleIcon sx={{ color: "green" }} />
+            </>
+          )}
           <Typography sx={{ fontSize: 16, textAlign: "center", my: 2 }}>
             {type === "DELETE" && "Xóa biển số thành công!"}
             {type === "CREATE" && "Tạo biển số thành công!"}
             {type === "UPDATE" && "Cập nhật biển số thành công!"}
+            {type === "REGISTER_ACCOUNT_SUCCESS" && (
+              <>
+                Ghi nhận thông tin thành công!<br />
+                Vui lòng xác minh tài khoản qua email!
+              </>
+            )}
+            {type === "REGISTER_ACCOUNT_FAIL" && (
+              <>
+                Đăng ký thất bại!<br />
+                Vui lòng kiểm tra lại thông tin
+              </>
+            )}
+            {type === "REGISTER_AUCTION_SUCCESS" && "Đăng ký đấu giá thành công!"}
+            {type === "REGISTER_AUCTION_FAIL" && "Bạn đã đăng ký phòng đấu giá này trước đó!"}
           </Typography>
         </Box>
 

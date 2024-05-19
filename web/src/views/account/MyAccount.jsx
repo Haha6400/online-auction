@@ -21,6 +21,8 @@ import ListIcon from '@mui/icons-material/List';
 import Footer from "../../components/common/Footer";
 import AppAppBar from "../../components/base/AppAppBar";
 import Update from "../account/Update";
+import WaitingList from "./WaitingList";
+import MyAuction from "./MyAuction";
 
 
 const items = [
@@ -130,89 +132,14 @@ export default function MyAccount() {
                                                     />
                                                 </Typography>
 
-                                                {/* <Link
-                                                    color="primary"
-                                                    variant="body2"
-                                                    fontWeight="bold"
-                                                    sx={{
-                                                        display: 'inline-flex',
-                                                        alignItems: 'center',
-                                                        '& > svg': { transition: '0.2s' },
-                                                        '&:hover > svg': { transform: 'translateX(2px)' },
-                                                    }}
-                                                    onClick={(event) => {
-                                                        event.stopPropagation();
-                                                    }}
-                                                >
-                                                </Link> */}
+
                                             </Box>
                                         </Box>
                                     </Card>
                                 ))}
                             </Stack>
                         </Grid>
-                        {/* <Grid
-                            item
-                            xs={14}
-                            md={8}
-                            sx={{ display: { xs: 'none', sm: 'flex' }, width: '100%' }}
-                        >
-                            <Box
-                                sx={{
-                                    // mt: { xs: 8, sm: 10 },
-                                    padding: 5,
-                                    alignSelf: "center",
-                                    width: "100%",
-                                    bgcolor: "rgba(255, 255, 255, 0.3)",
-                                    backgroundSize: "cover",
-                                    borderRadius: "10px",
-                                    boxShadow: `0px 3.5px 5.5px rgba(0, 0, 0, 0.02)`,
-                                }}
-                                id="LPTable"
-                            >
-                                <Typography
-                                    component="h1" variant="h5"
 
-                                    color="text.secondary"
-                                    sx={{ fontWeight: 700, fontSize: 24, textAlign: "center" }}
-                                >
-                                    {items[selectedItemIndex].title}
-                                </Typography>
-                            </Box> */}
-                        {/* <Card
-                                variant="outlined"
-                                sx={{
-                                    height: '100%',
-                                    width: '100%',
-                                    display: { xs: 'none', sm: 'flex' },
-                                    boxShadow: `0px 3.5px 5.5px rgba(0, 0, 0, 0.02)`,
-                                    backgroundColor: 'red'
-                                }}
-                            > */}
-
-                        {/* <Box
-                                sx={{
-                                    m: 'auto',
-                                    width: '95%',
-                                    height: 500,
-                                    backgroundSize: 'contain',
-                                    backgroundColor: 'rgba(255, 255, 255, 0.3)'
-                                }}
-                            >
-                                <Typography component="h1" variant="h5" sx={{
-                                    margin: 3
-                                }}>
-                                    {items[selectedItemIndex].title}
-                                </Typography>
-                                {items[selectedItemIndex].title === "Thông tin cá nhân" && (
-                                    <>
-                                        <Update />
-                                    </>
-                                )}
-
-                            </Box> */}
-                        {/* </Card> */}
-                        {/* </Grid> */}
                         <Grid
                             item
                             xs={14}
@@ -251,6 +178,16 @@ export default function MyAccount() {
                                 {items[selectedItemIndex].title === "Thông tin cá nhân" && (
                                     <>
                                         <Update />
+                                    </>
+                                )}
+                                {items[selectedItemIndex].title === "Lịch sử đấu giá" && (
+                                    <>
+                                        <MyAuction />
+                                    </>
+                                )}
+                                {items[selectedItemIndex].title === "Danh sách chờ" && (
+                                    <>
+                                        <WaitingList />
                                     </>
                                 )}
                             </Box>

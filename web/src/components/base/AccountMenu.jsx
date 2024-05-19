@@ -40,7 +40,7 @@ export default function AccountMenu() {
 
     const handleCloseUserMenu = (link) => {
         setanchorEl(null);
-        if (link) {
+        if (typeof (link) == "string") {
             if (link == 'logout') {
                 auth.logoutAction();
             } else {
@@ -121,19 +121,19 @@ export default function AccountMenu() {
                         <ListItemIcon>
                             <Settings fontSize="small" />
                         </ListItemIcon>
-                        Settings
+                        Cài đặt
                     </MenuItem>
-                    <MenuItem onClick={() => handleCloseUserMenu("my-auction")}>
+                    {/* <MenuItem onClick={() => handleCloseUserMenu("my-auction")}>
                         <ListItemIcon>
                             <AllInboxIcon fontSize="small" />
                         </ListItemIcon>
                         My Auction
-                    </MenuItem>
+                    </MenuItem> */}
                     <MenuItem onClick={() => handleCloseUserMenu("logout")}>
                         <ListItemIcon>
                             <Logout fontSize="small" />
                         </ListItemIcon>
-                        Logout
+                        Đăng xuất
                     </MenuItem>
                 </Menu>
             </Box>

@@ -109,7 +109,7 @@ export default function Update() {
                     }} />
                     <Grid container spacing={2}>
                         <Grid item xs={6}>
-                            <Typography>ID Number</Typography>
+                            <Typography>Căn cước công dân</Typography>
                             <TextField
                                 disabled
                                 fullWidth
@@ -120,7 +120,7 @@ export default function Update() {
                             />
                         </Grid>
                         <Grid item xs={6}>
-                            <Typography>Date of Issue</Typography>
+                            <Typography>Ngày cấp</Typography>
                             <TextField
                                 disabled
                                 fullWidth
@@ -135,7 +135,7 @@ export default function Update() {
                     </Grid>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
-                            <Typography>Place of Issue</Typography>
+                            <Typography>Địa điểm cấp</Typography>
                             <TextField
                                 disabled
                                 fullWidth
@@ -151,7 +151,7 @@ export default function Update() {
                         variant="contained"
                         sx={{ mt: 1, mb: 1, width: '20%', marginRight: 0 }}
                     >
-                        Update
+                        Cập nhật
                     </Button>
                 </Box>
             </Box>
