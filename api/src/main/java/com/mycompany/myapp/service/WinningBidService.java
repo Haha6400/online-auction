@@ -40,7 +40,6 @@ public interface WinningBidService {
      * @return the list of entities.
      */
     List<WinningBidDTO> findAll();
-    List<LicensePlateDTO> findAllWinningLicenseByUsers(UserDTO userDTO);
 
     /**
      * Get the "id" winningBid.
@@ -56,4 +55,5 @@ public interface WinningBidService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+    List<LicensePlateDTO> findAllWinningLicenseByUsers(UserDTO userDTO);
 }

@@ -8,6 +8,4 @@ import org.mapstruct.*;
  * Mapper for the entity {@link LicensePlate} and its DTO {@link LicensePlateDTO}.
  */
 @Mapper(componentModel = "spring")
-public interface LicensePlateMapper extends EntityMapper<LicensePlateDTO, LicensePlate> {
-    LicensePlateDTO toDto(LicensePlate s);
-}
+public interface LicensePlateMapper extends EntityMapper<LicensePlateDTO, LicensePlate> {}

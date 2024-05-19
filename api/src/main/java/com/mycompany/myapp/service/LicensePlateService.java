@@ -1,11 +1,10 @@
 package com.mycompany.myapp.service;
 
+import com.mycompany.myapp.service.dto.AuctionRoomDTO;
 import com.mycompany.myapp.service.dto.LicensePlateDTO;
 import com.mycompany.myapp.service.dto.UserDTO;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 /**
  * Service Interface for managing {@link com.mycompany.myapp.domain.LicensePlate}.
@@ -38,18 +37,9 @@ public interface LicensePlateService {
     /**
      * Get all the licensePlates.
      *
-     * @param pageable the pagination information.
      * @return the list of entities.
      */
-    Page<LicensePlateDTO> findAll(Pageable pageable);
-
-    /**
-     * Get all the LicensePlateDTO where AuctionRoom is {@code null}.
-     *
-     * @return the {@link List} of entities.
-     */
-    List<LicensePlateDTO> findAllWhereAuctionRoomIsNull();
-    //    List<LicensePlateDTO> test(UserDTO userDTO);
+    List<LicensePlateDTO> findAll();
 
     /**
      * Get the "id" licensePlate.
@@ -65,4 +55,6 @@ public interface LicensePlateService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+    List<LicensePlateDTO> getAllOrderByCreatedDateDESC();
+    List<LicensePlateDTO> getAllOrderByCreatedDateASC();
 }

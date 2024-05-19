@@ -33,7 +33,7 @@ spring:
       enabled: false
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mysql://localhost:3306/myAuction?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+    url: jdbc:mysql://localhost:3306/auction?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
     username: root
     password:
     hikari:
@@ -57,7 +57,7 @@ spring:
 
 # ===================================================================
 # To enable TLS in production, generate a certificate using:
-# keytool -genkey -alias myauction -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore keystore.p12 -validity 3650
+# keytool -genkey -alias auction -storetype PKCS12 -keyalg RSA -keysize 2048 -keystore keystore.p12 -validity 3650
 #
 # You can also use Let's Encrypt:
 # See details in topic "Create a Java Keystore (.JKS) from Let's Encrypt Certificates" on https://maximilian-boehm.com/en-gb/blog
@@ -92,21 +92,6 @@ jhipster:
   http:
     cache: # Used by the CachingHttpHeadersFilter
       timeToLiveInDays: 1461
-  cors:
-    allowed-origins: 'http://localhost:3000, https://localhost:3000,http://localhost:8100,https://localhost:8100,http://localhost:9000,https://localhost:9000,https://localhost:3000'
-    # Enable CORS when running in GitHub Codespaces
-    allowed-methods: '*'
-    allowed-headers: '*'
-    exposed-headers: 'Authorization,Link,X-Total-Count,X-${jhipster.clientApp.name}-alert,X-${jhipster.clientApp.name}-error,X-${jhipster.clientApp.name}-params'
-    allow-credentials: true
-    max-age: 1800
-  cache: # Cache configuration
-    redis: # Redis configuration
-      expiration: 3600 # By default objects stay 1 hour (in seconds) in the cache
-      server: redis://localhost:6379
-      cluster: false
-      # server: redis://localhost:6379,redis://localhost:16379,redis://localhost:26379
-      # cluster: true
   security:
     authentication:
       jwt:
@@ -115,7 +100,7 @@ jhipster:
         # - In the Consul configserver
         # - In a separate `application-prod.yml` file, in the same folder as your executable JAR file
         # - In the `JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET` environment variable
-        base64-secret: Y2IwMzU3MjM3YjNhYWMxZTQ0OWZlMGJjMzE0MGI3YmZhYzUwM2QwNTA2ZTUyYjVjYzg0NTZmODAyOGM1ZDY3ZGZhODhhNThhYjFkYmQwYTZjYWYyYzYxNzQ5YjRhNzkwMDIzYTBhYzQ0OTc4NzAyZjM1MjU0MDYxZWM1YWIzZGM=
+        base64-secret: YjJlNTA1YzYzOWZiNzhhZmYxNzgxOTBkM2FjZmVjN2Q1MzI5NjgwMDE0YmYzYTg1NjgzMDM4ZDhjNDUxYzEwYjMxMmU4MWQwZDFkYTcxNzZmZGEwNWY3ZjRkOTQ5ZTc1ZDRiZTIxOGVjZDA5ZjM1ZWM4Y2E2ZDI0ZjRlMWJhMDE=
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
         token-validity-in-seconds-for-remember-me: 2592000

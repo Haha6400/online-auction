@@ -1,5 +1,6 @@
 package com.mycompany.myapp.service.dto;
 
+import com.mycompany.myapp.domain.enumeration.PaymentStatus;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -7,15 +8,15 @@ import java.util.Objects;
  * A DTO for the {@link com.mycompany.myapp.domain.WinningBid} entity.
  */
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class WinningBidDTO implements Serializable {
+public class WinningBidDTO {
 
     private Long id;
 
-    private Boolean paymentStatus;
-
-    private AuctionRoomDTO auctionRoom;
+    private PaymentStatus paymentStatus;
 
     private BidDTO bid;
+
+    private AuctionRoomDTO auctionRoom;
 
     public Long getId() {
         return id;
@@ -25,20 +26,12 @@ public class WinningBidDTO implements Serializable {
         this.id = id;
     }
 
-    public Boolean getPaymentStatus() {
+    public PaymentStatus getPaymentStatus() {
         return paymentStatus;
     }
 
-    public void setPaymentStatus(Boolean paymentStatus) {
+    public void setPaymentStatus(PaymentStatus paymentStatus) {
         this.paymentStatus = paymentStatus;
-    }
-
-    public AuctionRoomDTO getAuctionRoom() {
-        return auctionRoom;
-    }
-
-    public void setAuctionRoom(AuctionRoomDTO auctionRoom) {
-        this.auctionRoom = auctionRoom;
     }
 
     public BidDTO getBid() {
@@ -47,6 +40,14 @@ public class WinningBidDTO implements Serializable {
 
     public void setBid(BidDTO bid) {
         this.bid = bid;
+    }
+
+    public AuctionRoomDTO getAuctionRoom() {
+        return auctionRoom;
+    }
+
+    public void setAuctionRoom(AuctionRoomDTO auctionRoom) {
+        this.auctionRoom = auctionRoom;
     }
 
     @Override
@@ -76,8 +77,8 @@ public class WinningBidDTO implements Serializable {
         return "WinningBidDTO{" +
             "id=" + getId() +
             ", paymentStatus='" + getPaymentStatus() + "'" +
-            ", auctionRoom=" + getAuctionRoom() +
             ", bid=" + getBid() +
+            ", auctionRoom=" + getAuctionRoom() +
             "}";
     }
 }

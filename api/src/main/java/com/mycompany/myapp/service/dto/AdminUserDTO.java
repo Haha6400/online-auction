@@ -12,13 +12,10 @@ import java.util.stream.Collectors;
 /**
  * A DTO representing a user, with his authorities.
  */
-public class AdminUserDTO implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class AdminUserDTO {
 
     private Long id;
 
-    @NotBlank
     @Pattern(regexp = Constants.LOGIN_REGEX)
     @Size(min = 1, max = 50)
     private String login;
@@ -28,9 +25,6 @@ public class AdminUserDTO implements Serializable {
 
     @Size(max = 50)
     private String lastName;
-
-    @Size(max = 11)
-    private String phoneNumber;
 
     @Email
     @Size(min = 5, max = 254)
@@ -64,7 +58,6 @@ public class AdminUserDTO implements Serializable {
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
         this.email = user.getEmail();
-        this.phoneNumber = user.getPhoneNumber();
         this.activated = user.isActivated();
         this.imageUrl = user.getImageUrl();
         this.langKey = user.getLangKey();
@@ -113,14 +106,6 @@ public class AdminUserDTO implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
     }
 
     public String getImageUrl() {

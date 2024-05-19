@@ -1,16 +1,14 @@
 # This configuration is intended for development purpose, it's **your** responsibility to harden it for production
-name: myauction
+name: auction
 services:
   app:
-    image: myauction
+    image: auction
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,api-docs
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/myauction?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-      - SPRING_LIQUIBASE_URL=jdbc:mysql://mysql:3306/myauction?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
-      - JHIPSTER_CACHE_REDIS_SERVER=redis://redis:6379
-      - JHIPSTER_CACHE_REDIS_CLUSTER=false
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/auction?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
+      - SPRING_LIQUIBASE_URL=jdbc:mysql://mysql:3306/auction?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
     ports:
       - 127.0.0.1:8080:8080
     healthcheck:
@@ -29,7 +27,3 @@ services:
     extends:
       file: ./mysql.yml
       service: mysql
-  redis:
-    extends:
-      file: ./redis.yml
-      service: redis

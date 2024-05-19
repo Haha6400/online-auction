@@ -28,7 +28,7 @@
 # - In Consul mode, the ports are in the consul.yml file.
 # - In Eureka mode, the ports are in the jhipster-registry.yml file.
 
-name: myauction
+name: auction
 services:
   jhipster-control-center:
     image: 'jhipster/jhipster-control-center:v0.5.0'
@@ -42,8 +42,8 @@ services:
       - SPRING_PROFILES_ACTIVE=prod,api-docs,static
       - SPRING_SECURITY_USER_PASSWORD=admin
       # The token should have the same value than the one declared in you Spring configuration under the jhipster.security.authentication.jwt.base64-secret configuration's entry
-      - JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET=Y2IwMzU3MjM3YjNhYWMxZTQ0OWZlMGJjMzE0MGI3YmZhYzUwM2QwNTA2ZTUyYjVjYzg0NTZmODAyOGM1ZDY3ZGZhODhhNThhYjFkYmQwYTZjYWYyYzYxNzQ5YjRhNzkwMDIzYTBhYzQ0OTc4NzAyZjM1MjU0MDYxZWM1YWIzZGM=
-      - SPRING_CLOUD_DISCOVERY_CLIENT_SIMPLE_INSTANCES_MYAUCTION_0_URI=http://host.docker.internal:8080
+      - JHIPSTER_SECURITY_AUTHENTICATION_JWT_BASE64_SECRET=YjJlNTA1YzYzOWZiNzhhZmYxNzgxOTBkM2FjZmVjN2Q1MzI5NjgwMDE0YmYzYTg1NjgzMDM4ZDhjNDUxYzEwYjMxMmU4MWQwZDFkYTcxNzZmZGEwNWY3ZjRkOTQ5ZTc1ZDRiZTIxOGVjZDA5ZjM1ZWM4Y2E2ZDI0ZjRlMWJhMDE=
+      - SPRING_CLOUD_DISCOVERY_CLIENT_SIMPLE_INSTANCES_AUCTION_0_URI=http://host.docker.internal:8080
       - LOGGING_FILE_NAME=/tmp/jhipster-control-center.log
     # If you want to expose these ports outside your dev PC,
     # remove the "127.0.0.1:" prefix

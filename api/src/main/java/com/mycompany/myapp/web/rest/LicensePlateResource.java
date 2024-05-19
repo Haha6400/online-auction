@@ -2,7 +2,6 @@ package com.mycompany.myapp.web.rest;
 
 import com.mycompany.myapp.repository.LicensePlateRepository;
 import com.mycompany.myapp.service.LicensePlateService;
-import com.mycompany.myapp.service.UserService;
 import com.mycompany.myapp.service.dto.LicensePlateDTO;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
@@ -13,15 +12,9 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
-import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
 /**
@@ -41,16 +34,10 @@ public class LicensePlateResource {
     private final LicensePlateService licensePlateService;
 
     private final LicensePlateRepository licensePlateRepository;
-    private final UserService userService;
 
-    public LicensePlateResource(
-        LicensePlateService licensePlateService,
-        LicensePlateRepository licensePlateRepository,
-        UserService userService
-    ) {
+    public LicensePlateResource(LicensePlateService licensePlateService, LicensePlateRepository licensePlateRepository) {
         this.licensePlateService = licensePlateService;
         this.licensePlateRepository = licensePlateRepository;
-        this.userService = userService;
     }
 
     /**
@@ -144,23 +131,16 @@ public class LicensePlateResource {
     /**
      * {@code GET  /license-plates} : get all the licensePlates.
      *
-     * @param pageable the pagination information.
-     * @param filter the filter of the request.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of licensePlates in body.
      */
     @GetMapping("")
-    public ResponseEntity<List<LicensePlateDTO>> getAllLicensePlates(
-        @org.springdoc.core.annotations.ParameterObject Pageable pageable,
-        @RequestParam(name = "filter", required = false) String filter
-    ) {
-        if ("auctionroom-is-null".equals(filter)) {
-            log.debug("REST request to get all LicensePlates where auctionRoom is null");
-            return new ResponseEntity<>(licensePlateService.findAllWhereAuctionRoomIsNull(), HttpStatus.OK);
+    public List<LicensePlateDTO> getAllLicensePlates(@RequestParam(name = "filter", required = false) String filter) {
+        if ("desc".equals(filter)) {
+            return licensePlateService.getAllOrderByCreatedDateDESC();
+        } else if ("asc".equals(filter)) {
+            return licensePlateService.getAllOrderByCreatedDateASC();
         }
-        log.debug("REST request to get a page of LicensePlates");
-        Page<LicensePlateDTO> page = licensePlateService.findAll(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-        return ResponseEntity.ok().headers(headers).body(page.getContent());
+        return licensePlateService.findAll();
     }
 
     /**

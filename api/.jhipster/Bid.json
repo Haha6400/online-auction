@@ -1,21 +1,28 @@
 {
   "annotations": {
-    "changelogDate": "20240401160112"
+    "changelogDate": "20240517065903"
   },
   "applications": "*",
   "dto": "mapstruct",
   "fields": [
     {
-      "fieldName": "amount",
-      "fieldType": "Long"
+      "fieldName": "eventTime",
+      "fieldType": "Instant"
     },
     {
-      "fieldName": "timestamp",
-      "fieldType": "Instant"
+      "fieldName": "priceBeforeBidding",
+      "fieldType": "Float"
+    },
+    {
+      "fieldName": "priceStep",
+      "fieldType": "Float"
+    },
+    {
+      "fieldName": "numberOfPriceStep",
+      "fieldType": "Float"
     }
   ],
   "name": "Bid",
-  "pagination": "pagination",
   "relationships": [
     {
       "otherEntityField": "login",
@@ -24,20 +31,6 @@
       "relationshipSide": "left",
       "relationshipType": "many-to-one",
       "relationshipWithBuiltInEntity": true
-    },
-    {
-      "otherEntityName": "winningBid",
-      "otherEntityRelationshipName": "bid",
-      "relationshipName": "winningBid",
-      "relationshipSide": "right",
-      "relationshipType": "one-to-one"
-    },
-    {
-      "otherEntityName": "auctionRoom",
-      "otherEntityRelationshipName": "bid",
-      "relationshipName": "auctionRoom",
-      "relationshipSide": "right",
-      "relationshipType": "many-to-one"
     }
   ],
   "searchEngine": "no",

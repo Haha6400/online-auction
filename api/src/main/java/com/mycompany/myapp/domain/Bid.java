@@ -11,29 +11,35 @@ import java.time.Instant;
 @Entity
 @Table(name = "bid")
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class Bid extends AbstractAuditingEntity<Long> {
+public class Bid {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "amount")
-    private Long amount;
+    @Column(name = "event_time")
+    private Instant eventTime;
 
-    @Column(name = "timestamp")
-    private Instant timestamp;
+    @Column(name = "price_before_bidding")
+    private Float priceBeforeBidding;
+
+    @Column(name = "price_step")
+    private Float priceStep;
+
+    @Column(name = "number_of_price_step")
+    private Float numberOfPriceStep;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
-    @JsonIgnoreProperties(value = { "auctionRoom", "bid" }, allowSetters = true)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = { "bids", "licensePlate", "users", "winningBid" }, allowSetters = true)
+    private AuctionRoom auctionRoom;
+
+    @JsonIgnoreProperties(value = { "bid", "auctionRoom" }, allowSetters = true)
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "bid")
     private WinningBid winningBid;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "licensePlate", "bids", "users", "winningBid" }, allowSetters = true)
-    private AuctionRoom auctionRoom;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -50,30 +56,56 @@ public class Bid extends AbstractAuditingEntity<Long> {
         this.id = id;
     }
 
-    public Long getAmount() {
-        return this.amount;
+    public Instant getEventTime() {
+        return this.eventTime;
     }
 
-    public Bid amount(Long amount) {
-        this.setAmount(amount);
+    public Bid eventTime(Instant eventTime) {
+        this.setEventTime(eventTime);
         return this;
     }
 
-    public void setAmount(Long amount) {
-        this.amount = amount;
+    public void setEventTime(Instant eventTime) {
+        this.eventTime = eventTime;
     }
 
-    public Instant getTimestamp() {
-        return this.timestamp;
+    public Float getPriceBeforeBidding() {
+        return this.priceBeforeBidding;
     }
 
-    public Bid timestamp(Instant timestamp) {
-        this.setTimestamp(timestamp);
+    public Bid priceBeforeBidding(Float priceBeforeBidding) {
+        this.setPriceBeforeBidding(priceBeforeBidding);
         return this;
     }
 
-    public void setTimestamp(Instant timestamp) {
-        this.timestamp = timestamp;
+    public void setPriceBeforeBidding(Float priceBeforeBidding) {
+        this.priceBeforeBidding = priceBeforeBidding;
+    }
+
+    public Float getPriceStep() {
+        return this.priceStep;
+    }
+
+    public Bid priceStep(Float priceStep) {
+        this.setPriceStep(priceStep);
+        return this;
+    }
+
+    public void setPriceStep(Float priceStep) {
+        this.priceStep = priceStep;
+    }
+
+    public Float getNumberOfPriceStep() {
+        return this.numberOfPriceStep;
+    }
+
+    public Bid numberOfPriceStep(Float numberOfPriceStep) {
+        this.setNumberOfPriceStep(numberOfPriceStep);
+        return this;
+    }
+
+    public void setNumberOfPriceStep(Float numberOfPriceStep) {
+        this.numberOfPriceStep = numberOfPriceStep;
     }
 
     public User getUser() {
@@ -86,6 +118,19 @@ public class Bid extends AbstractAuditingEntity<Long> {
 
     public Bid user(User user) {
         this.setUser(user);
+        return this;
+    }
+
+    public AuctionRoom getAuctionRoom() {
+        return this.auctionRoom;
+    }
+
+    public void setAuctionRoom(AuctionRoom auctionRoom) {
+        this.auctionRoom = auctionRoom;
+    }
+
+    public Bid auctionRoom(AuctionRoom auctionRoom) {
+        this.setAuctionRoom(auctionRoom);
         return this;
     }
 
@@ -105,19 +150,6 @@ public class Bid extends AbstractAuditingEntity<Long> {
 
     public Bid winningBid(WinningBid winningBid) {
         this.setWinningBid(winningBid);
-        return this;
-    }
-
-    public AuctionRoom getAuctionRoom() {
-        return this.auctionRoom;
-    }
-
-    public void setAuctionRoom(AuctionRoom auctionRoom) {
-        this.auctionRoom = auctionRoom;
-    }
-
-    public Bid auctionRoom(AuctionRoom auctionRoom) {
-        this.setAuctionRoom(auctionRoom);
         return this;
     }
 
@@ -145,8 +177,10 @@ public class Bid extends AbstractAuditingEntity<Long> {
     public String toString() {
         return "Bid{" +
             "id=" + getId() +
-            ", amount=" + getAmount() +
-            ", timestamp='" + getTimestamp() + "'" +
+            ", eventTime='" + getEventTime() + "'" +
+            ", priceBeforeBidding=" + getPriceBeforeBidding() +
+            ", priceStep=" + getPriceStep() +
+            ", numberOfPriceStep=" + getNumberOfPriceStep() +
             "}";
     }
 }

@@ -10,7 +10,7 @@ import java.util.Set;
  * A DTO for the {@link com.mycompany.myapp.domain.AuctionRoom} entity.
  */
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class AuctionRoomDTO implements Serializable {
+public class AuctionRoomDTO {
 
     private Long id;
 
@@ -20,7 +20,9 @@ public class AuctionRoomDTO implements Serializable {
 
     private Instant endTime;
 
-    private Long initPrice;
+    private Float initialPrice;
+
+    private Float priceStep;
 
     private LicensePlateDTO licensePlate;
 
@@ -58,12 +60,20 @@ public class AuctionRoomDTO implements Serializable {
         this.endTime = endTime;
     }
 
-    public Long getInitPrice() {
-        return initPrice;
+    public Float getInitialPrice() {
+        return initialPrice;
     }
 
-    public void setInitPrice(Long initPrice) {
-        this.initPrice = initPrice;
+    public void setInitialPrice(Float initialPrice) {
+        this.initialPrice = initialPrice;
+    }
+
+    public Float getPriceStep() {
+        return priceStep;
+    }
+
+    public void setPriceStep(Float priceStep) {
+        this.priceStep = priceStep;
     }
 
     public LicensePlateDTO getLicensePlate() {
@@ -111,7 +121,8 @@ public class AuctionRoomDTO implements Serializable {
             ", description='" + getDescription() + "'" +
             ", startTime='" + getStartTime() + "'" +
             ", endTime='" + getEndTime() + "'" +
-            ", initPrice=" + getInitPrice() +
+            ", initialPrice=" + getInitialPrice() +
+            ", priceStep=" + getPriceStep() +
             ", licensePlate=" + getLicensePlate() +
             ", users=" + getUsers() +
             "}";

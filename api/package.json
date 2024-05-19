@@ -1,8 +1,8 @@
 {
-  "name": "my-auction",
+  "name": "auction",
   "version": "0.0.0",
   "private": true,
-  "description": "Description for myAuction",
+  "description": "Description for auction",
   "license": "UNLICENSED",
   "scripts": {
     "app:start": "./mvnw",
@@ -10,7 +10,7 @@
     "backend:build-cache": "./mvnw dependency:go-offline -ntp",
     "backend:debug": "./mvnw -Dspring-boot.run.jvmArguments=\"-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8000\"",
     "backend:doc:test": "./mvnw -ntp javadoc:javadoc --batch-mode",
-    "backend:info": "./mvnw -ntp enforcer:display-info --batch-mode",
+    "backend:info": "./mvnw --version",
     "backend:nohttp:test": "./mvnw -ntp checkstyle:check --batch-mode",
     "backend:start": "./mvnw",
     "backend:unit:test": "./mvnw -ntp verify --batch-mode -Dlogging.level.ROOT=OFF -Dlogging.level.tech.jhipster=OFF -Dlogging.level.com.mycompany.myapp=OFF -Dlogging.level.org.springframework=OFF -Dlogging.level.org.springframework.web=OFF -Dlogging.level.org.springframework.security=OFF",
@@ -24,8 +24,6 @@
     "ci:e2e:teardown:docker": "docker compose -f src/main/docker/services.yml down -v && docker ps -a",
     "docker:db:down": "docker compose -f src/main/docker/mysql.yml down -v",
     "docker:db:up": "docker compose -f src/main/docker/mysql.yml up --wait",
-    "docker:redis:down": "docker compose -f src/main/docker/redis.yml down -v",
-    "docker:redis:up": "docker compose -f src/main/docker/redis.yml up --wait",
     "java:docker": "./mvnw -ntp verify -DskipTests -Pprod jib:dockerBuild",
     "java:docker:arm64": "npm run java:docker -- -Djib-maven-plugin.architecture=arm64",
     "java:docker:dev": "npm run java:docker -- -Pdev,webapp",
@@ -47,15 +45,15 @@
     "packaging": "jar"
   },
   "devDependencies": {
-    "generator-jhipster": "8.2.1",
+    "generator-jhipster": "8.4.0",
     "husky": "9.0.11",
     "lint-staged": "15.2.2",
     "prettier": "3.2.5",
     "prettier-plugin-java": "2.6.0",
-    "prettier-plugin-packagejson": "2.4.12"
+    "prettier-plugin-packagejson": "2.5.0"
   },
   "engines": {
-    "node": ">=20.11.1"
+    "node": ">=20.12.2"
   },
   "cacheDirectories": [
     "node_modules"

@@ -33,7 +33,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mysql://localhost:3306/myAuction?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://localhost:3306/auction?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&createDatabaseIfNotExist=true
     username: root
     password:
     hikari:
@@ -44,7 +44,6 @@ spring:
         prepStmtCacheSize: 250
         prepStmtCacheSqlLimit: 2048
         useServerPrepStmts: true
-        validationTimeout: 300000
   liquibase:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
     contexts: dev
@@ -56,7 +55,6 @@ spring:
     properties.mail.smtp:
       auth: true
       starttls.enable: true
-
   messages:
     cache-duration: PT1S # 1 second, see the ISO 8601 standard
   thymeleaf:
@@ -72,17 +70,10 @@ server:
 # ===================================================================
 
 jhipster:
-  cache: # Cache configuration
-    redis: # Redis configuration
-      expiration: 3600 # By default objects stay 1 hour (in seconds) in the cache
-      server: redis://localhost:6379
-      cluster: false
-      # server: redis://localhost:6379,redis://localhost:16379,redis://localhost:26379
-      # cluster: true
   # CORS is only enabled by default with the "dev" profile
   cors:
     # Allow Ionic for JHipster by default (* no longer allowed in Spring Boot 2.4+)
-    allowed-origins: 'http://localhost:3000, https://localhost:3000,http://localhost:8100,https://localhost:8100,http://localhost:9000,https://localhost:9000,https://localhost:3000'
+    allowed-origins: 'http://localhost:3000,https://localhost:3000,http://localhost:8100,https://localhost:8100,http://localhost:9000,https://localhost:9000'
     # Enable CORS when running in GitHub Codespaces
     allowed-origin-patterns: 'https://*.githubpreview.dev'
     allowed-methods: '*'
@@ -94,7 +85,7 @@ jhipster:
     authentication:
       jwt:
         # This token must be encoded using Base64 and be at least 256 bits long (you can type `openssl rand -base64 64` on your command line to generate a 512 bits one)
-        base64-secret: Y2IwMzU3MjM3YjNhYWMxZTQ0OWZlMGJjMzE0MGI3YmZhYzUwM2QwNTA2ZTUyYjVjYzg0NTZmODAyOGM1ZDY3ZGZhODhhNThhYjFkYmQwYTZjYWYyYzYxNzQ5YjRhNzkwMDIzYTBhYzQ0OTc4NzAyZjM1MjU0MDYxZWM1YWIzZGM=
+        base64-secret: YjJlNTA1YzYzOWZiNzhhZmYxNzgxOTBkM2FjZmVjN2Q1MzI5NjgwMDE0YmYzYTg1NjgzMDM4ZDhjNDUxYzEwYjMxMmU4MWQwZDFkYTcxNzZmZGEwNWY3ZjRkOTQ5ZTc1ZDRiZTIxOGVjZDA5ZjM1ZWM4Y2E2ZDI0ZjRlMWJhMDE=
         # Token is valid 24 hours
         token-validity-in-seconds: 86400
         token-validity-in-seconds-for-remember-me: 2592000

@@ -143,12 +143,6 @@ public class WinningBidResource {
         return winningBidService.findAll();
     }
 
-    @GetMapping("/self/all")
-    public List<LicensePlateDTO> getAllByCurrentUser() {
-        log.debug("REST request to get all WinningBids");
-        return winningBidService.findAllWinningLicenseByUsers(userService.getCurrentUserDTO().get());
-    }
-
     /**
      * {@code GET  /winning-bids/:id} : get the "id" winningBid.
      *
@@ -175,5 +169,11 @@ public class WinningBidResource {
         return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
             .build();
+    }
+
+    @GetMapping("/self/all")
+    public List<LicensePlateDTO> getAllByCurrentUser() {
+        log.debug("REST request to get all WinningBids");
+        return winningBidService.findAllWinningLicenseByUsers(userService.getCurrentUserDTO().get());
     }
 }

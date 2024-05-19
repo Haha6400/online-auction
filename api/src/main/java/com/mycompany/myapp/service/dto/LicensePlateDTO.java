@@ -1,5 +1,6 @@
 package com.mycompany.myapp.service.dto;
 
+import com.mycompany.myapp.domain.enumeration.LicensePlateStatus;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -12,6 +13,8 @@ public class LicensePlateDTO {
     private Long id;
 
     private String plateNumber;
+
+    private LicensePlateStatus status;
 
     private String vehicleType;
 
@@ -31,6 +34,14 @@ public class LicensePlateDTO {
 
     public void setPlateNumber(String plateNumber) {
         this.plateNumber = plateNumber;
+    }
+
+    public LicensePlateStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(LicensePlateStatus status) {
+        this.status = status;
     }
 
     public String getVehicleType() {
@@ -76,6 +87,7 @@ public class LicensePlateDTO {
         return "LicensePlateDTO{" +
             "id=" + getId() +
             ", plateNumber='" + getPlateNumber() + "'" +
+            ", status='" + getStatus() + "'" +
             ", vehicleType='" + getVehicleType() + "'" +
             ", province='" + getProvince() + "'" +
             "}";

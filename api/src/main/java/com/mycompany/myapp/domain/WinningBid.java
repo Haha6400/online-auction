@@ -1,6 +1,7 @@
 package com.mycompany.myapp.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.mycompany.myapp.domain.enumeration.PaymentStatus;
 import jakarta.persistence.*;
 import java.io.Serializable;
 
@@ -17,18 +18,19 @@ public class WinningBid {
     @Column(name = "id")
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "payment_status")
-    private Boolean paymentStatus;
+    private PaymentStatus paymentStatus;
 
-    @JsonIgnoreProperties(value = { "licensePlate", "bids", "users", "winningBid" }, allowSetters = true)
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(unique = true)
-    private AuctionRoom auctionRoom;
-
-    @JsonIgnoreProperties(value = { "user", "winningBid", "auctionRoom" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "user", "auctionRoom", "winningBid" }, allowSetters = true)
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(unique = true)
     private Bid bid;
+
+    @JsonIgnoreProperties(value = { "bids", "licensePlate", "users", "winningBid" }, allowSetters = true)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(unique = true)
+    private AuctionRoom auctionRoom;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -45,30 +47,17 @@ public class WinningBid {
         this.id = id;
     }
 
-    public Boolean getPaymentStatus() {
+    public PaymentStatus getPaymentStatus() {
         return this.paymentStatus;
     }
 
-    public WinningBid paymentStatus(Boolean paymentStatus) {
+    public WinningBid paymentStatus(PaymentStatus paymentStatus) {
         this.setPaymentStatus(paymentStatus);
         return this;
     }
 
-    public void setPaymentStatus(Boolean paymentStatus) {
+    public void setPaymentStatus(PaymentStatus paymentStatus) {
         this.paymentStatus = paymentStatus;
-    }
-
-    public AuctionRoom getAuctionRoom() {
-        return this.auctionRoom;
-    }
-
-    public void setAuctionRoom(AuctionRoom auctionRoom) {
-        this.auctionRoom = auctionRoom;
-    }
-
-    public WinningBid auctionRoom(AuctionRoom auctionRoom) {
-        this.setAuctionRoom(auctionRoom);
-        return this;
     }
 
     public Bid getBid() {
@@ -81,6 +70,19 @@ public class WinningBid {
 
     public WinningBid bid(Bid bid) {
         this.setBid(bid);
+        return this;
+    }
+
+    public AuctionRoom getAuctionRoom() {
+        return this.auctionRoom;
+    }
+
+    public void setAuctionRoom(AuctionRoom auctionRoom) {
+        this.auctionRoom = auctionRoom;
+    }
+
+    public WinningBid auctionRoom(AuctionRoom auctionRoom) {
+        this.setAuctionRoom(auctionRoom);
         return this;
     }
 

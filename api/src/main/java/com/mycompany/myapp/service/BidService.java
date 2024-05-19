@@ -37,10 +37,9 @@ public interface BidService {
     /**
      * Get all the bids.
      *
-     * @param pageable the pagination information.
      * @return the list of entities.
      */
-    Page<BidDTO> findAll(Pageable pageable);
+    List<BidDTO> findAll();
 
     /**
      * Get all the BidDTO where WinningBid is {@code null}.

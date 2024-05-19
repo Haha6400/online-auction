@@ -1,7 +1,6 @@
 package com.mycompany.myapp.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.mycompany.myapp.config.Constants;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -47,10 +46,6 @@ public class User extends AbstractAuditingEntity<Long> {
     @Column(name = "last_name", length = 50)
     private String lastName;
 
-    @Size(max = 11)
-    @Column(name = "phone_number", length = 50)
-    private String phoneNumber;
-
     @Email
     @Size(min = 5, max = 254)
     @Column(length = 254, unique = true)
@@ -82,8 +77,7 @@ public class User extends AbstractAuditingEntity<Long> {
     private Instant resetDate = null;
 
     @JsonIgnore
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @ManyToMany
     @JoinTable(
         name = "user_authority",
         joinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "id") },
@@ -91,8 +85,6 @@ public class User extends AbstractAuditingEntity<Long> {
     )
     @BatchSize(size = 20)
     private Set<Authority> authorities = new HashSet<>();
-
-    public User() {}
 
     public Long getId() {
         return id;
@@ -141,14 +133,6 @@ public class User extends AbstractAuditingEntity<Long> {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
     }
 
     public String getImageUrl() {

@@ -29,17 +29,18 @@ public class AuctionRoom extends AbstractAuditingEntity<Long> {
     @Column(name = "end_time")
     private Instant endTime;
 
-    @Column(name = "init_price")
-    private Long initPrice;
+    @Column(name = "initial_price")
+    private Float initialPrice;
 
-    @JsonIgnoreProperties(value = { "auctionRoom", "vehicleType", "province" }, allowSetters = true)
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(unique = true)
-    private LicensePlate licensePlate;
+    @Column(name = "price_step")
+    private Float priceStep;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "auctionRoom")
-    @JsonIgnoreProperties(value = { "user", "winningBid", "auctionRoom" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "user", "auctionRoom", "winningBid" }, allowSetters = true)
     private Set<Bid> bids = new HashSet<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private LicensePlate licensePlate;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -49,8 +50,8 @@ public class AuctionRoom extends AbstractAuditingEntity<Long> {
     )
     private Set<User> users = new HashSet<>();
 
-    @JsonIgnoreProperties(value = { "auctionRoom", "bid" }, allowSetters = true)
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "auctionRoom")
+    @JsonIgnoreProperties(value = { "bid", "auctionRoom" }, allowSetters = true)
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "auctionRoom")
     private WinningBid winningBid;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -107,30 +108,30 @@ public class AuctionRoom extends AbstractAuditingEntity<Long> {
         this.endTime = endTime;
     }
 
-    public Long getInitPrice() {
-        return this.initPrice;
+    public Float getInitialPrice() {
+        return this.initialPrice;
     }
 
-    public AuctionRoom initPrice(Long initPrice) {
-        this.setInitPrice(initPrice);
+    public AuctionRoom initialPrice(Float initialPrice) {
+        this.setInitialPrice(initialPrice);
         return this;
     }
 
-    public void setInitPrice(Long initPrice) {
-        this.initPrice = initPrice;
+    public void setInitialPrice(Float initialPrice) {
+        this.initialPrice = initialPrice;
     }
 
-    public LicensePlate getLicensePlate() {
-        return this.licensePlate;
+    public Float getPriceStep() {
+        return this.priceStep;
     }
 
-    public void setLicensePlate(LicensePlate licensePlate) {
-        this.licensePlate = licensePlate;
-    }
-
-    public AuctionRoom licensePlate(LicensePlate licensePlate) {
-        this.setLicensePlate(licensePlate);
+    public AuctionRoom priceStep(Float priceStep) {
+        this.setPriceStep(priceStep);
         return this;
+    }
+
+    public void setPriceStep(Float priceStep) {
+        this.priceStep = priceStep;
     }
 
     public Set<Bid> getBids() {
@@ -152,15 +153,28 @@ public class AuctionRoom extends AbstractAuditingEntity<Long> {
         return this;
     }
 
-    public AuctionRoom addBid(Bid bid) {
+    public AuctionRoom addBids(Bid bid) {
         this.bids.add(bid);
         bid.setAuctionRoom(this);
         return this;
     }
 
-    public AuctionRoom removeBid(Bid bid) {
+    public AuctionRoom removeBids(Bid bid) {
         this.bids.remove(bid);
         bid.setAuctionRoom(null);
+        return this;
+    }
+
+    public LicensePlate getLicensePlate() {
+        return this.licensePlate;
+    }
+
+    public void setLicensePlate(LicensePlate licensePlate) {
+        this.licensePlate = licensePlate;
+    }
+
+    public AuctionRoom licensePlate(LicensePlate licensePlate) {
+        this.setLicensePlate(licensePlate);
         return this;
     }
 
@@ -233,7 +247,8 @@ public class AuctionRoom extends AbstractAuditingEntity<Long> {
             ", description='" + getDescription() + "'" +
             ", startTime='" + getStartTime() + "'" +
             ", endTime='" + getEndTime() + "'" +
-            ", initPrice=" + getInitPrice() +
+            ", initialPrice=" + getInitialPrice() +
+            ", priceStep=" + getPriceStep() +
             "}";
     }
 }

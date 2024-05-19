@@ -68,9 +68,9 @@ public class BidServiceImpl implements BidService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<BidDTO> findAll(Pageable pageable) {
+    public List<BidDTO> findAll() {
         log.debug("Request to get all Bids");
-        return bidRepository.findAll(pageable).map(bidMapper::toDto);
+        return bidRepository.findAll().stream().map(bidMapper::toDto).collect(Collectors.toCollection(LinkedList::new));
     }
 
     public Page<BidDTO> findAllWithEagerRelationships(Pageable pageable) {

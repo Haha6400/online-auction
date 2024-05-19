@@ -1,6 +1,6 @@
 {
   "annotations": {
-    "changelogDate": "20240401160113"
+    "changelogDate": "20240517065902"
   },
   "applications": "*",
   "dto": "mapstruct",
@@ -18,26 +18,27 @@
       "fieldType": "Instant"
     },
     {
-      "fieldName": "initPrice",
-      "fieldType": "Long"
+      "fieldName": "initialPrice",
+      "fieldType": "Float"
+    },
+    {
+      "fieldName": "priceStep",
+      "fieldType": "Float"
     }
   ],
   "name": "AuctionRoom",
-  "pagination": "pagination",
   "relationships": [
     {
-      "otherEntityName": "licensePlate",
-      "otherEntityRelationshipName": "auctionRoom",
-      "relationshipName": "licensePlate",
-      "relationshipSide": "left",
-      "relationshipType": "one-to-one"
-    },
-    {
       "otherEntityName": "bid",
-      "otherEntityRelationshipName": "auctionRoom",
-      "relationshipName": "bid",
+      "relationshipName": "bids",
       "relationshipSide": "left",
       "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "licensePlate",
+      "relationshipName": "licensePlate",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
     },
     {
       "otherEntityField": "login",

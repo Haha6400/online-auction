@@ -13,7 +13,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -82,6 +81,19 @@ public class WinningBidServiceImpl implements WinningBidService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public Optional<WinningBidDTO> findOne(Long id) {
+        log.debug("Request to get WinningBid : {}", id);
+        return winningBidRepository.findById(id).map(winningBidMapper::toDto);
+    }
+
+    @Override
+    public void delete(Long id) {
+        log.debug("Request to delete WinningBid : {}", id);
+        winningBidRepository.deleteById(id);
+    }
+
+    @Override
     public List<LicensePlateDTO> findAllWinningLicenseByUsers(UserDTO userDTO) {
         List<LicensePlateDTO> result = new ArrayList<>();
         List<WinningBidDTO> tmp = winningBidRepository
@@ -94,18 +106,5 @@ public class WinningBidServiceImpl implements WinningBidService {
             result.add(w.getAuctionRoom().getLicensePlate());
         }
         return result;
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public Optional<WinningBidDTO> findOne(Long id) {
-        log.debug("Request to get WinningBid : {}", id);
-        return winningBidRepository.findById(id).map(winningBidMapper::toDto);
-    }
-
-    @Override
-    public void delete(Long id) {
-        log.debug("Request to delete WinningBid : {}", id);
-        winningBidRepository.deleteById(id);
     }
 }

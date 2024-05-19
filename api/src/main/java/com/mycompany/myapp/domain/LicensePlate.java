@@ -1,6 +1,6 @@
 package com.mycompany.myapp.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.mycompany.myapp.domain.enumeration.LicensePlateStatus;
 import jakarta.persistence.*;
 import java.io.Serializable;
 
@@ -20,15 +20,15 @@ public class LicensePlate extends AbstractAuditingEntity<Long> {
     @Column(name = "plate_number")
     private String plateNumber;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private LicensePlateStatus status;
+
     @Column(name = "vehicle_type")
     private String vehicleType;
 
-    @Column(name = "province_")
+    @Column(name = "province")
     private String province;
-
-    @JsonIgnoreProperties(value = { "licensePlate", "bids", "users", "winningBid" }, allowSetters = true)
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "licensePlate")
-    private AuctionRoom auctionRoom;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -58,8 +58,26 @@ public class LicensePlate extends AbstractAuditingEntity<Long> {
         this.plateNumber = plateNumber;
     }
 
+    public LicensePlateStatus getStatus() {
+        return this.status;
+    }
+
+    public LicensePlate status(LicensePlateStatus status) {
+        this.setStatus(status);
+        return this;
+    }
+
+    public void setStatus(LicensePlateStatus status) {
+        this.status = status;
+    }
+
     public String getVehicleType() {
-        return vehicleType;
+        return this.vehicleType;
+    }
+
+    public LicensePlate vehicleType(String vehicleType) {
+        this.setVehicleType(vehicleType);
+        return this;
     }
 
     public void setVehicleType(String vehicleType) {
@@ -67,30 +85,16 @@ public class LicensePlate extends AbstractAuditingEntity<Long> {
     }
 
     public String getProvince() {
-        return province;
+        return this.province;
+    }
+
+    public LicensePlate province(String province) {
+        this.setProvince(province);
+        return this;
     }
 
     public void setProvince(String province) {
         this.province = province;
-    }
-
-    public AuctionRoom getAuctionRoom() {
-        return this.auctionRoom;
-    }
-
-    public void setAuctionRoom(AuctionRoom auctionRoom) {
-        if (this.auctionRoom != null) {
-            this.auctionRoom.setLicensePlate(null);
-        }
-        if (auctionRoom != null) {
-            auctionRoom.setLicensePlate(this);
-        }
-        this.auctionRoom = auctionRoom;
-    }
-
-    public LicensePlate auctionRoom(AuctionRoom auctionRoom) {
-        this.setAuctionRoom(auctionRoom);
-        return this;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
@@ -118,6 +122,7 @@ public class LicensePlate extends AbstractAuditingEntity<Long> {
         return "LicensePlate{" +
             "id=" + getId() +
             ", plateNumber='" + getPlateNumber() + "'" +
+            ", status='" + getStatus() + "'" +
             ", vehicleType='" + getVehicleType() + "'" +
             ", province='" + getProvince() + "'" +
             "}";

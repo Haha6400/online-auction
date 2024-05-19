@@ -8,13 +8,17 @@ import java.util.Objects;
  * A DTO for the {@link com.mycompany.myapp.domain.Bid} entity.
  */
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class BidDTO implements Serializable {
+public class BidDTO {
 
     private Long id;
 
-    private Long amount;
+    private Instant eventTime;
 
-    private Instant timestamp;
+    private Float priceBeforeBidding;
+
+    private Float priceStep;
+
+    private Float numberOfPriceStep;
 
     private UserDTO user;
 
@@ -28,20 +32,36 @@ public class BidDTO implements Serializable {
         this.id = id;
     }
 
-    public Long getAmount() {
-        return amount;
+    public Instant getEventTime() {
+        return eventTime;
     }
 
-    public void setAmount(Long amount) {
-        this.amount = amount;
+    public void setEventTime(Instant eventTime) {
+        this.eventTime = eventTime;
     }
 
-    public Instant getTimestamp() {
-        return timestamp;
+    public Float getPriceBeforeBidding() {
+        return priceBeforeBidding;
     }
 
-    public void setTimestamp(Instant timestamp) {
-        this.timestamp = timestamp;
+    public void setPriceBeforeBidding(Float priceBeforeBidding) {
+        this.priceBeforeBidding = priceBeforeBidding;
+    }
+
+    public Float getPriceStep() {
+        return priceStep;
+    }
+
+    public void setPriceStep(Float priceStep) {
+        this.priceStep = priceStep;
+    }
+
+    public Float getNumberOfPriceStep() {
+        return numberOfPriceStep;
+    }
+
+    public void setNumberOfPriceStep(Float numberOfPriceStep) {
+        this.numberOfPriceStep = numberOfPriceStep;
     }
 
     public UserDTO getUser() {
@@ -86,8 +106,10 @@ public class BidDTO implements Serializable {
     public String toString() {
         return "BidDTO{" +
             "id=" + getId() +
-            ", amount=" + getAmount() +
-            ", timestamp='" + getTimestamp() + "'" +
+            ", eventTime='" + getEventTime() + "'" +
+            ", priceBeforeBidding=" + getPriceBeforeBidding() +
+            ", priceStep=" + getPriceStep() +
+            ", numberOfPriceStep=" + getNumberOfPriceStep() +
             ", user=" + getUser() +
             ", auctionRoom=" + getAuctionRoom() +
             "}";

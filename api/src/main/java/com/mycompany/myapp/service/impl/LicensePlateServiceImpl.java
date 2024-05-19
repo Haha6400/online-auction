@@ -1,6 +1,7 @@
 package com.mycompany.myapp.service.impl;
 
 import com.mycompany.myapp.domain.LicensePlate;
+import com.mycompany.myapp.domain.enumeration.LicensePlateStatus;
 import com.mycompany.myapp.repository.LicensePlateRepository;
 import com.mycompany.myapp.repository.UserRepository;
 import com.mycompany.myapp.service.LicensePlateService;
@@ -11,11 +12,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,6 +45,7 @@ public class LicensePlateServiceImpl implements LicensePlateService {
     public LicensePlateDTO save(LicensePlateDTO licensePlateDTO) {
         log.debug("Request to save LicensePlate : {}", licensePlateDTO);
         LicensePlate licensePlate = licensePlateMapper.toEntity(licensePlateDTO);
+        licensePlate.status(LicensePlateStatus.NOT_YET_AUCTIONED);
         licensePlate = licensePlateRepository.save(licensePlate);
         return licensePlateMapper.toDto(licensePlate);
     }
@@ -76,35 +75,11 @@ public class LicensePlateServiceImpl implements LicensePlateService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<LicensePlateDTO> findAll(Pageable pageable) {
+    public List<LicensePlateDTO> findAll() {
         log.debug("Request to get all LicensePlates");
-        return licensePlateRepository.findAll(pageable).map(licensePlateMapper::toDto);
+        return licensePlateRepository.findAll().stream().map(licensePlateMapper::toDto).collect(Collectors.toCollection(LinkedList::new));
     }
 
-    /**
-     *  Get all the licensePlates where AuctionRoom is {@code null}.
-     *  @return the list of entities.
-     */
-    @Transactional(readOnly = true)
-    public List<LicensePlateDTO> findAllWhereAuctionRoomIsNull() {
-        log.debug("Request to get all licensePlates where AuctionRoom is null");
-        return StreamSupport.stream(licensePlateRepository.findAll().spliterator(), false)
-            .filter(licensePlate -> licensePlate.getAuctionRoom() == null)
-            .map(licensePlateMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
-    }
-
-    //    @Transactional(readOnly = true)
-    //    public List<LicensePlateDTO> test(UserDTO userDTO) {
-    //        log.debug("Request to get all licensePlates where AuctionRoom is null");
-    //        return StreamSupport.stream(licensePlateRepository.findAll().spliterator(), false)
-    //            .filter(licensePlate ->
-    //                licensePlate.getAuctionRoom().getBids() != null)
-    //            .map(licensePlateMapper::toDto)
-    //            .collect(Collectors.toCollection(LinkedList::new));
-    //    }
-    //.getWinningBid().getBid().getUser()
-    //                    == userRepository.findOneByLogin(userDTO.getLogin()).get()
     @Override
     @Transactional(readOnly = true)
     public Optional<LicensePlateDTO> findOne(Long id) {
@@ -116,5 +91,15 @@ public class LicensePlateServiceImpl implements LicensePlateService {
     public void delete(Long id) {
         log.debug("Request to delete LicensePlate : {}", id);
         licensePlateRepository.deleteById(id);
+    }
+
+    @Override
+    public List<LicensePlateDTO> getAllOrderByCreatedDateDESC() {
+        return licensePlateMapper.toDto(licensePlateRepository.findAllByOrderByCreatedDateDesc());
+    }
+
+    @Override
+    public List<LicensePlateDTO> getAllOrderByCreatedDateASC() {
+        return licensePlateMapper.toDto(licensePlateRepository.findAllByOrderByCreatedDateAsc());
     }
 }
