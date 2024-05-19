@@ -190,6 +190,11 @@ public class AuctionRoomServiceImpl implements AuctionRoomService {
     }
 
     @Override
+    public List<AuctionRoomDTO> getAllAuctionsInProgress(Instant date) {
+        return auctionRoomMapper.toDto(auctionRoomRepository.findAllByStartTimeBeforeAndEndTimeAfterOrderByStartTimeDesc(date, date));
+    }
+
+    @Override
     public List<AuctionRoomDTO> getAuctionsInProgressByUser(UserDTO userDTO, Instant date) {
         return auctionRoomMapper.toDto(
             auctionRoomRepository.findAllByUsersAndStartTimeBeforeAndEndTimeAfterOrderByStartTimeDesc(

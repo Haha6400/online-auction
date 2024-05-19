@@ -78,6 +78,7 @@ public interface AuctionRoomService {
 
     List<AuctionRoomDTO> getAllHistoryAuctionByUser(UserDTO userDTO, Instant date);
     List<AuctionRoomDTO> getAuctionWaitlistByUser(UserDTO userDTO, Instant date);
+    List<AuctionRoomDTO> getAllAuctionsInProgress(Instant date);
 
     List<AuctionRoomDTO> getAuctionsInProgressByUser(UserDTO userDTO, Instant date);
 

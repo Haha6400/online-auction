@@ -147,7 +147,7 @@ public class AuctionRoomResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of auctionRooms in body.
      */
     @GetMapping("")
-    public List<CustomAuctionResult> getAllAuctionRooms(
+    public List<?> getAllAuctionRooms(
         @RequestParam(name = "filter", required = false) String filter,
         @RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload
     ) {
@@ -158,7 +158,7 @@ public class AuctionRoomResource {
             return auctionRoomService.getAllOrderByCreatedDateAsc();
         }
         log.debug("REST request to get all AuctionRooms");
-        return auctionRoomService.findAll();
+        return auctionRoomService.getAllAuctionsInProgress(Instant.now());
     }
 
     /**

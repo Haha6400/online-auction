@@ -37,6 +37,7 @@ public interface AuctionRoomRepository extends AuctionRoomRepositoryWithBagRelat
     List<AuctionRoom> findAllByUsersAndEndTimeBefore(User user, Instant date);
     List<AuctionRoom> findAllByUsersAndStartTimeAfter(User user, Instant date);
     List<AuctionRoom> findAllByUsersAndStartTimeBeforeAndEndTimeAfterOrderByStartTimeDesc(User user, Instant start, Instant end);
+    List<AuctionRoom> findAllByStartTimeBeforeAndEndTimeAfterOrderByStartTimeDesc(Instant start, Instant end);
 
     List<AuctionRoom> findAllByUsersOrderByCreatedDateDesc(User user);
     //    List<AuctionRoom> findAllByUsersAndWinningBid(User user);
