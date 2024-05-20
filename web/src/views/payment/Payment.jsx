@@ -14,7 +14,6 @@ import Footer from "../../components/common/Footer";
 import WaitingConfirmPayment from "./WaitingConfirmPayment";
 import PaymentHistory from "./PaymentHistory";
 import { getAllAuctionRoom } from "../../service/user/licensePlateAPI";
-import { formatTime } from "../../utils/timeFormatter";
 
 const items = [
     {
