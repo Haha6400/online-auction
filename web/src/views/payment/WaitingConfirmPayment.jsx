@@ -26,7 +26,7 @@ import {
 import PaymentDialog from "../../components/common/PaymentDialog";
 import { LPStatus } from "../../utils/constants/LicensePlate";
 import { getAllAuctionRoom } from "../../service/user/licensePlateAPI";
-import { formatTime } from "../../utils/timeFormatter";
+import { formatTime } from "../../utils/formatter";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/AuthProvider";
 

@@ -23,7 +23,7 @@ import { LPtype, LPprovinces } from "../../utils/constants/LicensePlate";
 import LicensePlateInput from "../../components/common/LicensePlateInput";
 import { updateLicensePlate } from "../../service/admin/licensePlateAPI";
 
-import { formatTime } from "../../utils/timeFormatter";
+import { formatTime } from "../../utils/formatter";
 
 export default function Update(props) {
     const [idToken, setIdToken] = useState(

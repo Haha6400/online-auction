@@ -31,7 +31,7 @@ import Footer from "../../components/common/Footer";
 import Box from "@mui/material/Box";
 
 import ViewPlanModal from "./modals/ViewPlanModal";
-import { formatTimeWithoutHour, getNthDay } from "../../utils/timeFormatter";
+import { formatTimeWithoutHour, getNthDay } from "../../utils/formatter";
 
 let planData = [
   {
