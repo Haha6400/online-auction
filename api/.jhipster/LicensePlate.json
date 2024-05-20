@@ -12,7 +12,7 @@
     {
       "fieldName": "status",
       "fieldType": "LicensePlateStatus",
-      "fieldValues": "NOT_YET_AUCTIONED,AWAITING_AUCTION,AUCTION_FAILED,AUCTION_COMPLETED, PAYMENT_COMPLETED"
+      "fieldValues": "NOT_YET_AUCTIONED,AWAITING_AUCTION,AUCTION_FAILED,AUCTION_COMPLETED"
     },
     {
       "fieldName": "vehicleType",
