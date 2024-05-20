@@ -95,7 +95,7 @@ public class AccountResource {
         //            throw new AccountResourceException("No user was found for this activation key");
         //        }
         HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(URI.create("http://localhost:3000/login"));
+        headers.setLocation(URI.create("http://localhost:3000"));
         return new ResponseEntity<>(headers, HttpStatus.MOVED_PERMANENTLY);
     }
 

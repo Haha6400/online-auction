@@ -72,7 +72,7 @@ export default function Update(props) {
 
         const values = {
             'id': props.currentAuctionRoom.id,
-            'initPrice': data.get('initPrice'),
+            'initialPrice': data.get('initialPrice'),
             'startTime': startTime,
             'endTime': endTime,
             'description': data.get('description')
@@ -390,10 +390,10 @@ export default function Update(props) {
                                             fullWidth
                                             multiline
                                             type="number"
-                                            id="initPrice"
-                                            name="initPrice"
-                                            autoComplete="initPrice"
-                                            defaultValue={props.currentAuctionRoom.initPrice}
+                                            id="initialPrice"
+                                            name="initialPrice"
+                                            autoComplete="initialPrice"
+                                            defaultValue={props.currentAuctionRoom.initialPrice}
                                             sx={{
                                                 fontWeight: 1000,
                                                 mt: 1, mb: 1,

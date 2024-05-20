@@ -99,7 +99,7 @@ export default function Create(props) {
         }
 
         const values = {
-            'initPrice': data.get('initPrice'),
+            'initialPrice': data.get('initialPrice'),
             'startTime': dayjs(startTime, 'HH:mm DD/MM/YYYY').toISOString(),
             'endTime': dayjs(endTime, 'HH:mm DD/MM/YYYY').toISOString(),
             'description': data.get('description'),
@@ -200,9 +200,9 @@ export default function Create(props) {
                                         required
                                         fullWidth
                                         type="number"
-                                        id="initPrice"
-                                        name="initPrice"
-                                        autoComplete="initPrice"
+                                        id="initialPrice"
+                                        name="initialPrice"
+                                        autoComplete="initialPrice"
                                         autoFocus
                                         sx={{
                                             mt: 1, mb: 1,

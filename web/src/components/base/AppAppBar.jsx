@@ -152,6 +152,29 @@ export default function AppAppBar({ currentPage, login }) {
                     </Typography>
                   </MenuItem>
                 </Link>
+                {idToken &&
+                  accountUser["authorities"] &&
+                  accountUser["authorities"].includes("ROLE_ADMIN") && (
+                    <>
+                      <Link to={idToken && "/payment"}>
+                        <MenuItem
+                          sx={{ py: "6px", px: "12px", ml: "10px" }}
+                          selected={currentPage === "payment"}
+                          onClick={!idToken ? login : () => { }}
+                        >
+                          <Typography
+                            variant="navbar"
+                            color={
+                              currentPage === "payment"
+                                ? "text.primary"
+                                : "text.secondary"
+                            }
+                          >
+                            Thanh toán
+                          </Typography>
+                        </MenuItem>
+                      </Link>
+                    </>)}
               </Box>
             </Box>
 

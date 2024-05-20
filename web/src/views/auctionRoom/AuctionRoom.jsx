@@ -88,7 +88,6 @@ export default function AuctionRoom() {
   const handleDeleteButtonClick = async (auctionRoom) => {
     setSelectedAutionRoom(auctionRoom);
     setOpenDeleteDialog(true);
-    console.log("sdv");
   }
 
   const deleteAuctionRoomConfirm = async (event) => {

@@ -1,9 +1,11 @@
 import * as React from "react";
+import axios from 'axios';
 import Container from "@mui/material/Container";
 import IconButton from "@mui/material/IconButton";
 import Link from "@mui/material/Link";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import Dialog from "@mui/material/Dialog";
 
 
 import Grid from '@mui/material/Grid';
@@ -11,21 +13,42 @@ import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Button from '@mui/material/Button';
 
+import ResultModal from "../../components/base/ResultModal";
 import { useAuth } from "../../hooks/AuthProvider";
 
-const handleSubmit = async (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-        email: data.get('email'),
-        username: data.get('username'),
-    });
-};
-
 export default function Update() {
-    const [idToken] = React.useState(localStorage.getItem("id_token"));
+    const [idToken, setIdToken] = React.useState(
+        localStorage.getItem("id_token"),
+    );
     const [accountUser, setAccountUser] = React.useState({});
     const auth = useAuth();
+    const [openSuccessModal, setOpenSuccessModal] = React.useState(false);
+    const [openFailModal, setOpenFailModal] = React.useState(false);
+    const toggleSuccessModal = () => {
+        setOpenSuccessModal(!openSuccessModal);
+    };
+    const toggleFailModal = () => {
+        setOpenFailModal(!openFailModal);
+    };
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        const data = new FormData(event.currentTarget);
+        const values = Object.fromEntries(data.entries());
+        try {
+            const response = await axios.put(`http://localhost:8080/api/account/update`, values, {
+                headers: { Authorization: `Bearer ${idToken}` }
+            });
+            if (response.status === 200) {
+                toggleSuccessModal();
+            } else {
+                toggleFailModal();
+            }
+            auth.getCurrentUser(idToken);
+        } catch (error) {
+            console.dir('Update Account error:', error);
+        }
+    };
+
     React.useEffect(() => {
         if (auth.user) {
             setAccountUser(auth.user);
@@ -153,6 +176,12 @@ export default function Update() {
                     >
                         Cập nhật
                     </Button>
+                    <Dialog open={openSuccessModal} onClose={toggleSuccessModal}>
+                        <ResultModal type="UPDATE_ACCOUNT_SUCCESS" close={toggleSuccessModal} />
+                    </Dialog>
+                    <Dialog open={openFailModal} onClose={toggleFailModal}>
+                        <ResultModal type="UPDATE_ACCOUNT_FAIL" close={toggleFailModal} />
+                    </Dialog>
                 </Box>
             </Box>
         </Container>

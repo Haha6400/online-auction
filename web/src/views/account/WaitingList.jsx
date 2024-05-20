@@ -13,6 +13,7 @@ import Paper from "@mui/material/Paper";
 
 import Search from "@mui/icons-material/Search";
 import ManageSearchIcon from "@mui/icons-material/ManageSearch";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
 import {
     OutlinedInput,
@@ -33,125 +34,49 @@ export default function WaitingList() {
     const [idToken, setIdToken] = useState(
         localStorage.getItem("id_token"),
     );
-    const [LPSearchInput, setLPSearchInput] = useState("");
-    const [vehicleStatus, setVehicleStatus] = useState("");
-    const [openAuctionRegisterModal, setOpenAuctionRegisterModal] =
+
+    const auth = useAuth();
+    const [openAuctionModal, setOpenAuctionModal] =
         useState(false);
 
     const [licensePlates, setLicensePlates] = useState([]);
 
-    const [currentLP, setCurrentLP] = useState({});
+    const [selectedAutionRoom, setSelectedAutionRoom] = useState(null);
 
-    const navigate = useNavigate();
-
-    const filteredLicensePlates = licensePlates
-        ? licensePlates.filter((plate) => {
-            // const matchesVehicleType =
-            //     !vehicleType || plate.vehicleType === vehicleType;
-            const matchesPlateNumber =
-                !LPSearchInput ||
-                plate.plateNumber.toLowerCase().includes(LPSearchInput.toLowerCase());
-            return matchesPlateNumber;
-        })
-        : [];
-
-    const toggleAuctionRegisterMdal = () => {
-        setOpenAuctionRegisterModal(!openAuctionRegisterModal);
+    const toggleAuctionViewMdal = () => {
+        setOpenAuctionModal(!openAuctionModal);
     };
-
-    const fetchLicensePlates = async () => {
+    const fetchLicensePlates = async (userId) => {
         const res = await getAllAuctionRoom();
 
         const comingAuctionRooms = res.filter(
-            (auctionRoom) => new Date(auctionRoom.startTime) > new Date()
+            (auctionRoom) => {
+                return new Date(auctionRoom.startTime) > new Date()
+                    && auctionRoom.users.some(user => user.id === userId)
+            }
         );
 
         setLicensePlates(
             comingAuctionRooms.map((auctionRoom) => {
                 return {
-                    ...auctionRoom.licensePlate,
+                    ...auctionRoom,
                     startTime: formatTime(new Date(auctionRoom.startTime)),
                     endTime: formatTime(new Date(auctionRoom.endTime)),
-                    description: auctionRoom.description,
-                    initPrice: auctionRoom.initPrice,
                 };
             }),
         );
     };
     useEffect(() => {
-        fetchLicensePlates();
+        if (auth.user) {
+            fetchLicensePlates(auth.user.id);
+        }
     }, []);
 
     return (
         <>
-            <Box
-                sx={{
-                    py: 2,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    flexWrap: "wrap",
-                    gap: 5,
-                }}
-            >
-                <OutlinedInput
-                    type="search"
-                    placeholder="Nhập biển số xe cần tìm"
-                    size="small"
-                    sx={{
-                        width: 250,
-                        marginY: 2,
-                        border: "1px solid #015433",
-                        borderRadius: 3,
-                    }}
-                    startAdornment={
-                        <Search
-                            sx={{
-                                width: 20,
-                                color: "015433",
-                                mr: 1,
-                            }}
-                        />
-                    }
-                    value={LPSearchInput}
-                    onChange={(event) => {
-                        setLPSearchInput(event.target.value);
-                    }}
-                />
-                <FormControl sx={{ minWidth: 250, marginY: 2 }} size="small">
-                    <Select
-                        autoWidth
-                        displayEmpty
-                        value={vehicleStatus}
-                        onChange={(event) => {
-                            setVehicleStatus(event.target.value);
-                        }}
-                        sx={{
-                            width: 250,
-                            border: "1px solid #015433",
-                            borderRadius: 3,
-                        }}
-                    >
-                        <MenuItem sx={{ borderRadius: 0, width: 250 }} value="">
-                            Chọn trạng thái
-                        </MenuItem>
-                        {Object.keys(LPStatus).map((key) => (
-                            <MenuItem
-                                key={key}
-                                sx={{ borderRadius: 0, width: 250 }}
-                                value={LPStatus[key]}
-                            >
-                                {LPStatus[key]}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-            </Box>
-
             <TableContainer
                 component={Paper}
                 sx={{
-                    mt: 2,
                     backgroundColor: "rgba(255, 255, 255, 0.15)",
                 }}
             >
@@ -183,23 +108,23 @@ export default function WaitingList() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {filteredLicensePlates.map((licensePlate, index) => (
-                            <TableRow key={licensePlate.id}>
+                        {licensePlates.map((auctionRoom, index) => (
+                            <TableRow key={auctionRoom.id}>
                                 <TableCell align="center">{index + 1}</TableCell>
-                                <TableCell align="center">{licensePlate.plateNumber}</TableCell>
-                                <TableCell align="center">{licensePlate.province}</TableCell>
-                                <TableCell align="center">{licensePlate.vehicleType}</TableCell>
+                                <TableCell align="center">{auctionRoom.licensePlate['plateNumber']}</TableCell>
+                                <TableCell align="center">{auctionRoom.licensePlate['province']}</TableCell>
+                                <TableCell align="center">{auctionRoom.licensePlate['vehicleType']}</TableCell>
 
                                 <TableCell sx={{ whiteSpace: "nowrap" }} align="center">
-                                    {licensePlate.startTime}
+                                    {auctionRoom.startTime}
                                 </TableCell>
 
-                                <TableCell width={200}>
+                                <TableCell>
                                     <Button
                                         onClick={() => {
                                             if (idToken) {
-                                                setCurrentLP(licensePlate);
-                                                toggleAuctionRegisterMdal();
+                                                setSelectedAutionRoom(auctionRoom)
+                                                toggleAuctionViewMdal();
                                             }
                                         }}
                                         variant="contained"
@@ -210,8 +135,9 @@ export default function WaitingList() {
                                             backgroundColor: "primary",
                                             color: "white",
                                         }}
+                                        startIcon={<VisibilityIcon style={{ fontSize: 14 }} />}
                                     >
-                                        Đăng ký đấu giá
+                                        Xem phòng
                                     </Button>
                                 </TableCell>
                             </TableRow>
@@ -219,7 +145,7 @@ export default function WaitingList() {
                     </TableBody>
                 </Table>
             </TableContainer>
-            {filteredLicensePlates.length === 0 && (
+            {licensePlates.length === 0 && (
                 <Box
                     sx={{
                         display: "flex",
@@ -240,13 +166,16 @@ export default function WaitingList() {
             )}
 
             <Dialog
-                open={openAuctionRegisterModal}
-                onClose={toggleAuctionRegisterMdal}
+                open={openAuctionModal}
+                onClose={toggleAuctionViewMdal}
             >
-                <AuctionRegisterModal
-                    licensePlate={currentLP}
-                    close={toggleAuctionRegisterMdal}
-                />
+                {selectedAutionRoom && (
+                    <AuctionRegisterModal
+                        title="XEM PHÒNG ĐẤU GIÁ"
+                        auctionRoom={selectedAutionRoom}
+                        close={toggleAuctionViewMdal}
+                    />
+                )}
             </Dialog>
         </>
     );

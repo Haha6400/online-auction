@@ -11,6 +11,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import AuctionRoom from "./views/auctionRoom/AuctionRoom";
 import RegisterV2 from "./components/common/RegisterV2"
 import AuthProvider from "./hooks/AuthProvider";
+import Payment from "./views/payment/Payment"
 
 
 const router = createBrowserRouter([
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
   {
     path: "/list-auction-room",
     element: <AuctionRoom />,
+  },
+  {
+    path: "/payment",
+    element: <Payment />,
   },
   {
     path: "/my-auction",

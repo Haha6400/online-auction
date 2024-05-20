@@ -23,68 +23,62 @@ import {
     Dialog,
     Typography,
 } from "@mui/material";
-import AuctionRegisterModal from "../../components/base/AuctionRegisterModal";
-import { LPStatus } from "../../utils/constants/LicensePlate";
+
+import PaymentDialog from "../../components/common/PaymentDialog";
+import { LPprovinces, LPtype } from "../../utils/constants/LicensePlate";
 import { getAllAuctionRoom } from "../../service/user/licensePlateAPI";
 import { formatTime } from "../../utils/timeFormatter";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../hooks/AuthProvider";
 
-export default function MyAuction() {
-    const [idToken, setIdToken] = useState(
-        localStorage.getItem("id_token"),
-    );
-    const auth = useAuth();
+export default function PaymentHistory() {
     const [LPSearchInput, setLPSearchInput] = useState("");
-    const [vehicleStatus, setVehicleStatus] = useState("");
-    const [openAuctionModal, setOpenAuctionModal] =
+    const [province, setProvince] = useState("");
+    const [vehicleType, setVehicleType] = useState("");
+    const [openAuctionRegisterModal, setOpenAuctionRegisterModal] =
         useState(false);
 
     const [licensePlates, setLicensePlates] = useState([]);
 
-    const [selectedAutionRoom, setSelectedAutionRoom] = useState(null);
+    const [currentLP, setCurrentLP] = useState({});
 
     const navigate = useNavigate();
 
     const filteredLicensePlates = licensePlates
         ? licensePlates.filter((licensePlate) => {
             const plate = licensePlate.licensePlate
-            // const matchesVehicleType =
-            //     !vehicleType || plate.vehicleType === vehicleType;
+            const matchesLPprovince = !province || plate.province === province;
+            const matchesVehicleType =
+                !vehicleType || plate.vehicleType === vehicleType;
             const matchesPlateNumber =
                 !LPSearchInput ||
                 plate.plateNumber.toLowerCase().includes(LPSearchInput.toLowerCase());
-            return matchesPlateNumber;
+            return matchesLPprovince && matchesVehicleType && matchesPlateNumber;
         })
         : [];
 
-    const toggleAuctionViewMdal = () => {
-        setOpenAuctionModal(!openAuctionModal);
+    const toggleAuctionRegisterMdal = () => {
+        setOpenAuctionRegisterModal(!openAuctionRegisterModal);
     };
-    const fetchLicensePlates = async (userId) => {
-        const res = await getAllAuctionRoom();
 
+    const fetchLicensePlates = async () => {
+        const res = await getAllAuctionRoom();
         const comingAuctionRooms = res.filter(
-            (auctionRoom) => {
-                return auctionRoom.users.some(user => user.id === userId)
-            }
+            (auctionRoom) => new Date(auctionRoom.startTime) > new Date(),
         );
 
         setLicensePlates(
             comingAuctionRooms.map((auctionRoom) => {
                 return {
                     ...auctionRoom,
-                    startTime: formatTime(new Date(auctionRoom.startTime)),
-                    endTime: formatTime(new Date(auctionRoom.endTime)),
+                    'startTime': formatTime(new Date(auctionRoom.startTime)),
+                    'endTime': formatTime(new Date(auctionRoom.endTime))
                 };
             }),
         );
-        console.log("comingAuctionRooms", comingAuctionRooms)
     };
+
     useEffect(() => {
-        if (auth.user) {
-            fetchLicensePlates(auth.user.id);
-        }
+        fetchLicensePlates();
     }, []);
 
     return (
@@ -103,7 +97,7 @@ export default function MyAuction() {
                     placeholder="Nhập biển số xe cần tìm"
                     size="small"
                     sx={{
-                        width: 250,
+                        width: 210,
                         marginY: 2,
                         border: "1px solid #015433",
                         borderRadius: 3,
@@ -122,30 +116,58 @@ export default function MyAuction() {
                         setLPSearchInput(event.target.value);
                     }}
                 />
-                <FormControl sx={{ minWidth: 250, marginY: 2 }} size="small">
+                <FormControl sx={{ minWidth: 150, marginY: 2 }} size="small">
                     <Select
                         autoWidth
                         displayEmpty
-                        value={vehicleStatus}
+                        value={province}
                         onChange={(event) => {
-                            setVehicleStatus(event.target.value);
+                            setProvince(event.target.value);
                         }}
                         sx={{
-                            width: 250,
+                            width: 210,
                             border: "1px solid #015433",
                             borderRadius: 3,
                         }}
                     >
                         <MenuItem sx={{ borderRadius: 0, width: 250 }} value="">
-                            Chọn trạng thái
+                            Chọn tỉnh/thành phố
                         </MenuItem>
-                        {Object.keys(LPStatus).map((key) => (
+                        {Object.keys(LPprovinces).map((key) => (
                             <MenuItem
                                 key={key}
                                 sx={{ borderRadius: 0, width: 250 }}
-                                value={LPStatus[key]}
+                                value={LPprovinces[key]}
                             >
-                                {LPStatus[key]}
+                                {LPprovinces[key]}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+                <FormControl sx={{ minWidth: 150, marginY: 2 }} size="small">
+                    <Select
+                        autoWidth
+                        displayEmpty
+                        value={vehicleType}
+                        onChange={(event) => {
+                            setVehicleType(event.target.value);
+                        }}
+                        sx={{
+                            width: 210,
+                            border: "1px solid #015433",
+                            borderRadius: 3,
+                        }}
+                    >
+                        <MenuItem sx={{ borderRadius: 0, width: 250 }} value="">
+                            Chọn loại xe
+                        </MenuItem>
+                        {Object.keys(LPtype).map((key) => (
+                            <MenuItem
+                                key={key}
+                                sx={{ borderRadius: 0, width: 250 }}
+                                value={LPtype[key]}
+                            >
+                                {LPtype[key]}
                             </MenuItem>
                         ))}
                     </Select>
@@ -175,38 +197,35 @@ export default function MyAuction() {
                                 sx={{ fontWeight: 600, whiteSpace: "nowrap" }}
                                 align="center"
                             >
-                                Thời gian đấu giá
+                                Loại xe
                             </TableCell>
                             <TableCell
                                 sx={{ fontWeight: 600, whiteSpace: "nowrap" }}
                                 align="center"
                             >
-                                Kết quả
+                                Thời gian đấu giá
                             </TableCell>
                             <TableCell sx={{ fontWeight: 600 }}></TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {filteredLicensePlates.map((auctionRoom, index) => (
-                            <TableRow key={auctionRoom.id}>
+                        {filteredLicensePlates.map((licensePlate, index) => (
+                            <TableRow key={licensePlate.id}>
                                 <TableCell align="center">{index + 1}</TableCell>
-                                <TableCell align="center">{auctionRoom.licensePlate['plateNumber']}</TableCell>
-                                <TableCell align="center">{auctionRoom.licensePlate['province']}</TableCell>
-
+                                <TableCell align="center">{licensePlate.licensePlate['plateNumber']}</TableCell>
+                                <TableCell align="center">{licensePlate.licensePlate['province']}</TableCell>
+                                <TableCell align="center">{licensePlate.licensePlate['vehicleType']}</TableCell>
 
                                 <TableCell sx={{ whiteSpace: "nowrap" }} align="center">
-                                    {auctionRoom.startTime}
-                                </TableCell>
 
-                                <TableCell align="center">{auctionRoom.licensePlate['vehicleType']}</TableCell>
+                                    {licensePlate.startTime}
+                                </TableCell>
 
                                 <TableCell>
                                     <Button
                                         onClick={() => {
-                                            if (idToken) {
-                                                setSelectedAutionRoom(auctionRoom)
-                                                toggleAuctionViewMdal();
-                                            }
+                                            setCurrentLP(licensePlate);
+                                            toggleAuctionRegisterMdal();
                                         }}
                                         variant="contained"
                                         color="primary"
@@ -247,16 +266,14 @@ export default function MyAuction() {
             )}
 
             <Dialog
-                open={openAuctionModal}
-                onClose={toggleAuctionViewMdal}
+                open={openAuctionRegisterModal}
+                onClose={toggleAuctionRegisterMdal}
             >
-                {selectedAutionRoom && (
-                    <AuctionRegisterModal
-                        title="XEM PHÒNG ĐẤU GIÁ"
-                        auctionRoom={selectedAutionRoom}
-                        close={toggleAuctionViewMdal}
-                    />
-                )}
+                <PaymentDialog
+                    title="XEM LỊCH SỬ ĐẤU GIÁ"
+                    auctionRoom={currentLP}
+                    close={toggleAuctionRegisterMdal}
+                />
             </Dialog>
         </>
     );

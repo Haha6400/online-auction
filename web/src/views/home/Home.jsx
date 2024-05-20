@@ -69,102 +69,101 @@ export default function Home() {
           }}
         >
           {/* Hero section */}
-          {!(role && role.includes("ROLE_ADMIN")) && (
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: { lg: "row", xs: "column" },
+              justifyContent: "space-between",
+            }}
+          >
             <Box
               sx={{
+                width: { xs: "100%", lg: "40%" },
+                textAlign: { xs: "center", lg: "left" },
                 display: "flex",
-                flexDirection: { lg: "row", xs: "column" },
-                justifyContent: "space-between",
+                justifyContent: "center",
+                pl: { xs: 0, lg: 4 },
               }}
             >
-              <Box
-                sx={{
-                  width: { xs: "100%", lg: "40%" },
-                  textAlign: { xs: "center", lg: "left" },
-                  display: "flex",
-                  justifyContent: "center",
-                  pl: { xs: 0, lg: 4 },
-                }}
+              <Stack
+                spacing={1}
+                useFlexGap
+                sx={{ width: { lg: "100%", md: "60%", xs: "80%" } }}
               >
-                <Stack
-                  spacing={1}
-                  useFlexGap
-                  sx={{ width: { lg: "100%", md: "60%", xs: "80%" } }}
+                <Typography
+                  variant="h1"
+                  sx={{
+                    lineHeight: 1.2,
+                    fontSize: "55px",
+                    fontWeight: "700",
+                  }}
                 >
+                  Công ty đấu giá hợp danh&nbsp;
                   <Typography
-                    variant="h1"
+                    component={"span"}
                     sx={{
+                      display: { lg: "block" },
+                      fontWeight: "800",
                       lineHeight: 1.2,
                       fontSize: "60px",
-                      fontWeight: "700",
+                      color: "#015433",
                     }}
                   >
-                    Công ty đấu giá hợp danh&nbsp;
-                    <Typography
-                      component={"span"}
-                      sx={{
-                        display: { lg: "block" },
-                        fontWeight: "800",
-                        lineHeight: 1.2,
-                        fontSize: "60px",
-                        color: "#015433",
-                      }}
-                    >
-                      OOAD
-                    </Typography>
+                    OOAuctionD
                   </Typography>
-                  <Typography
-                    color=""
-                    sx={{
-                      marginTop: 2,
-                      fontSize: "18px",
-                    }}
-                  >
-                    Khám phá và sở hữu biển số xe độc đáo ngay hôm nay!
-                  </Typography>
+                </Typography>
+                <Typography
+                  color=""
+                  sx={{
+                    marginTop: 2,
+                    fontSize: "18px",
+                  }}
+                >
+                  Khám phá và sở hữu biển số xe độc đáo ngay hôm nay!
+                </Typography>
 
-                  <Box>
-                    <a href={idToken && "#LPTable"}>
-                      <Button
-                        variant="contained"
-                        size="large"
-                        sx={{
-                          mt: 2,
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 1,
-                          width: { xs: "100%", lg: "auto" },
-                        }}
-                        onClick={!idToken ? toggleLoginDialog : () => {}}
-                      >
-                        Đăng ký ngay
-                        <Launch />
-                      </Button>
-                    </a>
-                    <Dialog open={openLoginDialog} onClose={toggleLoginDialog}>
-                      <Login handleLoginDialogClose={toggleLoginDialog} />
-                    </Dialog>
-                  </Box>
-                </Stack>
-              </Box>
-              <Box
-                sx={{
-                  width: { lg: "65%", xs: "100%" },
-                  display: { xs: "none", sm: "flex" },
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Box sx={{ width: { lg: "100%", xs: "80%" } }}>
-                  <img
-                    src={carImage}
-                    style={{ maxWidth: "100%", textAlign: "center" }}
-                    alt="car hero"
-                  />
+                <Box>
+                  <a href={idToken && "#LPTable"}>
+                    <Button
+                      variant="contained"
+                      size="large"
+                      sx={{
+                        mt: 2,
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 1,
+                        width: { xs: "100%", lg: "auto" },
+                      }}
+                      onClick={!idToken ? toggleLoginDialog : () => { }}
+                    >
+                      Đăng ký ngay
+                      <Launch />
+                    </Button>
+                  </a>
+                  <Dialog open={openLoginDialog} onClose={toggleLoginDialog}>
+                    <Login handleLoginDialogClose={toggleLoginDialog} />
+                  </Dialog>
                 </Box>
+              </Stack>
+            </Box>
+            <Box
+              sx={{
+                width: { lg: "65%", xs: "100%" },
+                display: { xs: "none", sm: "flex" },
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Box sx={{ width: { lg: "100%", xs: "80%" } }}>
+                <img
+                  src={carImage}
+                  style={{ maxWidth: "100%", textAlign: "center" }}
+                  alt="car hero"
+                />
               </Box>
             </Box>
-          )}
+          </Box>
+
 
           {/* List of license plate */}
           {/* <div id="LPTable"> */}

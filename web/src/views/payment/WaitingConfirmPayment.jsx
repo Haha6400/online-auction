@@ -13,7 +13,7 @@ import Paper from "@mui/material/Paper";
 
 import Search from "@mui/icons-material/Search";
 import ManageSearchIcon from "@mui/icons-material/ManageSearch";
-import VisibilityIcon from "@mui/icons-material/Visibility";
+import CheckIcon from '@mui/icons-material/Check';
 
 import {
     OutlinedInput,
@@ -23,40 +23,25 @@ import {
     Dialog,
     Typography,
 } from "@mui/material";
-import AuctionRegisterModal from "../../components/base/AuctionRegisterModal";
+import PaymentDialog from "../../components/common/PaymentDialog";
 import { LPStatus } from "../../utils/constants/LicensePlate";
 import { getAllAuctionRoom } from "../../service/user/licensePlateAPI";
 import { formatTime } from "../../utils/timeFormatter";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/AuthProvider";
 
-export default function MyAuction() {
+export default function WaitingConfirmPayment() {
     const [idToken, setIdToken] = useState(
         localStorage.getItem("id_token"),
     );
+
     const auth = useAuth();
-    const [LPSearchInput, setLPSearchInput] = useState("");
-    const [vehicleStatus, setVehicleStatus] = useState("");
     const [openAuctionModal, setOpenAuctionModal] =
         useState(false);
 
     const [licensePlates, setLicensePlates] = useState([]);
 
     const [selectedAutionRoom, setSelectedAutionRoom] = useState(null);
-
-    const navigate = useNavigate();
-
-    const filteredLicensePlates = licensePlates
-        ? licensePlates.filter((licensePlate) => {
-            const plate = licensePlate.licensePlate
-            // const matchesVehicleType =
-            //     !vehicleType || plate.vehicleType === vehicleType;
-            const matchesPlateNumber =
-                !LPSearchInput ||
-                plate.plateNumber.toLowerCase().includes(LPSearchInput.toLowerCase());
-            return matchesPlateNumber;
-        })
-        : [];
 
     const toggleAuctionViewMdal = () => {
         setOpenAuctionModal(!openAuctionModal);
@@ -66,7 +51,8 @@ export default function MyAuction() {
 
         const comingAuctionRooms = res.filter(
             (auctionRoom) => {
-                return auctionRoom.users.some(user => user.id === userId)
+                return new Date(auctionRoom.startTime) > new Date()
+                // && auctionRoom.users.some(user => user.id === userId)
             }
         );
 
@@ -79,7 +65,6 @@ export default function MyAuction() {
                 };
             }),
         );
-        console.log("comingAuctionRooms", comingAuctionRooms)
     };
     useEffect(() => {
         if (auth.user) {
@@ -89,73 +74,9 @@ export default function MyAuction() {
 
     return (
         <>
-            <Box
-                sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    flexWrap: "wrap",
-                    gap: 5,
-                }}
-            >
-                <OutlinedInput
-                    type="search"
-                    placeholder="Nhập biển số xe cần tìm"
-                    size="small"
-                    sx={{
-                        width: 250,
-                        marginY: 2,
-                        border: "1px solid #015433",
-                        borderRadius: 3,
-                    }}
-                    startAdornment={
-                        <Search
-                            sx={{
-                                width: 20,
-                                color: "015433",
-                                mr: 1,
-                            }}
-                        />
-                    }
-                    value={LPSearchInput}
-                    onChange={(event) => {
-                        setLPSearchInput(event.target.value);
-                    }}
-                />
-                <FormControl sx={{ minWidth: 250, marginY: 2 }} size="small">
-                    <Select
-                        autoWidth
-                        displayEmpty
-                        value={vehicleStatus}
-                        onChange={(event) => {
-                            setVehicleStatus(event.target.value);
-                        }}
-                        sx={{
-                            width: 250,
-                            border: "1px solid #015433",
-                            borderRadius: 3,
-                        }}
-                    >
-                        <MenuItem sx={{ borderRadius: 0, width: 250 }} value="">
-                            Chọn trạng thái
-                        </MenuItem>
-                        {Object.keys(LPStatus).map((key) => (
-                            <MenuItem
-                                key={key}
-                                sx={{ borderRadius: 0, width: 250 }}
-                                value={LPStatus[key]}
-                            >
-                                {LPStatus[key]}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-            </Box>
-
             <TableContainer
                 component={Paper}
                 sx={{
-                    mt: 2,
                     backgroundColor: "rgba(255, 255, 255, 0.15)",
                 }}
             >
@@ -175,30 +96,28 @@ export default function MyAuction() {
                                 sx={{ fontWeight: 600, whiteSpace: "nowrap" }}
                                 align="center"
                             >
-                                Thời gian đấu giá
+                                Loại xe
                             </TableCell>
                             <TableCell
                                 sx={{ fontWeight: 600, whiteSpace: "nowrap" }}
                                 align="center"
                             >
-                                Kết quả
+                                Thời gian đấu giá
                             </TableCell>
                             <TableCell sx={{ fontWeight: 600 }}></TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {filteredLicensePlates.map((auctionRoom, index) => (
+                        {licensePlates.map((auctionRoom, index) => (
                             <TableRow key={auctionRoom.id}>
                                 <TableCell align="center">{index + 1}</TableCell>
                                 <TableCell align="center">{auctionRoom.licensePlate['plateNumber']}</TableCell>
                                 <TableCell align="center">{auctionRoom.licensePlate['province']}</TableCell>
-
+                                <TableCell align="center">{auctionRoom.licensePlate['vehicleType']}</TableCell>
 
                                 <TableCell sx={{ whiteSpace: "nowrap" }} align="center">
                                     {auctionRoom.startTime}
                                 </TableCell>
-
-                                <TableCell align="center">{auctionRoom.licensePlate['vehicleType']}</TableCell>
 
                                 <TableCell>
                                     <Button
@@ -216,9 +135,9 @@ export default function MyAuction() {
                                             backgroundColor: "primary",
                                             color: "white",
                                         }}
-                                        startIcon={<VisibilityIcon style={{ fontSize: 14 }} />}
+                                        startIcon={<CheckIcon style={{ fontSize: 14 }} />}
                                     >
-                                        Xem phòng
+                                        Xác nhận
                                     </Button>
                                 </TableCell>
                             </TableRow>
@@ -226,7 +145,7 @@ export default function MyAuction() {
                     </TableBody>
                 </Table>
             </TableContainer>
-            {filteredLicensePlates.length === 0 && (
+            {licensePlates.length === 0 && (
                 <Box
                     sx={{
                         display: "flex",
@@ -251,8 +170,8 @@ export default function MyAuction() {
                 onClose={toggleAuctionViewMdal}
             >
                 {selectedAutionRoom && (
-                    <AuctionRegisterModal
-                        title="XEM PHÒNG ĐẤU GIÁ"
+                    <PaymentDialog
+                        title="XÁC NHẬN THANH TOÁN"
                         auctionRoom={selectedAutionRoom}
                         close={toggleAuctionViewMdal}
                     />

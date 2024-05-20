@@ -43,7 +43,8 @@ export default function ReadOnlyTable({ idToken, login }) {
   const navigate = useNavigate();
 
   const filteredLicensePlates = licensePlates
-    ? licensePlates.filter((plate) => {
+    ? licensePlates.filter((licensePlate) => {
+      const plate = licensePlate.licensePlate
       const matchesLPprovince = !province || plate.province === province;
       const matchesVehicleType =
         !vehicleType || plate.vehicleType === vehicleType;

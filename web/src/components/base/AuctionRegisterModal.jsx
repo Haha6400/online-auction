@@ -44,7 +44,9 @@ export default function AuctionRegisterModal({ title, auctionRoom, close }) {
       });
     }
     if (registerCheck) toggleFailModal()
-    else toggleSuccessModal();
+    else {
+      toggleSuccessModal();
+    }
   }
 
   React.useEffect(() => {
@@ -213,7 +215,7 @@ export default function AuctionRegisterModal({ title, auctionRoom, close }) {
                   {new Intl.NumberFormat("vi-VN", {
                     style: "currency",
                     currency: "VND",
-                  }).format(auctionRoom.initPrice)}
+                  }).format(auctionRoom.initialPrice)}
                 </Typography>
               </Stack>
             </Box>
@@ -241,39 +243,39 @@ export default function AuctionRegisterModal({ title, auctionRoom, close }) {
               </Stack>
             </Box>
           </Grid>
-        </Grid>
+          {/* Action button */}
+          <Grid container spacing={3} sx={{ mt: 0.5 }}>
+            {(title !== "XEM PHÒNG ĐẤU GIÁ") && (
+              <>
+                <Grid item xs={6}>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    sx={{ width: "100%" }}
+                    onClick={close}
+                  >
+                    Hủy bỏ
+                  </Button>
+                </Grid>
+                <Grid item xs={6}>
+                  <Button
+                    variant="contained"
+                    sx={{ width: "100%", background: "#079455" }}
+                    onClick={handleRegisterButton}
+                  >
+                    Đăng ký
+                  </Button>
+                  <Dialog open={openSuccessModal} onClose={toggleSuccessModal}>
+                    <ResultModal type="REGISTER_AUCTION_SUCCESS" close={toggleSuccessModal} />
+                  </Dialog>
+                  <Dialog open={openFailModal} onClose={toggleFailModal}>
+                    <ResultModal type="REGISTER_AUCTION_FAIL" close={toggleFailModal} />
+                  </Dialog>
+                </Grid>
+              </>
+            )}
 
-        {/* Action button */}
-        <Grid container spacing={3} sx={{ mt: 0.5 }}>
-          {(title !== "XEM PHÒNG ĐẤU GIÁ") && (
-            <>
-              <Grid item xs={6}>
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  sx={{ width: "100%" }}
-                  onClick={close}
-                >
-                  Hủy bỏ
-                </Button>
-              </Grid>
-              <Grid item xs={6}>
-                <Button
-                  variant="contained"
-                  sx={{ width: "100%", background: "#079455" }}
-                  onClick={handleRegisterButton}
-                >
-                  Đăng ký
-                </Button>
-                <Dialog open={openSuccessModal} onClose={toggleSuccessModal}>
-                  <ResultModal type="REGISTER_AUCTION_SUCCESS" close={toggleSuccessModal} />
-                </Dialog>
-                <Dialog open={openFailModal} onClose={toggleFailModal}>
-                  <ResultModal type="REGISTER_AUCTION_FAIL" close={toggleFailModal} />
-                </Dialog>
-              </Grid>
-            </>
-          )}
+          </Grid>
           {(title === "XEM PHÒNG ĐẤU GIÁ") && (
             <>
               <Button
@@ -286,7 +288,6 @@ export default function AuctionRegisterModal({ title, auctionRoom, close }) {
             </>
           )}
         </Grid>
-
         <Box sx={{ display: "flex" }}></Box>
       </Box>
     </Container >

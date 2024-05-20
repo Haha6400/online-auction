@@ -73,6 +73,6 @@ export const LPprovinces = {
 };
 
 export const LPStatus = {
-    SUCCESS: "Thành công",
-    FAIL: "Thất bại"
+    SUCCESS: "Đấu giá thành công",
+    FAIL: "Đấu giá thất bại"
 }

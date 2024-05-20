@@ -47,6 +47,13 @@ export default function ResultModal({ type, close }) {
             )}
             {type === "REGISTER_AUCTION_SUCCESS" && "Đăng ký đấu giá thành công!"}
             {type === "REGISTER_AUCTION_FAIL" && "Bạn đã đăng ký phòng đấu giá này trước đó!"}
+            {type === "UPDATE_ACCOUNT_SUCCESS" && "Cập nhật thông tin tài khoản thành công!"}
+            {type === "UPDATE_ACCOUNT_FAIL" && (
+              <>
+                Cập nhật thông tin tài khoản thất bại!<br />
+                Vui lòng kiểm tra lại thông tin.
+              </>
+            )}
           </Typography>
         </Box>
 

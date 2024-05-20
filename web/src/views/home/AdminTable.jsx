@@ -225,12 +225,6 @@ export default function AdminTable({ idToken }) {
               >
                 Loại xe
               </TableCell>
-              <TableCell
-                sx={{ fontWeight: 600, whiteSpace: "nowrap" }}
-                align="center"
-              >
-                Thời gian đấu giá
-              </TableCell>
               <TableCell sx={{ fontWeight: 600 }}></TableCell>
             </TableRow>
           </TableHead>
@@ -246,8 +240,14 @@ export default function AdminTable({ idToken }) {
                 <TableCell width={300}>
                   <Button
                     variant="contained"
-                    sx={{ mr: 2, ml: 5 }}
-                    style={{ background: "#079455" }}
+                    color="primary"
+                    size="small"
+                    sx={{
+                      mr: 2, ml: 5,
+                      whiteSpace: "nowrap",
+                      backgroundColor: "primary",
+                      color: "white",
+                    }}
                     startIcon={<EditNoteIcon style={{ fontSize: 16 }} />}
                     onClick={() => {
                       setCurrentLP(licensePlate);
@@ -259,8 +259,11 @@ export default function AdminTable({ idToken }) {
                   </Button>
                   <Button
                     variant="contained"
+                    size="small"
                     style={{
                       background: "#e05757",
+                      whiteSpace: "nowrap",
+                      color: "white",
                     }}
                     startIcon={<DeleteIcon style={{ fontSize: 14 }} />}
                     onClick={async () => {
