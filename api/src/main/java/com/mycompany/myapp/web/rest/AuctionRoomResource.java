@@ -1,18 +1,14 @@
 package com.mycompany.myapp.web.rest;
 
-import com.mycompany.myapp.domain.AuctionRoom;
-import com.mycompany.myapp.domain.Bid;
 import com.mycompany.myapp.repository.AuctionRoomRepository;
 import com.mycompany.myapp.service.AuctionRoomService;
 import com.mycompany.myapp.service.UserService;
 import com.mycompany.myapp.service.dto.AuctionRoomDTO;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
-import com.mycompany.myapp.web.rest.vm.CustomAuctionResult;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.Instant;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -151,7 +147,6 @@ public class AuctionRoomResource {
         @RequestParam(name = "filter", required = false) String filter,
         @RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload
     ) {
-        List<CustomAuctionResult> res = new ArrayList<>();
         if ("in-progress".equals(filter)) {
             return auctionRoomService.getAllAuctionsInProgress(Instant.now());
         } else if ("asc".equals(filter)) {

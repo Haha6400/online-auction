@@ -1,16 +1,15 @@
 package com.mycompany.myapp.service.impl;
 
 import com.mycompany.myapp.domain.AuctionRoom;
+import com.mycompany.myapp.domain.Bid;
 import com.mycompany.myapp.domain.WinningBid;
+import com.mycompany.myapp.domain.enumeration.PaymentStatus;
 import com.mycompany.myapp.repository.AuctionRoomRepository;
 import com.mycompany.myapp.repository.UserRepository;
 import com.mycompany.myapp.repository.WinningBidRepository;
 import com.mycompany.myapp.service.AuctionRoomService;
 import com.mycompany.myapp.service.WinningBidService;
-import com.mycompany.myapp.service.dto.AuctionRoomDTO;
-import com.mycompany.myapp.service.dto.LicensePlateDTO;
-import com.mycompany.myapp.service.dto.UserDTO;
-import com.mycompany.myapp.service.dto.WinningBidDTO;
+import com.mycompany.myapp.service.dto.*;
 import com.mycompany.myapp.service.mapper.WinningBidMapper;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -37,6 +36,8 @@ public class WinningBidServiceImpl implements WinningBidService {
     private final UserRepository userRepository;
     private final AuctionRoomRepository auctionRoomRepository;
 
+    private List<CustomWinningBidResponse> result;
+
     public WinningBidServiceImpl(
         WinningBidRepository winningBidRepository,
         WinningBidMapper winningBidMapper,
@@ -56,6 +57,7 @@ public class WinningBidServiceImpl implements WinningBidService {
         AuctionRoom auctionRoom = auctionRoomRepository.findById(winningBidDTO.getAuctionRoom().getId()).get();
         auctionRoom.setWinningBid(winningBid);
         auctionRoomRepository.save(auctionRoom);
+        winningBid.setPaymentStatus(PaymentStatus.UNPAID);
         winningBid = winningBidRepository.save(winningBid);
         return winningBidMapper.toDto(winningBid);
     }
@@ -69,11 +71,11 @@ public class WinningBidServiceImpl implements WinningBidService {
     }
 
     @Override
-    public Optional<WinningBidDTO> partialUpdate(WinningBidDTO winningBidDTO) {
+    public Optional<WinningBidDTO> partialUpdate(WinningBidDTO winningBidDTO, Long id) {
         log.debug("Request to partially update WinningBid : {}", winningBidDTO);
 
         return winningBidRepository
-            .findById(winningBidDTO.getId())
+            .findById(id)
             .map(existingWinningBid -> {
                 winningBidMapper.partialUpdate(existingWinningBid, winningBidDTO);
 
@@ -104,17 +106,39 @@ public class WinningBidServiceImpl implements WinningBidService {
     }
 
     @Override
-    public List<LicensePlateDTO> findAllWinningLicenseByUsers(UserDTO userDTO) {
-        List<LicensePlateDTO> result = new ArrayList<>();
+    public List<CustomWinningBidResponse> findAllWinningLicenseByUsers(UserDTO userDTO) {
+        result = new ArrayList<>();
         List<WinningBidDTO> tmp = winningBidRepository
             .findAllByBid_User(userRepository.findOneById(userDTO.getId()))
             .stream()
             .map(winningBidMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
-
         for (WinningBidDTO w : tmp) {
-            result.add(w.getAuctionRoom().getLicensePlate());
+            result.add(setCustomLicense(w));
         }
         return result;
+    }
+
+    @Override
+    public List<CustomWinningBidResponse> findAllWinningLicenseByStatus(UserDTO userDTO, PaymentStatus paymentStatus) {
+        result = new ArrayList<>();
+        List<WinningBidDTO> tmp = winningBidRepository
+            .findAllByBid_User(userRepository.findOneById(userDTO.getId()))
+            .stream()
+            .filter(winningBid -> winningBid.getPaymentStatus() == paymentStatus)
+            .map(winningBidMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
+
+        for (WinningBidDTO w : tmp) {
+            result.add(setCustomLicense(w));
+        }
+        return result;
+    }
+
+    CustomWinningBidResponse setCustomLicense(WinningBidDTO winningBidDTO) {
+        BidDTO bid = winningBidDTO.getBid();
+        float finalPrice = bid.getPriceBeforeBidding() + bid.getPriceStep() * bid.getNumberOfPriceStep();
+        CustomWinningBidResponse customWinningBidResponse = new CustomWinningBidResponse();
+        return customWinningBidResponse.licenseToCustom(winningBidDTO.getAuctionRoom().getLicensePlate(), finalPrice);
     }
 }

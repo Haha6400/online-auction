@@ -1,14 +1,10 @@
 package com.mycompany.myapp.service.dto;
 
+import com.mycompany.myapp.domain.LicensePlate;
 import com.mycompany.myapp.domain.enumeration.LicensePlateStatus;
-import java.io.Serializable;
 import java.util.Objects;
 
-/**
- * A DTO for the {@link com.mycompany.myapp.domain.LicensePlate} entity.
- */
-@SuppressWarnings("common-java:DuplicatedBlocks")
-public class LicensePlateDTO {
+public class CustomWinningBidResponse {
 
     private Long id;
 
@@ -20,6 +16,14 @@ public class LicensePlateDTO {
 
     private String province;
     private float finalPrice;
+
+    public float getFinalPrice() {
+        return finalPrice;
+    }
+
+    public void setFinalPrice(float finalPrice) {
+        this.finalPrice = finalPrice;
+    }
 
     public Long getId() {
         return id;
@@ -61,6 +65,35 @@ public class LicensePlateDTO {
         this.province = province;
     }
 
+    public CustomWinningBidResponse(
+        Long id,
+        String plateNumber,
+        LicensePlateStatus status,
+        String vehicleType,
+        String province,
+        float finalPrice
+    ) {
+        this.id = id;
+        this.plateNumber = plateNumber;
+        this.status = status;
+        this.vehicleType = vehicleType;
+        this.province = province;
+        this.finalPrice = finalPrice;
+    }
+
+    public CustomWinningBidResponse() {}
+
+    public CustomWinningBidResponse licenseToCustom(LicensePlateDTO licensePlateDTO, float finalPrice) {
+        return new CustomWinningBidResponse(
+            licensePlateDTO.getId(),
+            licensePlateDTO.getPlateNumber(),
+            licensePlateDTO.getStatus(),
+            licensePlateDTO.getVehicleType(),
+            licensePlateDTO.getProvince(),
+            finalPrice
+        );
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -70,11 +103,11 @@ public class LicensePlateDTO {
             return false;
         }
 
-        LicensePlateDTO licensePlateDTO = (LicensePlateDTO) o;
+        CustomWinningBidResponse customWinningBidResponse = (CustomWinningBidResponse) o;
         if (this.id == null) {
             return false;
         }
-        return Objects.equals(this.id, licensePlateDTO.id);
+        return Objects.equals(this.id, customWinningBidResponse.id);
     }
 
     @Override

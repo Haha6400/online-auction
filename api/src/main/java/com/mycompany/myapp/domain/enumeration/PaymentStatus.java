@@ -7,4 +7,5 @@ public enum PaymentStatus {
     UNPAID,
     PAID,
     PAST_DUE,
+    WAITING_CONFIRM,
 }

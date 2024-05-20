@@ -2,17 +2,14 @@ package com.mycompany.myapp.service.impl;
 
 import com.mycompany.myapp.domain.AuctionRoom;
 import com.mycompany.myapp.domain.Bid;
-import com.mycompany.myapp.domain.User;
 import com.mycompany.myapp.domain.enumeration.LicensePlateStatus;
 import com.mycompany.myapp.repository.AuctionRoomRepository;
 import com.mycompany.myapp.repository.UserRepository;
 import com.mycompany.myapp.service.AuctionRoomService;
 import com.mycompany.myapp.service.LicensePlateService;
-import com.mycompany.myapp.service.UserService;
 import com.mycompany.myapp.service.dto.AuctionRoomDTO;
 import com.mycompany.myapp.service.dto.UserDTO;
 import com.mycompany.myapp.service.mapper.AuctionRoomMapper;
-import com.mycompany.myapp.web.rest.vm.CustomAuctionResult;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.LinkedList;
