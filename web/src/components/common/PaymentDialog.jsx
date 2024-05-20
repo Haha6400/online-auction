@@ -36,15 +36,15 @@ export default function PaymentDialog({ title, auctionRoom, close }) {
     };
 
     const handleSubmit = async (id) => {
-        setOpenSuccessModal(!openSuccessModal);
-        console.log("id", id)
-        axios.patch(`http://localhost:8080/api/license-plates/${id}`, {
-            "id": id,
-            "status": "PAYMENT_COMPLETED",
-        },
-            {
-                headers: { Authorization: `Bearer ${idToken}` }
-            })
+        // setOpenSuccessModal(!openSuccessModal);
+        // console.log("id", id)
+        // axios.patch(`http://localhost:8080/api/license-plates/${id}`, {
+        //     "id": id,
+        //     "status": "PAYMENT_COMPLETED",
+        // },
+        //     {
+        //         headers: { Authorization: `Bearer ${idToken}` }
+        //     })
     };
 
 
@@ -310,7 +310,7 @@ export default function PaymentDialog({ title, auctionRoom, close }) {
                                     {new Intl.NumberFormat("vi-VN", {
                                         style: "currency",
                                         currency: "VND",
-                                    }).format(auctionRoom.priceStep)}
+                                    }).format(auctionRoom.finalPrice)}
                                 </Typography>
                             </Stack>
                         </Box>
@@ -361,9 +361,15 @@ export default function PaymentDialog({ title, auctionRoom, close }) {
                                     </Box>
                                     <Stack>
                                         <Typography>Người trúng</Typography>
-                                        <Typography sx={{ fontWeight: 600 }}>
-                                            Tên người trúng
-                                        </Typography>
+                                        (auctionRoom.winner && (
+                                        <>
+                                            <Typography sx={{ fontWeight: 600 }}>
+
+                                                {auctionRoom.winner['fullName']}
+                                            </Typography>
+                                        </>
+                                        ))
+
                                     </Stack>
 
                                 </Box>
