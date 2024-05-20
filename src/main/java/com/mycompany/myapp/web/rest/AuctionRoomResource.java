@@ -152,13 +152,13 @@ public class AuctionRoomResource {
         @RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload
     ) {
         List<CustomAuctionResult> res = new ArrayList<>();
-        if ("desc".equals(filter)) {
-            return auctionRoomService.getAllOrderByCreatedDateDesc();
+        if ("in-progress".equals(filter)) {
+            return auctionRoomService.getAllAuctionsInProgress(Instant.now());
         } else if ("asc".equals(filter)) {
             return auctionRoomService.getAllOrderByCreatedDateAsc();
         }
         log.debug("REST request to get all AuctionRooms");
-        return auctionRoomService.getAllAuctionsInProgress(Instant.now());
+        return auctionRoomService.getAllOrderByCreatedDateDesc();
     }
 
     /**
