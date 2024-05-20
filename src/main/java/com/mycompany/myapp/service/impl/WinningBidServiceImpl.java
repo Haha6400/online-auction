@@ -38,6 +38,8 @@ public class WinningBidServiceImpl implements WinningBidService {
     private final UserRepository userRepository;
     private final AuctionRoomRepository auctionRoomRepository;
 
+    private List<LicensePlateDTO> result;
+
     public WinningBidServiceImpl(
         WinningBidRepository winningBidRepository,
         WinningBidMapper winningBidMapper,
@@ -71,11 +73,11 @@ public class WinningBidServiceImpl implements WinningBidService {
     }
 
     @Override
-    public Optional<WinningBidDTO> partialUpdate(WinningBidDTO winningBidDTO) {
+    public Optional<WinningBidDTO> partialUpdate(WinningBidDTO winningBidDTO, Long id) {
         log.debug("Request to partially update WinningBid : {}", winningBidDTO);
 
         return winningBidRepository
-            .findById(winningBidDTO.getId())
+            .findById(id)
             .map(existingWinningBid -> {
                 winningBidMapper.partialUpdate(existingWinningBid, winningBidDTO);
 
@@ -107,10 +109,26 @@ public class WinningBidServiceImpl implements WinningBidService {
 
     @Override
     public List<LicensePlateDTO> findAllWinningLicenseByUsers(UserDTO userDTO) {
-        List<LicensePlateDTO> result = new ArrayList<>();
+        result = new ArrayList<>();
         List<WinningBidDTO> tmp = winningBidRepository
             .findAllByBid_User(userRepository.findOneById(userDTO.getId()))
             .stream()
+            .map(winningBidMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
+
+        for (WinningBidDTO w : tmp) {
+            result.add(w.getAuctionRoom().getLicensePlate());
+        }
+        return result;
+    }
+
+    @Override
+    public List<LicensePlateDTO> findAllWinningLicenseByStatus(UserDTO userDTO, PaymentStatus paymentStatus) {
+        result = new ArrayList<>();
+        List<WinningBidDTO> tmp = winningBidRepository
+            .findAllByBid_User(userRepository.findOneById(userDTO.getId()))
+            .stream()
+            .filter(winningBid -> winningBid.getPaymentStatus() == paymentStatus)
             .map(winningBidMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
 

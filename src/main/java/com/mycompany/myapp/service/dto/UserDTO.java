@@ -21,7 +21,7 @@ public class UserDTO {
         this.id = user.getId();
         // Customize it here if you need, or not, firstName/lastName/etc
         this.login = user.getLogin();
-        this.fullName = user.getFirstName() + user.getLastName();
+        this.fullName = user.getFirstName() + " " + user.getLastName();
     }
 
     public String getFullName() {

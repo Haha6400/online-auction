@@ -1,5 +1,6 @@
 package com.mycompany.myapp.web.rest;
 
+import com.mycompany.myapp.domain.enumeration.PaymentStatus;
 import com.mycompany.myapp.repository.WinningBidRepository;
 import com.mycompany.myapp.service.UserService;
 import com.mycompany.myapp.service.WinningBidService;
@@ -113,23 +114,14 @@ public class WinningBidResource {
         @RequestBody WinningBidDTO winningBidDTO
     ) throws URISyntaxException {
         log.debug("REST request to partial update WinningBid partially : {}, {}", id, winningBidDTO);
-        if (winningBidDTO.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-        }
-        if (!Objects.equals(id, winningBidDTO.getId())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
-        }
 
         if (!winningBidRepository.existsById(id)) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Optional<WinningBidDTO> result = winningBidService.partialUpdate(winningBidDTO);
+        Optional<WinningBidDTO> result = winningBidService.partialUpdate(winningBidDTO, id);
 
-        return ResponseUtil.wrapOrNotFound(
-            result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, winningBidDTO.getId().toString())
-        );
+        return ResponseUtil.wrapOrNotFound(result, HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, id.toString()));
     }
 
     /**
@@ -172,8 +164,15 @@ public class WinningBidResource {
     }
 
     @GetMapping("/self/all")
-    public List<LicensePlateDTO> getAllByCurrentUser() {
+    public List<LicensePlateDTO> getAllByCurrentUser(@RequestParam(name = "filter", required = false) String filter) {
         log.debug("REST request to get all WinningBids");
+        if ("paid".equals(filter)) {
+            return winningBidService.findAllWinningLicenseByStatus(userService.getCurrentUserDTO().get(), PaymentStatus.PAID);
+        } else if ("unpaid".equals(filter)) {
+            return winningBidService.findAllWinningLicenseByStatus(userService.getCurrentUserDTO().get(), PaymentStatus.UNPAID);
+        } else if ("past_due".equals(filter)) {
+            return winningBidService.findAllWinningLicenseByStatus(userService.getCurrentUserDTO().get(), PaymentStatus.PAST_DUE);
+        }
         return winningBidService.findAllWinningLicenseByUsers(userService.getCurrentUserDTO().get());
     }
 }

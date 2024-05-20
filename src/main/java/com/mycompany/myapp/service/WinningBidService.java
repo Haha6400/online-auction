@@ -1,5 +1,6 @@
 package com.mycompany.myapp.service;
 
+import com.mycompany.myapp.domain.enumeration.PaymentStatus;
 import com.mycompany.myapp.service.dto.LicensePlateDTO;
 import com.mycompany.myapp.service.dto.UserDTO;
 import com.mycompany.myapp.service.dto.WinningBidDTO;
@@ -32,7 +33,7 @@ public interface WinningBidService {
      * @param winningBidDTO the entity to update partially.
      * @return the persisted entity.
      */
-    Optional<WinningBidDTO> partialUpdate(WinningBidDTO winningBidDTO);
+    Optional<WinningBidDTO> partialUpdate(WinningBidDTO winningBidDTO, Long id);
 
     /**
      * Get all the winningBids.
@@ -56,4 +57,5 @@ public interface WinningBidService {
      */
     void delete(Long id);
     List<LicensePlateDTO> findAllWinningLicenseByUsers(UserDTO userDTO);
+    List<LicensePlateDTO> findAllWinningLicenseByStatus(UserDTO userDTO, PaymentStatus paymentStatus);
 }
