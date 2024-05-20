@@ -41,7 +41,7 @@ public class AuctionRoomServiceImpl implements AuctionRoomService {
     private final AuctionRoomMapper auctionRoomMapper;
     private final UserRepository userRepository;
     private final LicensePlateService licensePlateService;
-    private List<CustomAuctionResult> res;
+    private List<AuctionRoomDTO> res;
 
     public AuctionRoomServiceImpl(
         AuctionRoomRepository auctionRoomRepository,
@@ -97,15 +97,15 @@ public class AuctionRoomServiceImpl implements AuctionRoomService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<CustomAuctionResult> findAll() {
+    public List<AuctionRoomDTO> findAll() {
         log.debug("Request to get all AuctionRooms");
-        List<CustomAuctionResult> res = new ArrayList<>();
+        res = new ArrayList<>();
         auctionRoomRepository
             .findAll()
             .forEach(auctionRoomDTO -> {
                 AuctionRoom auctionRoom = auctionRoomRepository.findById(auctionRoomDTO.getId()).get();
 
-                res.add(setCustomResult(auctionRoom));
+                res.add(setAuctionRoomDTO(auctionRoom));
             });
         return res;
     }
@@ -142,7 +142,7 @@ public class AuctionRoomServiceImpl implements AuctionRoomService {
     }
 
     @Override
-    public List<CustomAuctionResult> getAllOrderByCreatedDateDesc() {
+    public List<AuctionRoomDTO> getAllOrderByCreatedDateDesc() {
         res = new ArrayList<>();
 
         auctionRoomRepository
@@ -150,13 +150,13 @@ public class AuctionRoomServiceImpl implements AuctionRoomService {
             .forEach(auctionRoomDTO -> {
                 AuctionRoom auctionRoom = auctionRoomRepository.findById(auctionRoomDTO.getId()).get();
 
-                res.add(setCustomResult(auctionRoom));
+                res.add(setAuctionRoomDTO(auctionRoom));
             });
         return res;
     }
 
     @Override
-    public List<CustomAuctionResult> getAllOrderByCreatedDateAsc() {
+    public List<AuctionRoomDTO> getAllOrderByCreatedDateAsc() {
         res = new ArrayList<>();
 
         auctionRoomRepository
@@ -164,7 +164,7 @@ public class AuctionRoomServiceImpl implements AuctionRoomService {
             .forEach(auctionRoomDTO -> {
                 AuctionRoom auctionRoom = auctionRoomRepository.findById(auctionRoomDTO.getId()).get();
 
-                res.add(setCustomResult(auctionRoom));
+                res.add(setAuctionRoomDTO(auctionRoom));
             });
         return res;
     }
@@ -244,16 +244,14 @@ public class AuctionRoomServiceImpl implements AuctionRoomService {
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
-    public CustomAuctionResult setCustomResult(AuctionRoom auctionRoom) {
-        CustomAuctionResult auctionResult = new CustomAuctionResult();
+    public AuctionRoomDTO setAuctionRoomDTO(AuctionRoom auctionRoom) {
+        AuctionRoomDTO auctionResult = auctionRoomMapper.toDto(auctionRoom);
         float finalPrice = 0;
         if (auctionRoom.getWinningBid() != null) {
             Bid bid = auctionRoom.getWinningBid().getBid();
             finalPrice = bid.getPriceBeforeBidding() + bid.getPriceStep() * bid.getPriceBeforeBidding();
-            auctionResult.setUserDTO(new UserDTO(auctionRoom.getWinningBid().getBid().getUser()));
+            auctionResult.setWinner(new UserDTO(auctionRoom.getWinningBid().getBid().getUser()));
         }
-
-        auctionResult.setAuctionRoomDTO(auctionRoomMapper.toDto(auctionRoom));
         auctionResult.setFinalPrice(finalPrice);
         return auctionResult;
     }

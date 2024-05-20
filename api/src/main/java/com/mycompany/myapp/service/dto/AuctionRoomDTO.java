@@ -25,6 +25,24 @@ public class AuctionRoomDTO {
     private Float priceStep;
 
     private LicensePlateDTO licensePlate;
+    private UserDTO winner;
+    private Float finalPrice;
+
+    public UserDTO getWinner() {
+        return winner;
+    }
+
+    public void setWinner(UserDTO winner) {
+        this.winner = winner;
+    }
+
+    public Float getFinalPrice() {
+        return finalPrice;
+    }
+
+    public void setFinalPrice(Float finalPrice) {
+        this.finalPrice = finalPrice;
+    }
 
     private Set<UserDTO> users = new HashSet<>();
 
