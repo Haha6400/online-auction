@@ -1,6 +1,7 @@
 package com.mycompany.myapp.service;
 
 import com.mycompany.myapp.domain.enumeration.PaymentStatus;
+import com.mycompany.myapp.service.dto.CustomWinningBidResponse;
 import com.mycompany.myapp.service.dto.LicensePlateDTO;
 import com.mycompany.myapp.service.dto.UserDTO;
 import com.mycompany.myapp.service.dto.WinningBidDTO;
@@ -56,6 +57,6 @@ public interface WinningBidService {
      * @param id the id of the entity.
      */
     void delete(Long id);
-    List<LicensePlateDTO> findAllWinningLicenseByUsers(UserDTO userDTO);
-    List<LicensePlateDTO> findAllWinningLicenseByStatus(UserDTO userDTO, PaymentStatus paymentStatus);
+    List<CustomWinningBidResponse> findAllWinningLicenseByUsers(UserDTO userDTO);
+    List<CustomWinningBidResponse> findAllWinningLicenseByStatus(UserDTO userDTO, PaymentStatus paymentStatus);
 }

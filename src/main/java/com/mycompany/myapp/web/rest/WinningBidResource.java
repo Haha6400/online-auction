@@ -164,7 +164,7 @@ public class WinningBidResource {
     }
 
     @GetMapping("/self/all")
-    public List<LicensePlateDTO> getAllByCurrentUser(@RequestParam(name = "filter", required = false) String filter) {
+    public List<?> getAllByCurrentUser(@RequestParam(name = "filter", required = false) String filter) {
         log.debug("REST request to get all WinningBids");
         if ("paid".equals(filter)) {
             return winningBidService.findAllWinningLicenseByStatus(userService.getCurrentUserDTO().get(), PaymentStatus.PAID);

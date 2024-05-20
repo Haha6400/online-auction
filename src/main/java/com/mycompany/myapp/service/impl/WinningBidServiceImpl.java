@@ -1,6 +1,7 @@
 package com.mycompany.myapp.service.impl;
 
 import com.mycompany.myapp.domain.AuctionRoom;
+import com.mycompany.myapp.domain.Bid;
 import com.mycompany.myapp.domain.WinningBid;
 import com.mycompany.myapp.domain.enumeration.PaymentStatus;
 import com.mycompany.myapp.repository.AuctionRoomRepository;
@@ -8,10 +9,7 @@ import com.mycompany.myapp.repository.UserRepository;
 import com.mycompany.myapp.repository.WinningBidRepository;
 import com.mycompany.myapp.service.AuctionRoomService;
 import com.mycompany.myapp.service.WinningBidService;
-import com.mycompany.myapp.service.dto.AuctionRoomDTO;
-import com.mycompany.myapp.service.dto.LicensePlateDTO;
-import com.mycompany.myapp.service.dto.UserDTO;
-import com.mycompany.myapp.service.dto.WinningBidDTO;
+import com.mycompany.myapp.service.dto.*;
 import com.mycompany.myapp.service.mapper.WinningBidMapper;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -38,7 +36,7 @@ public class WinningBidServiceImpl implements WinningBidService {
     private final UserRepository userRepository;
     private final AuctionRoomRepository auctionRoomRepository;
 
-    private List<LicensePlateDTO> result;
+    private List<CustomWinningBidResponse> result;
 
     public WinningBidServiceImpl(
         WinningBidRepository winningBidRepository,
@@ -108,22 +106,21 @@ public class WinningBidServiceImpl implements WinningBidService {
     }
 
     @Override
-    public List<LicensePlateDTO> findAllWinningLicenseByUsers(UserDTO userDTO) {
+    public List<CustomWinningBidResponse> findAllWinningLicenseByUsers(UserDTO userDTO) {
         result = new ArrayList<>();
         List<WinningBidDTO> tmp = winningBidRepository
             .findAllByBid_User(userRepository.findOneById(userDTO.getId()))
             .stream()
             .map(winningBidMapper::toDto)
             .collect(Collectors.toCollection(LinkedList::new));
-
         for (WinningBidDTO w : tmp) {
-            result.add(w.getAuctionRoom().getLicensePlate());
+            result.add(setCustomLicense(w));
         }
         return result;
     }
 
     @Override
-    public List<LicensePlateDTO> findAllWinningLicenseByStatus(UserDTO userDTO, PaymentStatus paymentStatus) {
+    public List<CustomWinningBidResponse> findAllWinningLicenseByStatus(UserDTO userDTO, PaymentStatus paymentStatus) {
         result = new ArrayList<>();
         List<WinningBidDTO> tmp = winningBidRepository
             .findAllByBid_User(userRepository.findOneById(userDTO.getId()))
@@ -133,8 +130,15 @@ public class WinningBidServiceImpl implements WinningBidService {
             .collect(Collectors.toCollection(LinkedList::new));
 
         for (WinningBidDTO w : tmp) {
-            result.add(w.getAuctionRoom().getLicensePlate());
+            result.add(setCustomLicense(w));
         }
         return result;
+    }
+
+    CustomWinningBidResponse setCustomLicense(WinningBidDTO winningBidDTO) {
+        BidDTO bid = winningBidDTO.getBid();
+        float finalPrice = bid.getPriceBeforeBidding() + bid.getPriceStep() * bid.getNumberOfPriceStep();
+        CustomWinningBidResponse customWinningBidResponse = new CustomWinningBidResponse();
+        return customWinningBidResponse.licenseToCustom(winningBidDTO.getAuctionRoom().getLicensePlate(), finalPrice);
     }
 }
