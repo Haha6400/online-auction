@@ -2,6 +2,7 @@ package com.mycompany.myapp.service.impl;
 
 import com.mycompany.myapp.domain.AuctionRoom;
 import com.mycompany.myapp.domain.WinningBid;
+import com.mycompany.myapp.domain.enumeration.PaymentStatus;
 import com.mycompany.myapp.repository.AuctionRoomRepository;
 import com.mycompany.myapp.repository.UserRepository;
 import com.mycompany.myapp.repository.WinningBidRepository;
@@ -56,6 +57,7 @@ public class WinningBidServiceImpl implements WinningBidService {
         AuctionRoom auctionRoom = auctionRoomRepository.findById(winningBidDTO.getAuctionRoom().getId()).get();
         auctionRoom.setWinningBid(winningBid);
         auctionRoomRepository.save(auctionRoom);
+        winningBid.setPaymentStatus(PaymentStatus.UNPAID);
         winningBid = winningBidRepository.save(winningBid);
         return winningBidMapper.toDto(winningBid);
     }
