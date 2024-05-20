@@ -63,7 +63,7 @@ export default function PaymentHistory() {
     const fetchLicensePlates = async () => {
         const res = await getAllAuctionRoom();
         const comingAuctionRooms = res.filter(
-            (auctionRoom) => new Date(auctionRoom.startTime) > new Date(),
+            (auctionRoom) => new Date(auctionRoom.startTime) < new Date(),
         );
 
         setLicensePlates(

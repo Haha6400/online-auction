@@ -8,4 +8,5 @@ public enum LicensePlateStatus {
     AWAITING_AUCTION,
     AUCTION_FAILED,
     AUCTION_COMPLETED,
+    PAYMENT_COMPLETED,
 }

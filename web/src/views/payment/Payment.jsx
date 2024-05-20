@@ -13,6 +13,8 @@ import AppAppBar from "../../components/base/AppAppBar";
 import Footer from "../../components/common/Footer";
 import WaitingConfirmPayment from "./WaitingConfirmPayment";
 import PaymentHistory from "./PaymentHistory";
+import { getAllAuctionRoom } from "../../service/user/licensePlateAPI";
+import { formatTime } from "../../utils/timeFormatter";
 
 const items = [
     {
@@ -35,6 +37,8 @@ export default function Payment() {
     };
 
     const selectItem = items[selectedItemIndex];
+
+
 
     return (
         <Stack
@@ -132,8 +136,6 @@ export default function Payment() {
                                                         sx={{ mt: '1px', ml: '2px' }}
                                                     />
                                                 </Typography>
-
-
                                             </Box>
                                         </Box>
                                     </Card>
@@ -168,6 +170,7 @@ export default function Payment() {
                             <Box
                                 sx={{
                                     padding: 2,
+                                    width: "100%",
                                     alignSelf: "center",
                                     bgcolor: "rgba(255, 255, 255, 0.3)",
                                     backgroundSize: "cover",
@@ -178,11 +181,14 @@ export default function Payment() {
                                 {items[selectedItemIndex].title === "Lịch sử thanh toán" && (
                                     <>
                                         <PaymentHistory />
+
                                     </>
                                 )}
+
                                 {items[selectedItemIndex].title === "Danh sách chờ xác nhận" && (
                                     <>
                                         <WaitingConfirmPayment />
+
                                     </>
                                 )}
                             </Box>

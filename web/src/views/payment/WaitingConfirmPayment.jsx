@@ -35,7 +35,6 @@ export default function WaitingConfirmPayment() {
         localStorage.getItem("id_token"),
     );
 
-    const auth = useAuth();
     const [openAuctionModal, setOpenAuctionModal] =
         useState(false);
 
@@ -46,12 +45,12 @@ export default function WaitingConfirmPayment() {
     const toggleAuctionViewMdal = () => {
         setOpenAuctionModal(!openAuctionModal);
     };
-    const fetchLicensePlates = async (userId) => {
+    const fetchLicensePlates = async () => {
         const res = await getAllAuctionRoom();
 
         const comingAuctionRooms = res.filter(
             (auctionRoom) => {
-                return new Date(auctionRoom.startTime) > new Date()
+                return new Date(auctionRoom.startTime) < new Date()
                 // && auctionRoom.users.some(user => user.id === userId)
             }
         );
@@ -67,9 +66,7 @@ export default function WaitingConfirmPayment() {
         );
     };
     useEffect(() => {
-        if (auth.user) {
-            fetchLicensePlates(auth.user.id);
-        }
+        fetchLicensePlates();
     }, []);
 
     return (

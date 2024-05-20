@@ -4,13 +4,9 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { Button, Grid, Stack, Dialog } from "@mui/material";
-import { Formik, Form, Field } from "formik"
 import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-
-import CardContent from '@mui/material/CardContent';
-import CardActions from '@mui/material/CardActions';
-
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import EventIcon from "@mui/icons-material/Event";
@@ -23,20 +19,6 @@ import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import { useAuth } from "../../hooks/AuthProvider";
 import ResultModal from "../base/ResultModal";
 
-import * as Yup from "yup"
-
-//Data
-const initialValues = {
-    paymentCheck: false,
-}
-
-let validationSchema = Yup.object().shape({
-    paymentCheck: Yup.boolean().required("Bắt buộc"),
-})
-
-const handleSubmit = async (values) => {
-    console.log("abs")
-};
 
 export default function PaymentDialog({ title, auctionRoom, close }) {
     const [accountUser, setAccountUser] = React.useState({});
@@ -46,6 +28,25 @@ export default function PaymentDialog({ title, auctionRoom, close }) {
     const [openSuccessModal, setOpenSuccessModal] = React.useState(false);
     const [openFailModal, setOpenFailModal] = React.useState(false);
     const auth = useAuth();
+
+    const [paymentMethod, setPaymentMethod] = React.useState();
+
+    const handlePaymentMethodChange = (event) => {
+        setPaymentMethod(event.target.value);
+    };
+
+    const handleSubmit = async (id) => {
+        setOpenSuccessModal(!openSuccessModal);
+        console.log("id", id)
+        axios.patch(`http://localhost:8080/api/license-plates/${id}`, {
+            "id": id,
+            "status": "PAYMENT_COMPLETED",
+        },
+            {
+                headers: { Authorization: `Bearer ${idToken}` }
+            })
+    };
+
 
     const toggleSuccessModal = () => {
         setOpenSuccessModal(!openSuccessModal);
@@ -84,8 +85,8 @@ export default function PaymentDialog({ title, auctionRoom, close }) {
             <Box
                 sx={{
                     margin: 5,
-                    marginLeft: 2,
-                    marginRight: 2,
+                    marginLeft: 0,
+                    marginRight: 0,
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
@@ -194,7 +195,6 @@ export default function PaymentDialog({ title, auctionRoom, close }) {
                         </Box>
                     </Grid>
 
-
                     <Grid item xs={12} sm={4}>
                         <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
                             <Box
@@ -240,6 +240,7 @@ export default function PaymentDialog({ title, auctionRoom, close }) {
                             </Stack>
                         </Box>
                     </Grid>
+
                     <Grid item xs={12} sm={4}>
                         <Box sx={{ display: "flex", alignItems: "center" }}>
                             <Box
@@ -288,6 +289,7 @@ export default function PaymentDialog({ title, auctionRoom, close }) {
                             </Stack>
                         </Box>
                     </Grid>
+
                     <Grid item xs={12} sm={4}>
                         <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
                             <Box
@@ -308,11 +310,12 @@ export default function PaymentDialog({ title, auctionRoom, close }) {
                                     {new Intl.NumberFormat("vi-VN", {
                                         style: "currency",
                                         currency: "VND",
-                                    }).format(auctionRoom.initialPrice)}
+                                    }).format(auctionRoom.priceStep)}
                                 </Typography>
                             </Stack>
                         </Box>
                     </Grid>
+
                     {(title === "XEM PHÒNG ĐẤU GIÁ") && (
                         <>
                             <Grid item xs={12} sm={4}>
@@ -339,6 +342,7 @@ export default function PaymentDialog({ title, auctionRoom, close }) {
                                 </Box>
                             </Grid>
                         </>)}
+
                     {(title !== "XEM PHÒNG ĐẤU GIÁ") && (
                         <>
                             <Grid item xs={12} sm={4}>
@@ -367,99 +371,79 @@ export default function PaymentDialog({ title, auctionRoom, close }) {
                         </>)}
 
                     {/* Action button */}
-                    <Grid container spacing={3} sx={{ mt: 0.5 }}>
-                        {(title === "XEM PHÒNG ĐẤU GIÁ") && (
-                            <>
-                                <Grid item xs={6}>
-                                    <Button
-                                        variant="outlined"
-                                        color="primary"
-                                        sx={{ width: "100%" }}
-                                        onClick={close}
-                                    >
-                                        Đóng
-                                    </Button>
-                                </Grid>
-                                <Grid item xs={6}>
-                                    <Button
-                                        variant="contained"
-                                        sx={{ width: "100%", background: "#079455" }}
-                                        onClick={handleRegisterButton}
-                                    >
-                                        Xem tài liệu
-                                    </Button>
-                                </Grid>
-                            </>)}
-                        {(title === "XÁC NHẬN THANH TOÁN") && (
-                            <>
-                                <Formik
-                                    initialValues={initialValues}
-                                    validationSchema={validationSchema}
-                                    onSubmit={handleSubmit}>
-                                    {({ dirty, isValid, values, handleChange, handleBlur }) => {
-                                        return (
-                                            <Form>
-                                                <CardContent>
-                                                    <Grid item container spacing={2} justify="center">
-                                                        <Grid item xs={12}>
-                                                            <FormControlLabel
-                                                                name="paymentCheck"
-                                                                control={<Checkbox value="paymentCheck" color="primary" />}
-                                                                label="Xác nhận đã thanh toán bằng tài khoản ngân hàng."
-                                                            ></FormControlLabel>
-                                                            <FormControlLabel
-                                                                name="paymentCheck"
-                                                                control={<Checkbox value="paymentCheck" color="primary" />}
-                                                                label="Xác nhận đã thanh toán bằng tiền mặt."
-                                                            ></FormControlLabel>
-                                                        </Grid>
+                    {(title === "XEM PHÒNG ĐẤU GIÁ") && (
+                        <>
+                            <Grid item xs={6}>
+                                <Button
+                                    variant="outlined"
+                                    color="primary"
+                                    sx={{ width: "100%" }}
+                                    onClick={close}
+                                >
+                                    Đóng
+                                </Button>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <Button
+                                    variant="contained"
+                                    sx={{ width: "100%", background: "#079455" }}
+                                    onClick={handleRegisterButton}
+                                >
+                                    Xem tài liệu
+                                </Button>
+                            </Grid>
+                        </>)}
+                    {(title === "XÁC NHẬN THANH TOÁN") && (
+                        <>
 
-                                                    </Grid>
-                                                </CardContent>
+                            <Grid item container spacing={2} justify="start" alignItems="center" marginLeft="4px">
+                                <Grid item xs={4}>
+                                    Xác nhận thanh toán:
+                                </Grid>
+                                <Grid item xs={8}>
+                                    <RadioGroup value={paymentMethod} onChange={handlePaymentMethodChange}>
+                                        <FormControlLabel
+                                            value="bankTransfer"
+                                            control={<Radio size="22px" color="primary" />}
+                                            label="Thanh toán bằng tài khoản ngân hàng."
+                                        />
+                                        <FormControlLabel
+                                            value="cash"
+                                            control={<Radio size="22px" color="primary" />}
+                                            label="Thanh toán bằng tiền mặt."
+                                        />
+                                    </RadioGroup>
+                                </Grid>
+                            </Grid>
 
-                                                <CardActions>
-                                                    <Grid item xs={6}>
-                                                        <Button
-                                                            variant="outlined"
-                                                            color="primary"
-                                                            sx={{ width: "100%" }}
-                                                            onClick={close}
-                                                        >
-                                                            Hủy bỏ
-                                                        </Button>
-                                                    </Grid>
-                                                    <Grid item xs={6}>
-                                                        <Button
-                                                            disabled={!dirty || !isValid}
-                                                            type="submit"
-                                                            fullWidth
-                                                            variant="contained"
-                                                            sx={{
-                                                                backgroundColor: "primary",
-                                                                color: "white",
-                                                            }}
-                                                            onClick={handleSubmit}
-                                                        >
-                                                            Xác nhận
-                                                        </Button>
-                                                        {/* <Button
-                                                            variant="contained"
-                                                            sx={{ width: "100%", background: "#079455" }}
-                                                            onClick={handleRegisterButton}
-                                                        >
-                                                            Xác nhận
-                                                        </Button> */}
-                                                    </Grid>
-                                                </CardActions>
-                                            </Form>
-                                        )
+                            <Grid item xs={6}>
+                                <Button
+                                    variant="outlined"
+                                    color="primary"
+                                    sx={{ width: "100%" }}
+                                    onClick={close}
+                                >
+                                    Hủy bỏ
+                                </Button>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <Button
+                                    disabled={!paymentMethod}
+                                    type="submit"
+                                    fullWidth
+                                    variant="contained"
+                                    sx={{
+                                        backgroundColor: "primary",
+                                        color: "white",
                                     }}
-                                </Formik>
+                                    onClick={handleSubmit(auctionRoom.licensePlate['id'])}
+                                >
+                                    Xác nhận
+                                </Button>
+                            </Grid>
 
-                            </>
-                        )}
-
-                    </Grid>
+                        </>
+                    )}
                     {(title === "XEM LỊCH SỬ ĐẤU GIÁ") && (
                         <>
                             <Button
@@ -472,9 +456,6 @@ export default function PaymentDialog({ title, auctionRoom, close }) {
                         </>
                     )}
                 </Grid>
-
-
-
                 <Box sx={{ display: "flex" }}></Box>
             </Box>
         </Container >

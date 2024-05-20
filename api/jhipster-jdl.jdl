@@ -9,7 +9,8 @@ enum LicensePlateStatus {
     NOT_YET_AUCTIONED,  
     AWAITING_AUCTION,  
     AUCTION_FAILED,  
-    AUCTION_COMPLETED  
+    AUCTION_COMPLETED,
+    PAYMENT_COMPLETED,
 }  
   
 entity AuctionRoom {
