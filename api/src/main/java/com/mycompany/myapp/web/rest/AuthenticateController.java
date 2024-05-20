@@ -54,20 +54,20 @@ public class AuthenticateController {
     @PostMapping("/authenticate")
     public ResponseEntity<JWTToken> authorize(@Valid @RequestBody LoginVM loginVM) {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                loginVM.getUsername(),
-                loginVM.getPassword());
+            loginVM.getUsername(),
+            loginVM.getPassword()
+        );
 
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = this.createToken(authentication, loginVM.isRememberMe());
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setBearerAuth(jwt);
-        return new ResponseEntity<>(new JWTToken(jwt), httpHeaders, HttpStatus.OK);
+        return new ResponseEntity<>(new JWTToken(jwt, loginVM.getUsername()), httpHeaders, HttpStatus.OK);
     }
 
     /**
-     * {@code GET /authenticate} : check if the user is authenticated, and return
-     * its login.
+     * {@code GET /authenticate} : check if the user is authenticated, and return its login.
      *
      * @param request the HTTP request.
      * @return the login if the user is authenticated.
@@ -79,8 +79,7 @@ public class AuthenticateController {
     }
 
     public String createToken(Authentication authentication, boolean rememberMe) {
-        String authorities = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(" "));
+        String authorities = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(" "));
 
         Instant now = Instant.now();
         Instant validity;
@@ -108,14 +107,21 @@ public class AuthenticateController {
     static class JWTToken {
 
         private String idToken;
+        private String userName;
 
-        JWTToken(String idToken) {
+
+        JWTToken(String idToken, String userName) {
             this.idToken = idToken;
+            this.userName = userName;
         }
 
         @JsonProperty("id_token")
         String getIdToken() {
             return idToken;
+        }
+        @JsonProperty("user_name")
+        String getUserName() {
+            return userName;
         }
 
         void setIdToken(String idToken) {

@@ -1,6 +1,6 @@
 {
   "annotations": {
-    "changelogDate": "20240401160115"
+    "changelogDate": "20240517065901"
   },
   "applications": "*",
   "dto": "mapstruct",
@@ -10,25 +10,21 @@
       "fieldType": "String"
     },
     {
-      "fieldName": "vehicleTypeName",
+      "fieldName": "status",
+      "fieldType": "LicensePlateStatus",
+      "fieldValues": "NOT_YET_AUCTIONED,AWAITING_AUCTION,AUCTION_FAILED,AUCTION_COMPLETED"
+    },
+    {
+      "fieldName": "vehicleType",
       "fieldType": "String"
     },
     {
-      "fieldName": "provinceName",
+      "fieldName": "province",
       "fieldType": "String"
     }
   ],
   "name": "LicensePlate",
-  "pagination": "pagination",
-  "relationships": [
-    {
-      "otherEntityName": "auctionRoom",
-      "otherEntityRelationshipName": "licensePlate",
-      "relationshipName": "auctionRoom",
-      "relationshipSide": "right",
-      "relationshipType": "one-to-one"
-    }
-  ],
+  "relationships": [],
   "searchEngine": "no",
   "service": "serviceImpl"
 }

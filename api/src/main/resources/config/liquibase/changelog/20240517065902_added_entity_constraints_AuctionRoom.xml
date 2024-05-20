@@ -8,7 +8,7 @@
     <!--
         Added the constraints for entity AuctionRoom.
     -->
-    <changeSet id="20240401160113-2" author="jhipster">
+    <changeSet id="20240517065902-2" author="jhipster">
 
         <addForeignKeyConstraint baseColumnNames="license_plate_id"
                                  baseTableName="auction_room"

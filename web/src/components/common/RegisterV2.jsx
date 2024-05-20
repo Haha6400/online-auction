@@ -23,6 +23,7 @@ import * as Yup from "yup"
 import Login from "../common/Login";
 import Footer from "./Footer";
 import AppAppBar from "../base/AppAppBar";
+import ResultModal from "../base/ResultModal";
 
 //Data
 const initialValues = {
@@ -66,9 +67,8 @@ let validationSchema = Yup.object().shape({
 export default function RegisterV2() {
 
     const [openLoginDialog, setOpenLoginDialog] = React.useState(false);
-    const [alertSeverity, setAlertSeverity] = React.useState('');
-    const [alertMessage, setAlertMessage] = React.useState('');
-    const [showAlert, setShowAlert] = React.useState(false);
+    const [openSuccessModal, setOpenSuccessModal] = React.useState(false);
+    const [openFailModal, setOpenFailModal] = React.useState(false);
     const navigate = useNavigate();
 
 
@@ -78,23 +78,23 @@ export default function RegisterV2() {
     const handleLoginDialogClose = () => {
         setOpenLoginDialog(false);
     };
+    const toggleSuccessModal = () => {
+        setOpenSuccessModal(!openSuccessModal);
+    };
+    const toggleFailModal = () => {
+        setOpenFailModal(!openFailModal);
+    };
     const handleSubmit = async (values) => {
         delete values.reEnterPassword;
         try {
             const response = await axios.post(`http://localhost:8080/api/register`, values);
             if (response.status === 201) {
-                setAlertSeverity('success');
-                setAlertMessage('Đăng ký thành công!');
-                setShowAlert(true);
+                toggleSuccessModal();
                 setTimeout(() => {
-                    setShowAlert(false);
                     navigate('/');
                 }, 3000);
             } else {
-                setAlertSeverity('error');
-                setAlertMessage('Đăng ký thất bại.');
-                setShowAlert(true);
-                setTimeout(() => setShowAlert(false), 3000);
+                toggleFailModal();
             }
         } catch (error) {
             console.dir('Registration error:', error);
@@ -245,19 +245,6 @@ export default function RegisterV2() {
                                         </CardContent>
 
                                         <CardActions>
-                                            {showAlert && (
-                                                <Alert
-                                                    severity={alertSeverity}
-                                                    sx={{
-                                                        position: 'fixed',
-                                                        bottom: '20px',
-                                                        right: '20px',
-                                                        zIndex: 9999
-                                                    }}
-                                                >
-                                                    {alertMessage}
-                                                </Alert>
-                                            )}
                                             <Button
                                                 disabled={!dirty || !isValid}
                                                 type="submit"
@@ -271,6 +258,12 @@ export default function RegisterV2() {
                                             >
                                                 Đăng ký
                                             </Button>
+                                            <Dialog open={openSuccessModal} onClose={toggleSuccessModal}>
+                                                <ResultModal type="REGISTER_ACCOUNT_SUCCESS" close={toggleSuccessModal} />
+                                            </Dialog>
+                                            <Dialog open={openFailModal} onClose={toggleFailModal}>
+                                                <ResultModal type="REGISTER_ACCOUNT_FAIL" close={toggleFailModal} />
+                                            </Dialog>
                                         </CardActions>
                                         <Grid container justifyContent="center">
                                             <Grid item>
@@ -299,6 +292,7 @@ export default function RegisterV2() {
                                 )
                             }}
                         </Formik>
+
                     </Box>
                 </Container>
             </Box>

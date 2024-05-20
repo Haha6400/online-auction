@@ -1,7 +1,9 @@
 package com.mycompany.myapp.web.rest;
 
 import com.mycompany.myapp.repository.WinningBidRepository;
+import com.mycompany.myapp.service.UserService;
 import com.mycompany.myapp.service.WinningBidService;
+import com.mycompany.myapp.service.dto.LicensePlateDTO;
 import com.mycompany.myapp.service.dto.WinningBidDTO;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
@@ -34,10 +36,12 @@ public class WinningBidResource {
     private final WinningBidService winningBidService;
 
     private final WinningBidRepository winningBidRepository;
+    private final UserService userService;
 
-    public WinningBidResource(WinningBidService winningBidService, WinningBidRepository winningBidRepository) {
+    public WinningBidResource(WinningBidService winningBidService, WinningBidRepository winningBidRepository, UserService userService) {
         this.winningBidService = winningBidService;
         this.winningBidRepository = winningBidRepository;
+        this.userService = userService;
     }
 
     /**
@@ -165,5 +169,11 @@ public class WinningBidResource {
         return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
             .build();
+    }
+
+    @GetMapping("/self/all")
+    public List<LicensePlateDTO> getAllByCurrentUser() {
+        log.debug("REST request to get all WinningBids");
+        return winningBidService.findAllWinningLicenseByUsers(userService.getCurrentUserDTO().get());
     }
 }

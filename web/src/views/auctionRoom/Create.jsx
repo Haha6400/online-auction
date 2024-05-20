@@ -1,4 +1,3 @@
-//TODO: Select license plate number
 import * as React from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -20,20 +19,21 @@ import Autocomplete from '@mui/material/Autocomplete';
 import Menu from '@mui/material/Menu';
 import DateAndTimePicker from '../../components/base/DateAndTimePicker';
 
-
-export default function CRUDialog(props) {
-
+export default function Create(props) {
+    const [idToken, setIdToken] = React.useState(
+        localStorage.getItem("id_token"),
+    );
+    const [licensePlateList, setLicensePlateList] = React.useState({})
+    const [licensePlateListProps, setLicensePlateListProps] = React.useState({})
+    const [licensePlateNumber, setLicensePlateNumber] = React.useState(null);
 
     const [startTime, setStartTime] = React.useState(null);
     const [startDate, setStartDate] = React.useState(dayjs((new Date()).$d).format('HH:mm DD/MM/YYYY'));
     const openStartTime = Boolean(startTime);
-    const licensePlateList = {
-        NO_1: '19A-125123',
-        NO_2: '20A-125123',
-    };
-    const licensePlateListProps = {
-        options: Object.values(licensePlateList),
-    };
+
+    const [endTime, setEndTime] = React.useState(null);
+    const openEndTime = Boolean(endTime);
+    const [endDate, setEndDate] = React.useState(dayjs((new Date()).$d).format('HH:mm DD/MM/YYYY'));
 
     const handleOpenStartTime = (event) => {
         setStartTime(event.currentTarget);
@@ -47,11 +47,6 @@ export default function CRUDialog(props) {
         setStartDate(newDate);
     };
 
-    const [endTime, setEndTime] = React.useState(null);
-    const openEndTime = Boolean(endTime);
-    const [endDate, setEndDate] = React.useState(dayjs((new Date()).$d).format('HH:mm DD/MM/YYYY'));
-
-    const [licensePlateNumber, setLicensePlateNumber] = React.useState(null);
     const handleOpenEndTime = (event) => {
         setEndTime(event.currentTarget);
     };
@@ -67,21 +62,49 @@ export default function CRUDialog(props) {
     const handleLicensePlateNumberChange = (event, values) => {
         setLicensePlateNumber(values)
     }
+    const getLPList = async () => {
+        const LPList = await axios.get(`http://localhost:8080/api/license-plates?filter=auctionroom-is-null`, {
+            headers: { Authorization: `Bearer ${idToken}` }
+        })
+        let licensePlateList = {}
+        for (let item of LPList.data) {
+            licensePlateList[item.id] = item.plateNumber
+        }
+
+        setLicensePlateList(licensePlateList)
+
+        let licensePlateNumberList = LPList.data.map(item => item.plateNumber);
+        const licensePlateListProps = {
+            options: Object.values(licensePlateNumberList),
+        };
+        setLicensePlateListProps(licensePlateListProps)
+    }
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         let startTime = data.get('startTime');
         let endTime = data.get('endTime');
+        let licensePlateID = null;
+
+        for (let key in licensePlateList) {
+            if (licensePlateList[key] === licensePlateNumber) {
+                licensePlateID = key;
+                break;
+            }
+        }
+        console.log("licensePlateID", licensePlateID)
+        const licensePlate = {
+            "id": licensePlateID
+        }
+
         const values = {
-            'initPrice': data.get('initPrice'),
+            'initialPrice': data.get('initialPrice'),
             'startTime': dayjs(startTime, 'HH:mm DD/MM/YYYY').toISOString(),
             'endTime': dayjs(endTime, 'HH:mm DD/MM/YYYY').toISOString(),
             'description': data.get('description'),
-            'licensePlateNumber': licensePlateNumber
+            'licensePlate': licensePlate
         }
-        const idToken = localStorage.getItem('id_token');
-        console.log("values", values);
         try {
             const response = await axios.post(`http://localhost:8080/api/auction-rooms`, values,
                 {
@@ -89,11 +112,16 @@ export default function CRUDialog(props) {
                 });
             console.log("response", response.data);
             props.close();
+            props.getAllAuctionRoom();
         } catch (error) {
             props.close();
             console.dir('Create auction room error:', error);
         }
     };
+
+    React.useEffect(() => {
+        getLPList();
+    }, [])
 
     return (
         <Stack
@@ -172,9 +200,9 @@ export default function CRUDialog(props) {
                                         required
                                         fullWidth
                                         type="number"
-                                        id="initPrice"
-                                        name="initPrice"
-                                        autoComplete="initPrice"
+                                        id="initialPrice"
+                                        name="initialPrice"
+                                        autoComplete="initialPrice"
                                         autoFocus
                                         sx={{
                                             mt: 1, mb: 1,

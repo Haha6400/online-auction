@@ -21,18 +21,18 @@ import tech.jhipster.config.JHipsterConstants;
 
 @SpringBootApplication
 @EnableConfigurationProperties({ LiquibaseProperties.class, ApplicationProperties.class })
-public class MyAuctionApp {
+public class AuctionApp {
 
-    private static final Logger log = LoggerFactory.getLogger(MyAuctionApp.class);
+    private static final Logger log = LoggerFactory.getLogger(AuctionApp.class);
 
     private final Environment env;
 
-    public MyAuctionApp(Environment env) {
+    public AuctionApp(Environment env) {
         this.env = env;
     }
 
     /**
-     * Initializes myAuction.
+     * Initializes auction.
      * <p>
      * Spring profiles can be configured with a program argument --spring.profiles.active=your-active-profile
      * <p>
@@ -65,7 +65,7 @@ public class MyAuctionApp {
      * @param args the command line arguments.
      */
     public static void main(String[] args) {
-        SpringApplication app = new SpringApplication(MyAuctionApp.class);
+        SpringApplication app = new SpringApplication(AuctionApp.class);
         DefaultProfileUtil.addDefaultProfile(app);
         Environment env = app.run(args).getEnvironment();
         logApplicationStartup(env);

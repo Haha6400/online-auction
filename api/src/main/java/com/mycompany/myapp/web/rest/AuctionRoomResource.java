@@ -1,30 +1,25 @@
 package com.mycompany.myapp.web.rest;
 
+import com.mycompany.myapp.domain.AuctionRoom;
+import com.mycompany.myapp.domain.Bid;
 import com.mycompany.myapp.repository.AuctionRoomRepository;
-import com.mycompany.myapp.security.SecurityUtils;
 import com.mycompany.myapp.service.AuctionRoomService;
 import com.mycompany.myapp.service.UserService;
-import com.mycompany.myapp.service.dto.AdminUserDTO;
 import com.mycompany.myapp.service.dto.AuctionRoomDTO;
-import com.mycompany.myapp.service.dto.UserDTO;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
+import com.mycompany.myapp.web.rest.vm.CustomAuctionResult;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.time.Instant;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.HeaderUtil;
-import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
 /**
@@ -42,18 +37,18 @@ public class AuctionRoomResource {
     private String applicationName;
 
     private final AuctionRoomService auctionRoomService;
-    private final UserService userService;
 
     private final AuctionRoomRepository auctionRoomRepository;
+    private final UserService userService;
 
     public AuctionRoomResource(
         AuctionRoomService auctionRoomService,
-        UserService userService,
-        AuctionRoomRepository auctionRoomRepository
+        AuctionRoomRepository auctionRoomRepository,
+        UserService userService
     ) {
         this.auctionRoomService = auctionRoomService;
-        this.userService = userService;
         this.auctionRoomRepository = auctionRoomRepository;
+        this.userService = userService;
     }
 
     /**
@@ -78,7 +73,7 @@ public class AuctionRoomResource {
     /**
      * {@code PUT  /auction-rooms/:id} : Updates an existing auctionRoom.
      *
-     * @param id the id of the auctionRoomDTO to save.
+     * @param id             the id of the auctionRoomDTO to save.
      * @param auctionRoomDTO the auctionRoomDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated auctionRoomDTO,
      * or with status {@code 400 (Bad Request)} if the auctionRoomDTO is not valid,
@@ -111,7 +106,7 @@ public class AuctionRoomResource {
     /**
      * {@code PATCH  /auction-rooms/:id} : Partial updates given fields of an existing auctionRoom, field will ignore if it is null
      *
-     * @param id the id of the auctionRoomDTO to save.
+     * @param id             the id of the auctionRoomDTO to save.
      * @param auctionRoomDTO the auctionRoomDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated auctionRoomDTO,
      * or with status {@code 400 (Bad Request)} if the auctionRoomDTO is not valid,
@@ -147,30 +142,23 @@ public class AuctionRoomResource {
     /**
      * {@code GET  /auction-rooms} : get all the auctionRooms.
      *
-     * @param pageable the pagination information.
      * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
-     * @param filter the filter of the request.
+     * @param filter    the filter of the request.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of auctionRooms in body.
      */
     @GetMapping("")
-    public ResponseEntity<List<AuctionRoomDTO>> getAllAuctionRooms(
-        @org.springdoc.core.annotations.ParameterObject Pageable pageable,
+    public List<?> getAllAuctionRooms(
         @RequestParam(name = "filter", required = false) String filter,
         @RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload
     ) {
-        if ("winningbid-is-null".equals(filter)) {
-            log.debug("REST request to get all AuctionRooms where winningBid is null");
-            return new ResponseEntity<>(auctionRoomService.findAllWhereWinningBidIsNull(), HttpStatus.OK);
+        List<CustomAuctionResult> res = new ArrayList<>();
+        if ("desc".equals(filter)) {
+            return auctionRoomService.getAllOrderByCreatedDateDesc();
+        } else if ("asc".equals(filter)) {
+            return auctionRoomService.getAllOrderByCreatedDateAsc();
         }
-        log.debug("REST request to get a page of AuctionRooms");
-        Page<AuctionRoomDTO> page;
-        if (eagerload) {
-            page = auctionRoomService.findAllWithEagerRelationships(pageable);
-        } else {
-            page = auctionRoomService.findAll(pageable);
-        }
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-        return ResponseEntity.ok().headers(headers).body(page.getContent());
+        log.debug("REST request to get all AuctionRooms");
+        return auctionRoomService.getAllAuctionsInProgress(Instant.now());
     }
 
     /**
@@ -187,19 +175,6 @@ public class AuctionRoomResource {
     }
 
     /**
-     * {@code GET  /auction-rooms/:plate_number} : get the plateNumber attached to auctionRoom.
-     *
-     * @param plateNumber the plateNumber of the auctionRoomDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the auctionRoomDTO, or with status {@code 404 (Not Found)}.
-     */
-    //    @GetMapping("/{plate_number}")
-    //    public ResponseEntity<AuctionRoomDTO> getAuctionRoom(@PathVariable("plate_number") String plateNumber) {
-    //        log.debug("REST request to get AuctionRoom : {}", plateNumber);
-    //        Optional<AuctionRoomDTO> auctionRoomDTO = auctionRoomService.findOneByLicensePlate(plateNumber);
-    //        return ResponseUtil.wrapOrNotFound(auctionRoomDTO);
-    //    }
-
-    /**
      * {@code DELETE  /auction-rooms/:id} : delete the "id" auctionRoom.
      *
      * @param id the id of the auctionRoomDTO to delete.
@@ -214,6 +189,33 @@ public class AuctionRoomResource {
             .build();
     }
 
+    @GetMapping(value = "/self/all")
+    public ResponseEntity<List<AuctionRoomDTO>> getAllOfCurrentUser(@RequestParam(name = "filter", required = false) String filter)
+        throws URISyntaxException {
+        if ("waitlist".equals(filter)) {
+            return new ResponseEntity<>(
+                auctionRoomService.getAuctionWaitlistByUser(userService.getCurrentUserDTO().get(), Instant.now()),
+                HttpStatus.OK
+            );
+        } else if ("history".equals(filter)) {
+            return new ResponseEntity<>(
+                auctionRoomService.getAllHistoryAuctionByUser(userService.getCurrentUserDTO().get(), Instant.now()),
+                HttpStatus.OK
+            );
+        } else if ("current".equals(filter)) {
+            return new ResponseEntity<>(
+                auctionRoomService.getAuctionsInProgressByUser(userService.getCurrentUserDTO().get(), Instant.now()),
+                HttpStatus.OK
+            );
+        } else if ("win".equals(filter)) {
+            return new ResponseEntity<>(auctionRoomService.getCurrentUserWonAuction(userService.getCurrentUserDTO().get()), HttpStatus.OK);
+        } else if ("lose".equals(filter)) {
+            return new ResponseEntity<>(auctionRoomService.getCurrentUserLostAuction(userService.getCurrentUserDTO().get()), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(auctionRoomService.getAllOrderByCreatedDateDESC(userService.getCurrentUserDTO().get()), HttpStatus.OK);
+    }
+
     @PatchMapping(value = "/register/{id}")
     public ResponseEntity<AuctionRoomDTO> addUserToAuctionRoom(@PathVariable(value = "id", required = false) final Long id)
         throws URISyntaxException {
@@ -224,10 +226,5 @@ public class AuctionRoomResource {
         Optional<AuctionRoomDTO> result = auctionRoomService.addUserToAuctionRoom(id, userService.getCurrentUserDTO().get());
 
         return ResponseUtil.wrapOrNotFound(result, HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, id.toString()));
-    }
-
-    @GetMapping(value = "/self")
-    public List<AuctionRoomDTO> getAllOfCurrentUser() throws URISyntaxException {
-        return auctionRoomService.getAllByUser(userService.getCurrentUserDTO().get());
     }
 }

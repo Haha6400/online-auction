@@ -1,4 +1,3 @@
-// TODO: Format plateNumber + UserGetAllAuctionRoom
 import * as React from "react";
 import axios from "axios";
 import Box from "@mui/material/Box";
@@ -9,7 +8,9 @@ import { Button, Card, Stack, Grid, Dialog } from "@mui/material";
 
 import AppAppBar from "../../components/base/AppAppBar";
 import Footer from "../../components/common/Footer";
-import CRUDialog from "../auctionRoom/CRUDialog";
+import Create from "./Create";
+import Update from "./Update";
+import AuctionRegisterModal from "../../components/base/AuctionRegisterModal";
 
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
@@ -17,19 +18,28 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import EventIcon from "@mui/icons-material/Event";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import HourglassTopIcon from "@mui/icons-material/HourglassTop";
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import DeleteIcon from "@mui/icons-material/Delete";
+import CreateIcon from '@mui/icons-material/Create';
 import EditNoteIcon from "@mui/icons-material/EditNote";
+
 
 import { useAuth } from "../../hooks/AuthProvider";
 import { formatTime } from "../../utils/formatter";
 
 export default function AuctionRoom() {
   const [openCreateDialog, setOpenCreateDialog] = React.useState(false);
+  const [openViewDialog, setOpenViewDialog] = React.useState(false);
+  const [openUpdateDialog, setOpenUpdateDialog] = React.useState(false);
+  const [openDeleteDialog, setOpenDeleteDialog] = React.useState(false);
+  const [openRegisterDialog, setOpenRegisterDialog] = React.useState(false);
+
   const [idToken, setIdToken] = React.useState(
     localStorage.getItem("id_token"),
   );
   const [accountUser, setAccountUser] = React.useState({});
   const [auctionRoomList, setAuctionRoomList] = React.useState(null);
+  const [selectedAutionRoom, setSelectedAutionRoom] = React.useState(null);
   const auth = useAuth();
   const dateNow = new Date();
 
@@ -39,6 +49,61 @@ export default function AuctionRoom() {
   const handleCreateButtonClose = () => {
     setOpenCreateDialog(false);
   };
+
+  const formatAuctionRoom = (auctionRoom) => {
+    auctionRoom = {
+      ...auctionRoom,
+      'startTime': formatTime(new Date(auctionRoom.startTime)),
+      'endTime': formatTime(new Date(auctionRoom.endTime)),
+    }
+    setSelectedAutionRoom(auctionRoom);
+  };
+
+  const handleOpenButtonClick = (auctionRoom) => {
+    formatAuctionRoom(auctionRoom);
+    setOpenViewDialog(true);
+  };
+
+  const handleOpenButtonClose = () => {
+    setOpenViewDialog(false);
+  };
+  const handleRegisterButtonClick = (auctionRoom) => {
+    formatAuctionRoom(auctionRoom);
+    setOpenRegisterDialog(true);
+  };
+
+  const handleRegisterButtonClose = () => {
+    setOpenRegisterDialog(false);
+  };
+
+  const handleUpdateButtonClick = (auctionRoom) => {
+    setSelectedAutionRoom(auctionRoom);
+    setOpenUpdateDialog(true);
+  };
+
+  const handleUpdateButtonClose = () => {
+    setOpenUpdateDialog(false);
+  };
+
+  const handleDeleteButtonClick = async (auctionRoom) => {
+    setSelectedAutionRoom(auctionRoom);
+    setOpenDeleteDialog(true);
+  }
+
+  const deleteAuctionRoomConfirm = async (event) => {
+    await axios.delete(`http://localhost:8080/api/auction-rooms/${selectedAutionRoom.id}`, {
+      headers: { Authorization: `Bearer ${idToken}` }
+    })
+      .then((res) => {
+        setOpenDeleteDialog(false)
+        getAllAuctionRoom();
+      })
+      .catch((error) => {
+        console.dir("Delete auction room error:", error);
+      });
+    return;
+  }
+
   const getAllAuctionRoom = async () => {
     await axios
       .get(`http://localhost:8080/api/auction-rooms`)
@@ -61,14 +126,13 @@ export default function AuctionRoom() {
   }, [auth.user]);
 
   React.useEffect(() => {
-    console.log("accountUser", accountUser);
     if (
       (accountUser["authorities"] &&
         accountUser["authorities"].includes("ROLE_ADMIN")) ||
       !accountUser["authorities"]
     )
       getAllAuctionRoom();
-  }, [accountUser]);
+  }, []);
 
   return (
     <Stack
@@ -137,9 +201,10 @@ export default function AuctionRoom() {
                     open={openCreateDialog}
                     onClose={handleCreateButtonClose}
                   >
-                    <CRUDialog
+                    <Create
                       title="Tạo phòng đấu giá"
                       close={handleCreateButtonClose}
+                      getAllAuctionRoom={getAllAuctionRoom}
                     />
                   </Dialog>
                 </>
@@ -190,18 +255,6 @@ export default function AuctionRoom() {
                                 ) + 1,
                               )}
                             </Typography>
-                            {/* <Typography
-                              variant="h4"
-                              sx={{ fontWeight: 600, color: "#333" }}
-                            >
-                              98A
-                            </Typography>
-                            <Typography
-                              variant="h4"
-                              sx={{ fontWeight: 600, color: "#333" }}
-                            >
-                              961.73
-                            </Typography> */}
                           </Box>
 
                           <Box
@@ -322,10 +375,10 @@ export default function AuctionRoom() {
                                 Trạng thái
                               </Typography>
                               <Typography sx={{ fontWeight: 600 }}>
-                                {dateNow < new Date(auctionRoom.startTime) && (
+                                {dateNow < (new Date(auctionRoom.startTime)) && (
                                   <>Chưa bắt đầu</>
                                 )}
-                                {dateNow > new Date(auctionRoom.startTime) && (
+                                {dateNow > (new Date(auctionRoom.startTime)) && (
                                   <>Đã kết thúc</>
                                 )}
                               </Typography>
@@ -337,6 +390,7 @@ export default function AuctionRoom() {
                               <>
                                 <Grid item xs={12}>
                                   <Button
+                                    key={auctionRoom.id} // Đảm bảo mỗi button có một key duy nhất
                                     variant="contained"
                                     style={{
                                       width: "100%",
@@ -344,11 +398,8 @@ export default function AuctionRoom() {
                                       background: "#A0A0A0",
                                       whiteSpace: "nowrap",
                                     }}
-                                    startIcon={
-                                      <VisibilityIcon
-                                        style={{ fontSize: 14 }}
-                                      />
-                                    }
+                                    onClick={() => handleOpenButtonClick(auctionRoom)} // Pass auctionRoom tương ứng vào hàm handleOpenButtonClick
+                                    startIcon={<VisibilityIcon style={{ fontSize: 14 }} />}
                                   >
                                     Xem phòng
                                   </Button>
@@ -363,85 +414,192 @@ export default function AuctionRoom() {
                                     {accountUser["authorities"].includes(
                                       "ROLE_ADMIN",
                                     ) && (
-                                      <>
-                                        <Grid item xs={6}>
-                                          <Button
-                                            variant="contained"
-                                            sx={{
-                                              width: "100%",
-                                              background: "#079455",
-                                              whiteSpace: "nowrap",
-                                            }}
-                                            startIcon={
-                                              <EditNoteIcon
+                                        <>
+                                          <Grid item xs={6}>
+                                            <Button
+                                              key={auctionRoom.id} // Đảm bảo mỗi button có một key duy nhất
+                                              variant="contained"
+                                              style={{
+                                                width: "100%",
+                                                background: "#079455",
+                                                whiteSpace: "nowrap",
+                                              }}
+                                              onClick={() => handleUpdateButtonClick(auctionRoom)}
+                                              startIcon={<EditNoteIcon
                                                 style={{ fontSize: 16 }}
-                                              />
-                                            }
-                                          >
-                                            Chỉnh sửa
-                                          </Button>
-                                        </Grid>
-                                        <Grid item xs={6}>
-                                          <Button
-                                            variant="contained"
-                                            style={{
-                                              width: "100%",
-                                              color: "#FFFFFF",
-                                              background: "#e05757",
-                                              whiteSpace: "nowrap",
-                                            }}
-                                            startIcon={
-                                              <DeleteIcon
-                                                style={{ fontSize: 14 }}
-                                              />
-                                            }
-                                          >
-                                            Xóa phòng
-                                          </Button>
-                                        </Grid>
-                                      </>
-                                    )}
+                                              />}
+                                            >
+                                              Chỉnh sửa
+                                            </Button>
+                                          </Grid>
+                                          <Grid item xs={6}>
+                                            <Button
+                                              variant="contained"
+                                              style={{
+                                                width: "100%",
+                                                color: "#FFFFFF",
+                                                background: "#e05757",
+                                                whiteSpace: "nowrap",
+                                              }}
+                                              onClick={() => {
+                                                handleDeleteButtonClick(auctionRoom);
+                                              }}
+                                              startIcon={
+                                                <DeleteIcon
+                                                  style={{ fontSize: 14 }}
+                                                />
+                                              }
+                                            >
+                                              Xóa phòng
+                                            </Button>
+                                          </Grid>
+                                        </>
+                                      )}
                                   </>
                                 )}
                                 {(!accountUser["authorities"] ||
                                   !accountUser["authorities"].includes(
                                     "ROLE_ADMIN",
                                   )) && (
-                                  <>
-                                    <Grid item xs={12}>
-                                      <Button
-                                        variant="contained"
-                                        style={{
-                                          width: "100%",
-                                          color: "#FFFFFF",
-                                          background: "#079455",
-                                          whiteSpace: "nowrap",
-                                        }}
-                                        startIcon={
-                                          <VisibilityIcon
-                                            style={{ fontSize: 14 }}
-                                          />
-                                        }
-                                      >
-                                        Xem phòng
-                                      </Button>
-                                    </Grid>
-                                  </>
-                                )}
+                                    <>
+                                      <Grid item xs={6}>
+                                        <Button
+                                          key={auctionRoom.id} // Ensures unique key for each button
+                                          variant="text"
+                                          style={{
+                                            width: "100%",
+                                            color: "#079455",
+                                            outline: "1px solid #079455"
+                                          }}
+                                          onClick={() => handleOpenButtonClick(auctionRoom)}
+                                          startIcon={<VisibilityIcon style={{ fontSize: 14 }} />}
+                                        >
+                                          Xem phòng
+                                        </Button>
+                                      </Grid>
+                                      <Grid item xs={6}>
+                                        <Button
+                                          key={auctionRoom.id} // Đảm bảo mỗi button có một key duy nhất
+                                          variant="contained"
+                                          style={{
+                                            width: "100%",
+                                            color: "#FFFFFF",
+                                            background: "#079455",
+                                            whiteSpace: "nowrap",
+                                          }}
+                                          onClick={() => handleRegisterButtonClick(auctionRoom)} // Pass auctionRoom tương ứng vào hàm handleOpenButtonClick
+                                          startIcon={<CreateIcon style={{ fontSize: 14 }} />}
+                                        >
+                                          Đăng ký
+                                        </Button>
+                                      </Grid>
+
+                                    </>
+                                  )}
                               </>
                             )}
                           </Grid>
                         </Card>
                       </Grid>
                     ))}
+                    <Dialog open={openViewDialog} onClose={handleOpenButtonClose}>
+                      {selectedAutionRoom && (
+                        <AuctionRegisterModal
+                          title="XEM PHÒNG ĐẤU GIÁ"
+                          auctionRoom={selectedAutionRoom}
+                          close={handleOpenButtonClose}
+                        />
+                      )}
+                    </Dialog>
+                    <Dialog open={openRegisterDialog} onClose={setOpenRegisterDialog}>
+                      {selectedAutionRoom && (
+                        <AuctionRegisterModal
+                          title="XÁC NHẬN ĐĂNG KÝ ĐẤU GIÁ"
+                          auctionRoom={selectedAutionRoom}
+                          close={handleRegisterButtonClose}
+                        />
+                      )}
+                    </Dialog>
+                    <Dialog open={openUpdateDialog} onClose={handleUpdateButtonClose}>
+                      {selectedAutionRoom && (
+                        <Update
+                          close={handleUpdateButtonClose}
+                          idToken={idToken}
+                          currentAuctionRoom={selectedAutionRoom}
+                          getAllAuctionRoom={getAllAuctionRoom}
+                        />
+                      )}
+                    </Dialog>
+                    <Dialog open={openDeleteDialog} onClose={() => setOpenDeleteDialog(false)}>
+                      {selectedAutionRoom && (
+                        <Stack>
+                          <Box id="hero" sx={{ width: "100%" }}>
+                            <Container
+                              sx={{
+                                display: "flex",
+                                flexDirection: "column",
+                              }}>
+                              <Box
+                                sx={{
+                                  marginTop: 3,
+                                  display: "flex",
+                                  flexDirection: "column",
+                                }}
+                                component="form" onSubmit={deleteAuctionRoomConfirm} onClickOutside
+                              >
+                                <Typography
+                                  variant="h5"
+                                  color="text.secondary"
+                                  sx={{ fontWeight: 1000, fontSize: 24, textAlign: "start", textJustify: "start", mb: 2 }}
+                                >
+                                  Xóa phòng đấu giá
+                                </Typography>
+                                <Typography>
+                                  Bạn có chắc chắn muốn xóa phòng đấu giá?
+                                </Typography>
+                                <Grid
+                                  container
+                                  spacing={3}
+                                  justifyContent="center"
+                                  sx={{ mb: 3, mt: 1, mr: 3 }}
+                                >
+                                  <Grid item xs={12} sm={6}>
+                                    <Button
+                                      variant="outlined"
+                                      color="primary"
+                                      sx={{ width: "100%" }}
+                                      onClick={() => setOpenDeleteDialog(false)}
+                                    >
+                                      Hủy bỏ
+                                    </Button>
+                                  </Grid>
+                                  <Grid item xs={12} sm={6}>
+                                    <Button
+                                      variant="contained"
+                                      sx={{ width: "100%", background: "#e05757", color: "#FFFFFF" }}
+                                      onClick={() => deleteAuctionRoomConfirm()}
+                                    >
+                                      Xác nhận
+                                    </Button>
+                                  </Grid>
+                                </Grid>
+
+                              </Box>
+
+                            </Container>
+                          </Box>
+
+                        </Stack>
+                      )}
+                    </Dialog>
                   </>
                 )}
               </Grid>
             </Box>
           </Box>
-        </Container>
-      </Box>
+        </Container >
+      </Box >
       <Footer />
-    </Stack>
+    </Stack >
   );
 }

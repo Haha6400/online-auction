@@ -71,3 +71,8 @@ export const LPprovinces = {
     VINH_PHUC: "Vĩnh Phúc",
     YEN_BAI: "Yên Bái",
 };
+
+export const LPStatus = {
+    SUCCESS: "Đấu giá thành công",
+    FAIL: "Đấu giá thất bại"
+}

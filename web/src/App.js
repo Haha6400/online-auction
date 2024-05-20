@@ -14,6 +14,7 @@ import AuthProvider from "./hooks/AuthProvider";
 import BiddingRoom, {
   loader as biddingRoomLoader,
 } from "./views/auctionRoom/BiddingRoom";
+import Payment from "./views/payment/Payment";
 
 const router = createBrowserRouter([
   {
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
     path: "/auction-room/:id",
     element: <BiddingRoom />,
     loader: biddingRoomLoader,
+  },
+  {
+    path: "/payment",
+    element: <Payment />,
   },
   {
     path: "/my-auction",

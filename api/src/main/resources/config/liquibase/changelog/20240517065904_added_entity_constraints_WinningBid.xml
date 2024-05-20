@@ -6,22 +6,22 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
     <!--
-        Added the constraints for entity LicensePlate.
+        Added the constraints for entity WinningBid.
     -->
-    <changeSet id="20240401160115-2" author="jhipster">
+    <changeSet id="20240517065904-2" author="jhipster">
 
-        <addForeignKeyConstraint baseColumnNames="vehicle_type_id"
-                                 baseTableName="license_plate"
-                                 constraintName="fk_license_plate__vehicle_type_id"
+        <addForeignKeyConstraint baseColumnNames="bid_id"
+                                 baseTableName="winning_bid"
+                                 constraintName="fk_winning_bid__bid_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="vehicle_type"
+                                 referencedTableName="bid"
                                  />
 
-        <addForeignKeyConstraint baseColumnNames="province_id"
-                                 baseTableName="license_plate"
-                                 constraintName="fk_license_plate__province_id"
+        <addForeignKeyConstraint baseColumnNames="auction_room_id"
+                                 baseTableName="winning_bid"
+                                 constraintName="fk_winning_bid__auction_room_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="province"
+                                 referencedTableName="auction_room"
                                  />
     </changeSet>
 </databaseChangeLog>

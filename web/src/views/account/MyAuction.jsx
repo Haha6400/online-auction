@@ -1,173 +1,263 @@
-import * as React from "react";
+import { useState, useEffect } from "react";
+
 import Box from "@mui/material/Box";
-
-import { alpha } from "@mui/material";
 import Button from "@mui/material/Button";
-import Container from "@mui/material/Container";
-import Link from "@mui/material/Link";
-import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
-import Footer from "../../components/common/Footer";
-import AppAppBar from "../../components/base/AppAppBar";
 
-import Card from '@mui/material/Card';
-import Chip from '@mui/material/Chip';
-import Grid from '@mui/material/Grid';
-import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
-import SettingsIcon from '@mui/icons-material/Settings';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
 
-const items = [
-    {
-        icon: <AccountCircleIcon />,
-        title: 'Auction đấu giá thành công',
-        imageLight: 'url("/static/images/templates/templates-images/dash-light.png")',
-        imageDark: 'url("/static/images/templates/templates-images/dash-dark.png")',
-    },
-    {
-        icon: <SettingsIcon />,
-        title: 'Auction đã tham gia',
-        imageLight: 'url("/static/images/templates/templates-images/dash-light.png")',
-        imageDark: 'url("/static/images/templates/templates-images/dash-dark.png")',
-    },
+import Search from "@mui/icons-material/Search";
+import ManageSearchIcon from "@mui/icons-material/ManageSearch";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
+import {
+    OutlinedInput,
+    FormControl,
+    Select,
+    MenuItem,
+    Dialog,
+    Typography,
+} from "@mui/material";
+import AuctionRegisterModal from "../../components/base/AuctionRegisterModal";
+import { LPStatus } from "../../utils/constants/LicensePlate";
+import { getAllAuctionRoom } from "../../service/user/licensePlateAPI";
+import { formatTime } from "../../utils/timeFormatter";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../hooks/AuthProvider";
 
-];
 export default function MyAuction() {
-    const [selectedItemIndex, setSelectedItemIndex] = React.useState(0);
+    const [idToken, setIdToken] = useState(
+        localStorage.getItem("id_token"),
+    );
+    const auth = useAuth();
+    const [LPSearchInput, setLPSearchInput] = useState("");
+    const [vehicleStatus, setVehicleStatus] = useState("");
+    const [openAuctionModal, setOpenAuctionModal] =
+        useState(false);
 
-    const handleItemClick = (index) => {
-        setSelectedItemIndex(index);
+    const [licensePlates, setLicensePlates] = useState([]);
+
+    const [selectedAutionRoom, setSelectedAutionRoom] = useState(null);
+
+    const navigate = useNavigate();
+
+    const filteredLicensePlates = licensePlates
+        ? licensePlates.filter((licensePlate) => {
+            const plate = licensePlate.licensePlate
+            // const matchesVehicleType =
+            //     !vehicleType || plate.vehicleType === vehicleType;
+            const matchesPlateNumber =
+                !LPSearchInput ||
+                plate.plateNumber.toLowerCase().includes(LPSearchInput.toLowerCase());
+            return matchesPlateNumber;
+        })
+        : [];
+
+    const toggleAuctionViewMdal = () => {
+        setOpenAuctionModal(!openAuctionModal);
     };
+    const fetchLicensePlates = async (userId) => {
+        const res = await getAllAuctionRoom();
 
-    const selectItem = items[selectedItemIndex];
+        const comingAuctionRooms = res.filter(
+            (auctionRoom) => {
+                return auctionRoom.users.some(user => user.id === userId)
+            }
+        );
+
+        setLicensePlates(
+            comingAuctionRooms.map((auctionRoom) => {
+                return {
+                    ...auctionRoom,
+                    startTime: formatTime(new Date(auctionRoom.startTime)),
+                    endTime: formatTime(new Date(auctionRoom.endTime)),
+                };
+            }),
+        );
+        console.log("comingAuctionRooms", comingAuctionRooms)
+    };
+    useEffect(() => {
+        if (auth.user) {
+            fetchLicensePlates(auth.user.id);
+        }
+    }, []);
+
     return (
         <>
-            <AppAppBar loginCheck="true" name="Ha Nguyen" />
             <Box
-                id="hero"
                 sx={{
-                    width: "100%",
-                    backgroundImage: "linear-gradient(180deg, #CEE5FD, #FFF)",
-                    backgroundSize: "100% 20%",
-                    backgroundRepeat: "no-repeat",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexWrap: "wrap",
+                    gap: 5,
                 }}
             >
-                <Container id="myAuction" sx={{ py: { xs: 8, sm: 16 } }}>
-                    <Grid container spacing={6}>
-                        <Grid item xs={9} md={4}>
-                            <Stack
-                                direction="column"
-                                justifyContent="center"
-                                alignItems="flex-start"
-                                spacing={2}
-                                useFlexGap
-                                sx={{ width: '100%', display: { xs: 'none', sm: 'flex' } }}
+                <OutlinedInput
+                    type="search"
+                    placeholder="Nhập biển số xe cần tìm"
+                    size="small"
+                    sx={{
+                        width: 250,
+                        marginY: 2,
+                        border: "1px solid #015433",
+                        borderRadius: 3,
+                    }}
+                    startAdornment={
+                        <Search
+                            sx={{
+                                width: 20,
+                                color: "015433",
+                                mr: 1,
+                            }}
+                        />
+                    }
+                    value={LPSearchInput}
+                    onChange={(event) => {
+                        setLPSearchInput(event.target.value);
+                    }}
+                />
+                <FormControl sx={{ minWidth: 250, marginY: 2 }} size="small">
+                    <Select
+                        autoWidth
+                        displayEmpty
+                        value={vehicleStatus}
+                        onChange={(event) => {
+                            setVehicleStatus(event.target.value);
+                        }}
+                        sx={{
+                            width: 250,
+                            border: "1px solid #015433",
+                            borderRadius: 3,
+                        }}
+                    >
+                        <MenuItem sx={{ borderRadius: 0, width: 250 }} value="">
+                            Chọn trạng thái
+                        </MenuItem>
+                        {Object.keys(LPStatus).map((key) => (
+                            <MenuItem
+                                key={key}
+                                sx={{ borderRadius: 0, width: 250 }}
+                                value={LPStatus[key]}
                             >
-                                {items.map(({ icon, title }, index) => (
-                                    <Card
-                                        key={index}
-                                        variant="outlined"
-                                        component={Button}
-                                        onClick={() => handleItemClick(index)}
-                                        sx={{
-                                            p: 3,
-                                            height: 'fit-content',
-                                            width: '100%',
-                                            background: 'none',
-                                            backgroundColor:
-                                                selectedItemIndex === index ? 'action.selected' : undefined,
-                                            borderColor: selectedItemIndex === index
-                                                ? 'primary.light'
-                                                : 'grey.200',
+                                {LPStatus[key]}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+            </Box>
+
+            <TableContainer
+                component={Paper}
+                sx={{
+                    mt: 2,
+                    backgroundColor: "rgba(255, 255, 255, 0.15)",
+                }}
+            >
+                <Table sx={{ minWidth: 700 }} aria-label="customized table">
+                    <TableHead sx={{ backgroundColor: "rgba(1, 84, 51, 0.2)" }}>
+                        <TableRow>
+                            <TableCell sx={{ fontWeight: 600 }} align="center">
+                                STT
+                            </TableCell>
+                            <TableCell sx={{ fontWeight: 600 }} align="center">
+                                Biển số
+                            </TableCell>
+                            <TableCell sx={{ fontWeight: 600 }} align="center">
+                                Tỉnh, Thành phố
+                            </TableCell>
+                            <TableCell
+                                sx={{ fontWeight: 600, whiteSpace: "nowrap" }}
+                                align="center"
+                            >
+                                Thời gian đấu giá
+                            </TableCell>
+                            <TableCell
+                                sx={{ fontWeight: 600, whiteSpace: "nowrap" }}
+                                align="center"
+                            >
+                                Kết quả
+                            </TableCell>
+                            <TableCell sx={{ fontWeight: 600 }}></TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {filteredLicensePlates.map((auctionRoom, index) => (
+                            <TableRow key={auctionRoom.id}>
+                                <TableCell align="center">{index + 1}</TableCell>
+                                <TableCell align="center">{auctionRoom.licensePlate['plateNumber']}</TableCell>
+                                <TableCell align="center">{auctionRoom.licensePlate['province']}</TableCell>
+
+
+                                <TableCell sx={{ whiteSpace: "nowrap" }} align="center">
+                                    {auctionRoom.startTime}
+                                </TableCell>
+
+                                <TableCell align="center">{auctionRoom.licensePlate['vehicleType']}</TableCell>
+
+                                <TableCell>
+                                    <Button
+                                        onClick={() => {
+                                            if (idToken) {
+                                                setSelectedAutionRoom(auctionRoom)
+                                                toggleAuctionViewMdal();
+                                            }
                                         }}
+                                        variant="contained"
+                                        color="primary"
+                                        size="small"
+                                        sx={{
+                                            whiteSpace: "nowrap",
+                                            backgroundColor: "primary",
+                                            color: "white",
+                                        }}
+                                        startIcon={<VisibilityIcon style={{ fontSize: 14 }} />}
                                     >
-                                        <Box
-                                            sx={{
-                                                width: '100%',
-                                                display: 'flex',
-                                                textAlign: 'left',
-                                                flexDirection: { xs: 'column', md: 'row' },
-                                                alignItems: { md: 'center' },
-                                                gap: 2.5,
-                                            }}
-                                        >
-                                            <Box
-                                                sx={{
-                                                    color: selectedItemIndex === index
-                                                        ? 'primary.main'
-                                                        : 'grey.300',
-                                                    display: 'flex', alignItems: 'center', textTransform: 'none'
-                                                }}
+                                        Xem phòng
+                                    </Button>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+            {filteredLicensePlates.length === 0 && (
+                <Box
+                    sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        bgcolor: "#01543333",
+                        color: "#555",
+                        padding: 5,
+                        borderBottomRightRadius: 10,
+                        borderBottomLeftRadius: 10,
+                    }}
+                >
+                    <ManageSearchIcon style={{ fontSize: 70 }} />
+                    <Typography sx={{ fontWeight: "600" }}>
+                        Không tìm thấy biển số phù hợp
+                    </Typography>
+                </Box>
+            )}
 
-                                            >
-                                                {icon}
-                                            </Box>
-                                            <Box>
-                                                <Typography
-                                                    color="text.primary"
-                                                    variant="body2"
-                                                    fontWeight="bold"
-                                                    sx={{ display: 'flex', alignItems: 'center', textTransform: 'none' }}
-                                                >
-                                                    {title}
-                                                    <ChevronRightRoundedIcon
-                                                        fontSize="small"
-                                                        sx={{ mt: '1px', ml: '2px' }}
-                                                    />
-                                                </Typography>
-
-                                                {/* <Link
-                                                    color="primary"
-                                                    variant="body2"
-                                                    fontWeight="bold"
-                                                    sx={{
-                                                        display: 'inline-flex',
-                                                        alignItems: 'center',
-                                                        '& > svg': { transition: '0.2s' },
-                                                        '&:hover > svg': { transform: 'translateX(2px)' },
-                                                    }}
-                                                    onClick={(event) => {
-                                                        event.stopPropagation();
-                                                    }}
-                                                >
-                                                </Link> */}
-                                            </Box>
-                                        </Box>
-                                    </Card>
-                                ))}
-                            </Stack>
-                        </Grid>
-                        <Grid
-                            item
-                            xs={14}
-                            md={8}
-                            sx={{ display: { xs: 'none', sm: 'flex' }, width: '100%' }}
-                        >
-                            <Card
-                                variant="outlined"
-                                sx={{
-                                    height: '100%',
-                                    width: '100%',
-                                    display: { xs: 'none', sm: 'flex' },
-                                    pointerEvents: 'none',
-                                }}
-                            >
-                                <Box
-                                    sx={{
-                                        m: 'auto',
-                                        width: 420,
-                                        height: 500,
-                                        backgroundSize: 'contain',
-                                        backgroundImage: items[selectedItemIndex].imageLight
-                                    }}
-                                />
-                            </Card>
-                        </Grid>
-                    </Grid>
-                </Container>
-            </Box >
-            <Footer />
+            <Dialog
+                open={openAuctionModal}
+                onClose={toggleAuctionViewMdal}
+            >
+                {selectedAutionRoom && (
+                    <AuctionRegisterModal
+                        title="XEM PHÒNG ĐẤU GIÁ"
+                        auctionRoom={selectedAutionRoom}
+                        close={toggleAuctionViewMdal}
+                    />
+                )}
+            </Dialog>
         </>
     );
 }

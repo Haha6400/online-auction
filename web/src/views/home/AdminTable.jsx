@@ -34,7 +34,7 @@ import {
 } from "../../service/admin/licensePlateAPI";
 import CreateLPModal from "./modals/CreateLPModal";
 import UpdateLPModal from "./modals/UpdateLPModal";
-import ResultModal from "./modals/ResultModal";
+import ResultModal from "../../components/base/ResultModal";
 
 export default function AdminTable({ idToken }) {
   const [LPSearchInput, setLPSearchInput] = useState("");
@@ -66,14 +66,14 @@ export default function AdminTable({ idToken }) {
   };
   const filteredLicensePlates = licensePlates
     ? licensePlates.filter((plate) => {
-        const matchesLPprovince = !province || plate.province === province;
-        const matchesVehicleType =
-          !vehicleType || plate.vehicleType === vehicleType;
-        const matchesPlateNumber =
-          !LPSearchInput ||
-          plate.plateNumber.toLowerCase().includes(LPSearchInput.toLowerCase());
-        return matchesLPprovince && matchesVehicleType && matchesPlateNumber;
-      })
+      const matchesLPprovince = !province || plate.province === province;
+      const matchesVehicleType =
+        !vehicleType || plate.vehicleType === vehicleType;
+      const matchesPlateNumber =
+        !LPSearchInput ||
+        plate.plateNumber.toLowerCase().includes(LPSearchInput.toLowerCase());
+      return matchesLPprovince && matchesVehicleType && matchesPlateNumber;
+    })
     : [];
 
   const fetchLicensePlates = async () => {
@@ -236,11 +236,18 @@ export default function AdminTable({ idToken }) {
                 <TableCell align="center">{licensePlate.province}</TableCell>
                 <TableCell align="center">{licensePlate.vehicleType}</TableCell>
 
+
                 <TableCell width={300}>
                   <Button
                     variant="contained"
-                    sx={{ mr: 2, ml: 5 }}
-                    style={{ background: "#079455" }}
+                    color="primary"
+                    size="small"
+                    sx={{
+                      mr: 2, ml: 5,
+                      whiteSpace: "nowrap",
+                      backgroundColor: "primary",
+                      color: "white",
+                    }}
                     startIcon={<EditNoteIcon style={{ fontSize: 16 }} />}
                     onClick={() => {
                       setCurrentLP(licensePlate);
@@ -252,8 +259,11 @@ export default function AdminTable({ idToken }) {
                   </Button>
                   <Button
                     variant="contained"
+                    size="small"
                     style={{
                       background: "#e05757",
+                      whiteSpace: "nowrap",
+                      color: "white",
                     }}
                     startIcon={<DeleteIcon style={{ fontSize: 14 }} />}
                     onClick={async () => {

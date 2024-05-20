@@ -15,31 +15,42 @@ import Grid from '@mui/material/Grid';
 import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
 import SettingsIcon from '@mui/icons-material/Settings';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import PaidIcon from '@mui/icons-material/Paid';
-import HttpsIcon from '@mui/icons-material/Https';
+import HistoryIcon from '@mui/icons-material/History';
+import ListIcon from '@mui/icons-material/List';
 
 import Footer from "../../components/common/Footer";
 import AppAppBar from "../../components/base/AppAppBar";
 import Update from "../account/Update";
+import WaitingList from "./WaitingList";
+import MyAuction from "./MyAuction";
+
+import { useAuth } from "../../hooks/AuthProvider";
+
 
 const items = [
     {
         icon: <AccountCircleIcon />,
-        title: 'Personal',
+        title: 'Thông tin cá nhân',
     },
     {
-        icon: <PaidIcon />,
-        title: 'Payment',
+        icon: <HistoryIcon />,
+        title: 'Lịch sử đấu giá',
     },
     {
-        icon: <HttpsIcon />,
-        title: 'Security',
+        icon: <ListIcon />,
+        title: 'Danh sách chờ',
     },
 
 
 ];
 
 export default function MyAccount() {
+    const [idToken, setIdToken] = React.useState(
+        localStorage.getItem("id_token"),
+    );
+    const [accountUser, setAccountUser] = React.useState({});
+    const auth = useAuth();
+
     const [selectedItemIndex, setSelectedItemIndex] = React.useState(0);
 
     const handleItemClick = (index) => {
@@ -47,144 +58,203 @@ export default function MyAccount() {
     };
 
     const selectItem = items[selectedItemIndex];
+
+    React.useEffect(() => {
+        if (auth.user) {
+            setAccountUser(auth.user);
+            console.log(auth.user);
+        }
+    }, [auth.user]);
+
     return (
-        <>
-            <AppAppBar loginCheck="true" name="Ha Nguyen" />
+        <Stack
+            sx={{
+                background: "url(/bgr.png)",
+                backgroundSize: "100% 100%",
+                backgroundRepeat: "no-repeat",
+            }}
+        >
+            <AppAppBar />
             <Box
                 id="hero"
                 sx={{
                     width: "100%",
-                    backgroundImage: "linear-gradient(180deg, #CEE5FD, #FFF)",
-                    backgroundSize: "100% 20%",
-                    backgroundRepeat: "no-repeat"
                 }}
             >
                 <Container id="myAccount" sx={{ py: { xs: 8, sm: 16 } }}>
-                    <Grid container spacing={6}>
-                        <Grid item xs={9} md={4}>
-                            <Stack
-                                direction="column"
-                                justifyContent="center"
-                                alignItems="flex-start"
-                                spacing={2}
-                                useFlexGap
-                                sx={{ width: '100%', display: { xs: 'none', sm: 'flex' } }}
-                            >
-                                {items.map(({ icon, title }, index) => (
-                                    <Card
-                                        key={index}
-                                        variant="outlined"
-                                        component={Button}
-                                        onClick={() => handleItemClick(index)}
-                                        sx={{
-                                            p: 3,
-                                            height: 'fit-content',
-                                            width: '100%',
-                                            background: 'none',
-                                            backgroundColor:
-                                                selectedItemIndex === index ? 'action.selected' : undefined,
-                                            borderColor: selectedItemIndex === index
-                                                ? 'primary.light'
-                                                : 'grey.200'
-                                        }}
+                    {idToken &&
+                        accountUser["authorities"] &&
+                        accountUser["authorities"].includes("ROLE_ADMIN") && (
+                            <>
+                                <Box
+                                    sx={{
+                                        mb: 2,
+                                        padding: 3,
+                                        alignSelf: "center",
+                                        width: "100%",
+                                        bgcolor: "rgba(255, 255, 255, 0.3)",
+                                        backgroundSize: "cover",
+                                        borderRadius: "10px",
+                                        boxShadow: `0px 3.5px 5.5px rgba(0, 0, 0, 0.02)`,
+                                    }}
+                                >
+                                    <Typography
+                                        component="h1" variant="h5"
+                                        sx={{ paddingLeft: 2, color: 'primary.main' }}
+                                    >
+                                        Thông tin cá nhân
+                                    </Typography>
+                                </Box>
+                                <Box
+                                    sx={{
+                                        padding: 2,
+                                        alignSelf: "center",
+                                        width: "100%",
+                                        bgcolor: "rgba(255, 255, 255, 0.3)",
+                                        backgroundSize: "cover",
+                                        borderRadius: "10px",
+                                        boxShadow: `0px 3.5px 5.5px rgba(0, 0, 0, 0.02)`
+                                    }}
+                                >
+                                    <Update />
+                                </Box>
+                            </>
+                        )}
+                    {idToken &&
+                        accountUser["authorities"] &&
+                        !accountUser["authorities"].includes("ROLE_ADMIN") && (
+                            <>
+                                <Grid container spacing={6}>
+
+                                    <Grid item xs={9} md={4}>
+                                        <Stack
+                                            direction="column"
+                                            justifyContent="center"
+                                            alignItems="flex-start"
+                                            spacing={2}
+                                            useFlexGap
+                                            sx={{ width: '100%', display: { xs: 'none', sm: 'flex' } }}
+                                        >
+                                            {items.map(({ icon, title }, index) => (
+                                                <Card
+                                                    key={index}
+                                                    variant="outlined"
+                                                    component={Button}
+                                                    onClick={() => handleItemClick(index)}
+                                                    sx={{
+                                                        p: 3,
+                                                        height: 'fit-content',
+                                                        width: '100%',
+                                                        background: 'none',
+                                                        backgroundColor:
+                                                            selectedItemIndex === index ? 'rgba(255, 255, 255, 0.3)' : "rgba(255, 255, 255, 0.1)",
+                                                        borderColor: selectedItemIndex === index
+                                                            ? 'primary.light'
+                                                            : 'rgba(255, 255, 255, 0.2)',
+                                                    }}
+                                                >
+                                                    <Box
+                                                        sx={{
+                                                            width: '100%',
+                                                            display: 'flex',
+                                                            textAlign: 'left',
+                                                            flexDirection: { xs: 'column', md: 'row' },
+                                                            alignItems: { md: 'center' },
+                                                            gap: 2.5,
+                                                        }}
+                                                    >
+                                                        <Box
+                                                            sx={{
+                                                                color: 'primary.main',
+                                                                display: 'flex', alignItems: 'center', textTransform: 'none'
+                                                            }}
+
+                                                        >
+                                                            {icon}
+                                                        </Box>
+                                                        <Box>
+                                                            <Typography
+                                                                color="text.primary"
+                                                                variant="body2"
+                                                                fontWeight="bold"
+                                                                sx={{ display: 'flex', alignItems: 'center', textTransform: 'none', color: 'primary.main' }}
+                                                            >
+                                                                {title}
+                                                                <ChevronRightRoundedIcon
+                                                                    fontSize="small"
+                                                                    sx={{ mt: '1px', ml: '2px' }}
+                                                                />
+                                                            </Typography>
+
+
+                                                        </Box>
+                                                    </Box>
+                                                </Card>
+                                            ))}
+                                        </Stack>
+                                    </Grid>
+
+                                    <Grid
+                                        item
+                                        xs={14}
+                                        md={8}
+                                        sx={{ display: { xs: 'none', sm: 'flex' }, width: '100%', flexDirection: 'column', gap: 2 }}
                                     >
                                         <Box
                                             sx={{
-                                                width: '100%',
-                                                display: 'flex',
-                                                textAlign: 'left',
-                                                flexDirection: { xs: 'column', md: 'row' },
-                                                alignItems: { md: 'center' },
-                                                gap: 2.5,
+                                                padding: 3,
+                                                alignSelf: "center",
+                                                width: "100%",
+                                                bgcolor: "rgba(255, 255, 255, 0.3)",
+                                                backgroundSize: "cover",
+                                                borderRadius: "10px",
+                                                boxShadow: `0px 3.5px 5.5px rgba(0, 0, 0, 0.02)`,
                                             }}
                                         >
-                                            <Box
-                                                sx={{
-                                                    color: selectedItemIndex === index
-                                                        ? 'primary.main'
-                                                        : 'grey.300',
-                                                    display: 'flex', alignItems: 'center', textTransform: 'none'
-                                                }}
-
+                                            <Typography
+                                                component="h1" variant="h5"
+                                                sx={{ paddingLeft: 2, color: 'primary.main' }}
                                             >
-                                                {icon}
-                                            </Box>
-                                            <Box>
-                                                <Typography
-                                                    color="text.primary"
-                                                    variant="body2"
-                                                    fontWeight="bold"
-                                                    sx={{ display: 'flex', alignItems: 'center', textTransform: 'none' }}
-                                                >
-                                                    {title}
-                                                    <ChevronRightRoundedIcon
-                                                        fontSize="small"
-                                                        sx={{ mt: '1px', ml: '2px' }}
-                                                    />
-                                                </Typography>
-
-                                                {/* <Link
-                                                    color="primary"
-                                                    variant="body2"
-                                                    fontWeight="bold"
-                                                    sx={{
-                                                        display: 'inline-flex',
-                                                        alignItems: 'center',
-                                                        '& > svg': { transition: '0.2s' },
-                                                        '&:hover > svg': { transform: 'translateX(2px)' },
-                                                    }}
-                                                    onClick={(event) => {
-                                                        event.stopPropagation();
-                                                    }}
-                                                >
-                                                </Link> */}
-                                            </Box>
+                                                {items[selectedItemIndex].title}
+                                            </Typography>
                                         </Box>
-                                    </Card>
-                                ))}
-                            </Stack>
-                        </Grid>
-                        <Grid
-                            item
-                            xs={14}
-                            md={8}
-                            sx={{ display: { xs: 'none', sm: 'flex' }, width: '100%' }}
-                        >
-                            <Card
-                                variant="outlined"
-                                sx={{
-                                    height: '100%',
-                                    width: '100%',
-                                    display: { xs: 'none', sm: 'flex' },
-                                }}
-                            >
+                                        <Box
+                                            sx={{
+                                                padding: 2,
+                                                alignSelf: "center",
+                                                width: "100%",
+                                                bgcolor: "rgba(255, 255, 255, 0.3)",
+                                                backgroundSize: "cover",
+                                                borderRadius: "10px",
+                                                boxShadow: `0px 3.5px 5.5px rgba(0, 0, 0, 0.02)`
+                                            }}
+                                        >
+                                            {items[selectedItemIndex].title === "Thông tin cá nhân" && (
+                                                <>
+                                                    <Update />
+                                                </>
+                                            )}
+                                            {items[selectedItemIndex].title === "Lịch sử đấu giá" && (
+                                                <>
+                                                    <MyAuction />
+                                                </>
+                                            )}
+                                            {items[selectedItemIndex].title === "Danh sách chờ" && (
+                                                <>
+                                                    <WaitingList />
+                                                </>
+                                            )}
+                                        </Box>
+                                    </Grid>
 
-                                <Box
-                                    sx={{
-                                        m: 'auto',
-                                        width: '95%',
-                                        height: 500,
-                                        backgroundSize: 'contain',
-                                    }}
-                                >
-                                    <Typography component="h1" variant="h5" sx={{
-                                        margin: 3
-                                    }}>
-                                        {items[selectedItemIndex].title} Information
-                                    </Typography>
-                                    {items[selectedItemIndex].title === "Personal" && (
-                                        <>
-                                            <Update />
-                                        </>
-                                    )}
+                                </Grid>
+                            </>
+                        )}
 
-                                </Box>
-                            </Card>
-                        </Grid>
-                    </Grid>
                 </Container>
-            </Box >
+            </Box>
+
             <Footer />
-        </>
+        </Stack >
     );
 }

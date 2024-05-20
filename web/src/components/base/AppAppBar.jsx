@@ -138,7 +138,7 @@ export default function AppAppBar({ currentPage, login }) {
                   <MenuItem
                     sx={{ py: "6px", px: "12px", ml: "10px" }}
                     selected={currentPage === "list_auction_room"}
-                    onClick={!idToken ? login : () => {}}
+                    onClick={!idToken ? login : () => { }}
                   >
                     <Typography
                       variant="navbar"
@@ -152,6 +152,29 @@ export default function AppAppBar({ currentPage, login }) {
                     </Typography>
                   </MenuItem>
                 </Link>
+                {idToken &&
+                  accountUser["authorities"] &&
+                  accountUser["authorities"].includes("ROLE_ADMIN") && (
+                    <>
+                      <Link to={idToken && "/payment"}>
+                        <MenuItem
+                          sx={{ py: "6px", px: "12px", ml: "10px" }}
+                          selected={currentPage === "payment"}
+                          onClick={!idToken ? login : () => { }}
+                        >
+                          <Typography
+                            variant="navbar"
+                            color={
+                              currentPage === "payment"
+                                ? "text.primary"
+                                : "text.secondary"
+                            }
+                          >
+                            Thanh toán
+                          </Typography>
+                        </MenuItem>
+                      </Link>
+                    </>)}
               </Box>
             </Box>
 
@@ -224,7 +247,6 @@ export default function AppAppBar({ currentPage, login }) {
                   <h4 style={{ color: "#015433", fontSize: "14px" }}>
                     {accountUser.login}
                   </h4>
-
                   <AccountMenu accountUser={accountUser} />
                 </>
               )}
@@ -295,7 +317,7 @@ export default function AppAppBar({ currentPage, login }) {
                     <MenuItem
                       sx={{ my: 1, py: 1 }}
                       selected={currentPage === "list_auction_room"}
-                      onClick={!idToken ? login : () => {}}
+                      onClick={!idToken ? login : () => { }}
                     >
                       <Typography
                         variant="navbar"
