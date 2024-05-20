@@ -30,10 +30,10 @@ public class Bid {
     @Column(name = "number_of_price_step")
     private Float numberOfPriceStep;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JsonIgnoreProperties(value = { "bids", "licensePlate", "users", "winningBid" }, allowSetters = true)
     private AuctionRoom auctionRoom;
 

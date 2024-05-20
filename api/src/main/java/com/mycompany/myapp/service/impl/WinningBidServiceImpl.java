@@ -1,9 +1,13 @@
 package com.mycompany.myapp.service.impl;
 
+import com.mycompany.myapp.domain.AuctionRoom;
 import com.mycompany.myapp.domain.WinningBid;
+import com.mycompany.myapp.repository.AuctionRoomRepository;
 import com.mycompany.myapp.repository.UserRepository;
 import com.mycompany.myapp.repository.WinningBidRepository;
+import com.mycompany.myapp.service.AuctionRoomService;
 import com.mycompany.myapp.service.WinningBidService;
+import com.mycompany.myapp.service.dto.AuctionRoomDTO;
 import com.mycompany.myapp.service.dto.LicensePlateDTO;
 import com.mycompany.myapp.service.dto.UserDTO;
 import com.mycompany.myapp.service.dto.WinningBidDTO;
@@ -31,21 +35,27 @@ public class WinningBidServiceImpl implements WinningBidService {
 
     private final WinningBidMapper winningBidMapper;
     private final UserRepository userRepository;
+    private final AuctionRoomRepository auctionRoomRepository;
 
     public WinningBidServiceImpl(
         WinningBidRepository winningBidRepository,
         WinningBidMapper winningBidMapper,
-        UserRepository userRepository
+        UserRepository userRepository,
+        AuctionRoomRepository auctionRoomRepository
     ) {
         this.winningBidRepository = winningBidRepository;
         this.winningBidMapper = winningBidMapper;
         this.userRepository = userRepository;
+        this.auctionRoomRepository = auctionRoomRepository;
     }
 
     @Override
     public WinningBidDTO save(WinningBidDTO winningBidDTO) {
         log.debug("Request to save WinningBid : {}", winningBidDTO);
         WinningBid winningBid = winningBidMapper.toEntity(winningBidDTO);
+        AuctionRoom auctionRoom = auctionRoomRepository.findById(winningBidDTO.getAuctionRoom().getId()).get();
+        auctionRoom.setWinningBid(winningBid);
+        auctionRoomRepository.save(auctionRoom);
         winningBid = winningBidRepository.save(winningBid);
         return winningBidMapper.toDto(winningBid);
     }

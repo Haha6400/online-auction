@@ -23,7 +23,7 @@ public class WinningBid {
     private PaymentStatus paymentStatus;
 
     @JsonIgnoreProperties(value = { "user", "auctionRoom", "winningBid" }, allowSetters = true)
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(unique = true)
     private Bid bid;
 

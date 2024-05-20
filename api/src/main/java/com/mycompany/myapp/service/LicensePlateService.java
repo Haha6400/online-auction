@@ -1,5 +1,6 @@
 package com.mycompany.myapp.service;
 
+import com.mycompany.myapp.domain.enumeration.LicensePlateStatus;
 import com.mycompany.myapp.service.dto.AuctionRoomDTO;
 import com.mycompany.myapp.service.dto.LicensePlateDTO;
 import com.mycompany.myapp.service.dto.UserDTO;
@@ -57,4 +58,6 @@ public interface LicensePlateService {
     void delete(Long id);
     List<LicensePlateDTO> getAllOrderByCreatedDateDESC();
     List<LicensePlateDTO> getAllOrderByCreatedDateASC();
+    List<LicensePlateDTO> findAllWhereAuctionRoomIsNull();
+    LicensePlateDTO setStatus(Long id, LicensePlateStatus status);
 }

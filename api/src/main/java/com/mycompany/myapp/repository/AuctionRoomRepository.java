@@ -2,6 +2,7 @@ package com.mycompany.myapp.repository;
 
 import com.mycompany.myapp.domain.AuctionRoom;
 import com.mycompany.myapp.domain.User;
+import com.mycompany.myapp.service.dto.UserDTO;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -36,6 +37,8 @@ public interface AuctionRoomRepository extends AuctionRoomRepositoryWithBagRelat
     List<AuctionRoom> findAllByUsersAndEndTimeBefore(User user, Instant date);
     List<AuctionRoom> findAllByUsersAndStartTimeAfter(User user, Instant date);
     List<AuctionRoom> findAllByUsersAndStartTimeBeforeAndEndTimeAfterOrderByStartTimeDesc(User user, Instant start, Instant end);
+    List<AuctionRoom> findAllByStartTimeBeforeAndEndTimeAfterOrderByStartTimeDesc(Instant start, Instant end);
 
     List<AuctionRoom> findAllByUsersOrderByCreatedDateDesc(User user);
+    //    List<AuctionRoom> findAllByUsersAndWinningBid(User user);
 }

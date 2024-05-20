@@ -36,6 +36,7 @@ public class BidServiceImpl implements BidService {
     }
 
     @Override
+    @Transactional
     public BidDTO save(BidDTO bidDTO) {
         log.debug("Request to save Bid : {}", bidDTO);
         Bid bid = bidMapper.toEntity(bidDTO);

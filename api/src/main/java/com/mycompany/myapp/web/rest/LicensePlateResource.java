@@ -12,6 +12,7 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.HeaderUtil;
@@ -139,6 +140,9 @@ public class LicensePlateResource {
             return licensePlateService.getAllOrderByCreatedDateDESC();
         } else if ("asc".equals(filter)) {
             return licensePlateService.getAllOrderByCreatedDateASC();
+        } else if ("auctionroom-is-null".equals(filter)) {
+            log.debug("REST request to get all LicensePlates where auctionRoom is null");
+            return licensePlateService.findAllWhereAuctionRoomIsNull();
         }
         return licensePlateService.findAll();
     }

@@ -12,6 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -101,5 +102,21 @@ public class LicensePlateServiceImpl implements LicensePlateService {
     @Override
     public List<LicensePlateDTO> getAllOrderByCreatedDateASC() {
         return licensePlateMapper.toDto(licensePlateRepository.findAllByOrderByCreatedDateAsc());
+    }
+
+    @Transactional(readOnly = true)
+    public List<LicensePlateDTO> findAllWhereAuctionRoomIsNull() {
+        log.debug("Request to get all licensePlates where AuctionRoom is null");
+        return StreamSupport.stream(licensePlateRepository.findAll().spliterator(), false)
+            .filter(licensePlate -> licensePlate.getStatus() == LicensePlateStatus.NOT_YET_AUCTIONED)
+            .map(licensePlateMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
+    }
+
+    @Override
+    public LicensePlateDTO setStatus(Long id, LicensePlateStatus status) {
+        Optional<LicensePlate> licensePlate = licensePlateRepository.findById(id);
+        licensePlate.get().setStatus(status);
+        return licensePlateMapper.toDto(licensePlate.get());
     }
 }
