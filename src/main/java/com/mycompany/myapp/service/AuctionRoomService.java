@@ -42,7 +42,7 @@ public interface AuctionRoomService {
      *
      * @return the list of entities.
      */
-    List<CustomAuctionResult> findAll();
+    List<AuctionRoomDTO> findAll();
 
     /**
      * Get all the AuctionRoomDTO where WinningBid is {@code null}.
@@ -73,8 +73,8 @@ public interface AuctionRoomService {
      * @param id the id of the entity.
      */
     void delete(Long id);
-    List<CustomAuctionResult> getAllOrderByCreatedDateDesc();
-    List<CustomAuctionResult> getAllOrderByCreatedDateAsc();
+    List<AuctionRoomDTO> getAllOrderByCreatedDateDesc();
+    List<AuctionRoomDTO> getAllOrderByCreatedDateAsc();
 
     List<AuctionRoomDTO> getAllHistoryAuctionByUser(UserDTO userDTO, Instant date);
     List<AuctionRoomDTO> getAuctionWaitlistByUser(UserDTO userDTO, Instant date);
