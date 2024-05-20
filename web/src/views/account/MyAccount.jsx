@@ -17,12 +17,14 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import HistoryIcon from '@mui/icons-material/History';
 import ListIcon from '@mui/icons-material/List';
+import PaidIcon from '@mui/icons-material/Paid';
 
 import Footer from "../../components/common/Footer";
 import AppAppBar from "../../components/base/AppAppBar";
 import Update from "../account/Update";
 import WaitingList from "./WaitingList";
 import MyAuction from "./MyAuction";
+import Unpaid from "./Unpaid";
 
 import { useAuth } from "../../hooks/AuthProvider";
 
@@ -33,12 +35,16 @@ const items = [
         title: 'Thông tin cá nhân',
     },
     {
-        icon: <HistoryIcon />,
-        title: 'Lịch sử đấu giá',
-    },
-    {
         icon: <ListIcon />,
         title: 'Danh sách chờ',
+    },
+    {
+        icon: <PaidIcon />,
+        title: 'Chưa thanh toán',
+    },
+    {
+        icon: <HistoryIcon />,
+        title: 'Lịch sử đấu giá',
     },
 
 
@@ -242,6 +248,11 @@ export default function MyAccount() {
                                             {items[selectedItemIndex].title === "Danh sách chờ" && (
                                                 <>
                                                     <WaitingList />
+                                                </>
+                                            )}
+                                            {items[selectedItemIndex].title === "Chưa thanh toán" && (
+                                                <>
+                                                    <Unpaid />
                                                 </>
                                             )}
                                         </Box>

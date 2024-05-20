@@ -54,6 +54,12 @@ export default function ResultModal({ type, close }) {
                 Vui lòng kiểm tra lại thông tin.
               </>
             )}
+            {type === "PAYMENT_SUCCESS" && (
+              <>
+                Ghi nhận thông tin thành công!<br />
+                Vui lòng khoảng 2-5 ngày để xác minh thanh toán.
+              </>
+            )}
           </Typography>
         </Box>
 

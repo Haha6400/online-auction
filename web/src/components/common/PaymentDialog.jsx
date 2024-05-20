@@ -316,89 +316,43 @@ export default function PaymentDialog({ title, auctionRoom, close }) {
                         </Box>
                     </Grid>
 
-                    {(title === "XEM PHÒNG ĐẤU GIÁ") && (
-                        <>
-                            <Grid item xs={12} sm={4}>
-                                <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-                                    <Box
-                                        sx={{
-                                            mr: 1,
-                                            pt: 1.5,
-                                            pb: 0.5,
-                                            px: 1.5,
-                                            borderRadius: "50%",
-                                            background: "#F4FCF8",
-                                        }}
-                                    >
-                                        <EmojiEventsIcon sx={{ fontSize: 25, color: "#5DD397" }} />
-                                    </Box>
-                                    <Stack>
-                                        <Typography>Kết quả</Typography>
-                                        <Typography sx={{ fontWeight: 600 }}>
-                                            Kết quả
-                                        </Typography>
-                                    </Stack>
 
-                                </Box>
-                            </Grid>
-                        </>)}
-
-                    {(title !== "XEM PHÒNG ĐẤU GIÁ") && (
-                        <>
-                            <Grid item xs={12} sm={4}>
-                                <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-                                    <Box
-                                        sx={{
-                                            mr: 1,
-                                            pt: 1.5,
-                                            pb: 0.5,
-                                            px: 1.5,
-                                            borderRadius: "50%",
-                                            background: "#F4FCF8",
-                                        }}
-                                    >
-                                        <EmojiEventsIcon sx={{ fontSize: 25, color: "#5DD397" }} />
-                                    </Box>
-                                    <Stack>
-                                        <Typography>Người trúng</Typography>
-                                        (auctionRoom.winner && (
+                    <Grid item xs={12} sm={4}>
+                        <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+                            <Box
+                                sx={{
+                                    mr: 1,
+                                    pt: 1.5,
+                                    pb: 0.5,
+                                    px: 1.5,
+                                    borderRadius: "50%",
+                                    background: "#F4FCF8",
+                                }}
+                            >
+                                <EmojiEventsIcon sx={{ fontSize: 25, color: "#5DD397" }} />
+                            </Box>
+                            <Stack>
+                                <Typography>Người trúng</Typography>
+                                <Typography sx={{ fontWeight: 600 }}>
+                                    {auctionRoom.winner && (
                                         <>
-                                            <Typography sx={{ fontWeight: 600 }}>
-
-                                                {auctionRoom.winner['fullName']}
-                                            </Typography>
+                                            {auctionRoom.winner['fullName']}
                                         </>
-                                        ))
+                                    )}
+                                    {!auctionRoom.winner && (
+                                        <>
+                                            ...
+                                        </>
+                                    )}
 
-                                    </Stack>
+                                </Typography>
 
-                                </Box>
-                            </Grid>
-                        </>)}
 
+                            </Stack>
+
+                        </Box>
+                    </Grid>
                     {/* Action button */}
-                    {(title === "XEM PHÒNG ĐẤU GIÁ") && (
-                        <>
-                            <Grid item xs={6}>
-                                <Button
-                                    variant="outlined"
-                                    color="primary"
-                                    sx={{ width: "100%" }}
-                                    onClick={close}
-                                >
-                                    Đóng
-                                </Button>
-                            </Grid>
-                            <Grid item xs={6}>
-                                <Button
-                                    variant="contained"
-                                    sx={{ width: "100%", background: "#079455" }}
-                                    onClick={handleRegisterButton}
-                                >
-                                    Xem tài liệu
-                                </Button>
-                            </Grid>
-                        </>)}
                     {(title === "XÁC NHẬN THANH TOÁN") && (
                         <>
 
