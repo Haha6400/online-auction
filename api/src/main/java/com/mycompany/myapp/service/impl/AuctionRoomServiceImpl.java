@@ -104,10 +104,8 @@ public class AuctionRoomServiceImpl implements AuctionRoomService {
             .findAll()
             .forEach(auctionRoomDTO -> {
                 AuctionRoom auctionRoom = auctionRoomRepository.findById(auctionRoomDTO.getId()).get();
-                Bid bid = auctionRoom.getWinningBid().getBid();
-                Float finalPrice = bid.getPriceBeforeBidding() + bid.getPriceStep() * bid.getPriceBeforeBidding();
 
-                res.add(setCustomResult(auctionRoom, finalPrice));
+                res.add(setCustomResult(auctionRoom));
             });
         return res;
     }
@@ -151,10 +149,8 @@ public class AuctionRoomServiceImpl implements AuctionRoomService {
             .findAllByOrderByCreatedDateDesc()
             .forEach(auctionRoomDTO -> {
                 AuctionRoom auctionRoom = auctionRoomRepository.findById(auctionRoomDTO.getId()).get();
-                Bid bid = auctionRoom.getWinningBid().getBid();
-                Float finalPrice = bid.getPriceBeforeBidding() + bid.getPriceStep() * bid.getPriceBeforeBidding();
 
-                res.add(setCustomResult(auctionRoom, finalPrice));
+                res.add(setCustomResult(auctionRoom));
             });
         return res;
     }
@@ -167,10 +163,8 @@ public class AuctionRoomServiceImpl implements AuctionRoomService {
             .findAllByOrderByCreatedDateAsc()
             .forEach(auctionRoomDTO -> {
                 AuctionRoom auctionRoom = auctionRoomRepository.findById(auctionRoomDTO.getId()).get();
-                Bid bid = auctionRoom.getWinningBid().getBid();
-                Float finalPrice = bid.getPriceBeforeBidding() + bid.getPriceStep() * bid.getPriceBeforeBidding();
 
-                res.add(setCustomResult(auctionRoom, finalPrice));
+                res.add(setCustomResult(auctionRoom));
             });
         return res;
     }
@@ -250,11 +244,16 @@ public class AuctionRoomServiceImpl implements AuctionRoomService {
             .collect(Collectors.toCollection(LinkedList::new));
     }
 
-    public CustomAuctionResult setCustomResult(AuctionRoom auctionRoom, Float finalPrice) {
+    public CustomAuctionResult setCustomResult(AuctionRoom auctionRoom) {
         CustomAuctionResult auctionResult = new CustomAuctionResult();
+        float finalPrice = 0;
+        if (auctionRoom.getWinningBid() != null) {
+            Bid bid = auctionRoom.getWinningBid().getBid();
+            finalPrice = bid.getPriceBeforeBidding() + bid.getPriceStep() * bid.getPriceBeforeBidding();
+            auctionResult.setUserDTO(new UserDTO(auctionRoom.getWinningBid().getBid().getUser()));
+        }
 
         auctionResult.setAuctionRoomDTO(auctionRoomMapper.toDto(auctionRoom));
-        auctionResult.setUserDTO(new UserDTO(auctionRoom.getWinningBid().getBid().getUser()));
         auctionResult.setFinalPrice(finalPrice);
         return auctionResult;
     }
