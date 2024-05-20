@@ -21,7 +21,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 
 import { useAuth } from "../../hooks/AuthProvider";
-import { formatTime } from "../../utils/timeFormatter";
+import { formatTime } from "../../utils/formatter";
 
 export default function AuctionRoom() {
   const [openCreateDialog, setOpenCreateDialog] = React.useState(false);

@@ -9,9 +9,11 @@ import CustomThemeProvider from "./utils/ThemeContext";
 import Plan from "./views/plan/Plan";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import AuctionRoom from "./views/auctionRoom/AuctionRoom";
-import RegisterV2 from "./components/common/RegisterV2"
+import RegisterV2 from "./components/common/RegisterV2";
 import AuthProvider from "./hooks/AuthProvider";
-
+import BiddingRoom, {
+  loader as biddingRoomLoader,
+} from "./views/auctionRoom/BiddingRoom";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +29,11 @@ const router = createBrowserRouter([
     element: <AuctionRoom />,
   },
   {
+    path: "/auction-room/:id",
+    element: <BiddingRoom />,
+    loader: biddingRoomLoader,
+  },
+  {
     path: "/my-auction",
     element: <MyAuction />,
   },
@@ -40,9 +47,7 @@ const router = createBrowserRouter([
   },
 ]);
 
-
 function App() {
-
   return (
     <CustomThemeProvider>
       <CssBaseline />
