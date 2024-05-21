@@ -1,7 +1,5 @@
 package com.mycompany.myapp.service;
 
-
-
 import com.mycompany.myapp.domain.Bid;
 import com.mycompany.myapp.domain.User;
 import com.mycompany.myapp.domain.WinningBid;
@@ -18,14 +16,15 @@ import com.mycompany.myapp.service.mapper.LicensePlateMapper;
 import com.mycompany.myapp.service.mapper.WinningBidMapper;
 import com.mycompany.myapp.web.websocket.dto.UpdateBidResponseDTO;
 import com.mycompany.myapp.web.websocket.dto.WinningBidResponseDTO;
+import java.sql.Date;
+import java.time.Instant;
+import java.util.*;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
-import java.util.*;
-
 @Service
 public class AuctionService {
+
     private final SimpMessageSendingOperations messageTemplate;
     private final AuctionRoomRepository auctionRoomRepository;
 
@@ -46,16 +45,19 @@ public class AuctionService {
     private final LicensePlateMapper licensePlateMapper;
 
     private final Map<Long, AuctionRoomWSDTO> ongoingAuctionMap = new HashMap<>();
-    public AuctionService(AuctionRoomRepository auctionRoomRepository,
-                          BidRepository bidRepository,
-                          UserRepository userRepository,
-                          WinningBidRepository winningBidRepository,
-                          LicensePlateRepository licensePlateRepository,
-                          AuctionRoomWSMapper auctionRoomWSMapper,
-                          BidMapper bidMapper,
-                          WinningBidMapper winningBidMapper,
-                          LicensePlateMapper licensePlateMapper,
-                          SimpMessageSendingOperations messageTemplate) {
+
+    public AuctionService(
+        AuctionRoomRepository auctionRoomRepository,
+        BidRepository bidRepository,
+        UserRepository userRepository,
+        WinningBidRepository winningBidRepository,
+        LicensePlateRepository licensePlateRepository,
+        AuctionRoomWSMapper auctionRoomWSMapper,
+        BidMapper bidMapper,
+        WinningBidMapper winningBidMapper,
+        LicensePlateMapper licensePlateMapper,
+        SimpMessageSendingOperations messageTemplate
+    ) {
         this.auctionRoomRepository = auctionRoomRepository;
         this.bidRepository = bidRepository;
         this.userRepository = userRepository;
@@ -66,27 +68,25 @@ public class AuctionService {
         this.winningBidMapper = winningBidMapper;
         this.licensePlateMapper = licensePlateMapper;
         this.messageTemplate = messageTemplate;
-
-
-        LicensePlateDTO licensePlate = new LicensePlateDTO();
-        licensePlate.setPlateNumber("29A-99999");
-        licensePlate.setStatus(LicensePlateStatus.NOT_YET_AUCTIONED);
-        licensePlate.setVehicleType("Ban Tai");
-        licensePlate.setProvince("Ha Noi");
-        licensePlateRepository.save(licensePlateMapper.toEntity(licensePlate));
-        AuctionRoomWSDTO auctionRoom = new AuctionRoomWSDTO();
-        auctionRoom.setStartTime(Instant.now());
-        auctionRoom.setEndTime(Instant.now().plusSeconds(30));
-        auctionRoom.setInitialPrice(0F);
-        auctionRoom.setPriceStep(1F);
-        auctionRoom.setLicensePlate(licensePlate);
-        auctionRoom.setBids(new ArrayList<>());
-        auctionRoomRepository.save(auctionRoomWSMapper.toEntity(auctionRoom));
+        //        LicensePlateDTO licensePlate = new LicensePlateDTO();
+        //        licensePlate.setPlateNumber("29A-99999");
+        //        licensePlate.setStatus(LicensePlateStatus.NOT_YET_AUCTIONED);
+        //        licensePlate.setVehicleType("Ban Tai");
+        //        licensePlate.setProvince("Ha Noi");
+        //        licensePlateRepository.save(licensePlateMapper.toEntity(licensePlate));
+        //        AuctionRoomWSDTO auctionRoom = new AuctionRoomWSDTO();
+        //        auctionRoom.setStartTime(Instant.now());
+        //        auctionRoom.setEndTime(Instant.now().plusSeconds(30));
+        //        auctionRoom.setInitialPrice(0F);
+        //        auctionRoom.setPriceStep(1F);
+        //        auctionRoom.setLicensePlate(licensePlate);
+        //        auctionRoom.setBids(new ArrayList<>());
+        //        auctionRoomRepository.save(auctionRoomWSMapper.toEntity(auctionRoom));
 
     }
 
     public AuctionRoomWSDTO getAuctionRoom(Long auctionRoomId) {
-        if(!ongoingAuctionMap.containsKey(auctionRoomId)) {
+        if (!ongoingAuctionMap.containsKey(auctionRoomId)) {
             fetchAuctionRoom(auctionRoomId);
         }
         return ongoingAuctionMap.get(auctionRoomId);
@@ -97,15 +97,22 @@ public class AuctionService {
         User user = userRepository.findOneWithAuthoritiesByLogin(bidDTO.getUser().getLogin()).get();
         bidDTO.getUser().setId(user.getId());
         bidDTO.setEventTime(Instant.now());
-        if(auctionRoom != null) {
+        if (auctionRoom != null) {
             boolean flag = false;
             if (auctionRoom.getBids().isEmpty()) {
-                if (Objects.equals(auctionRoom.getInitialPrice(), bidDTO.getPriceBeforeBidding()) &&
-                    Objects.equals(auctionRoom.getPriceStep(), bidDTO.getPriceStep())) flag = true;
+                if (
+                    Objects.equals(auctionRoom.getInitialPrice(), bidDTO.getPriceBeforeBidding()) &&
+                    Objects.equals(auctionRoom.getPriceStep(), bidDTO.getPriceStep())
+                ) flag = true;
             } else {
                 BidDTO lastBid = auctionRoom.getBids().get(auctionRoom.getBids().size() - 1);
-                if (Objects.equals(bidDTO.getPriceBeforeBidding(), lastBid.getPriceBeforeBidding() + lastBid.getPriceStep() * lastBid.getNumberOfPriceStep()) &&
-                    Objects.equals(bidDTO.getPriceStep(), auctionRoom.getPriceStep())) {
+                if (
+                    Objects.equals(
+                        bidDTO.getPriceBeforeBidding(),
+                        lastBid.getPriceBeforeBidding() + lastBid.getPriceStep() * lastBid.getNumberOfPriceStep()
+                    ) &&
+                    Objects.equals(bidDTO.getPriceStep(), auctionRoom.getPriceStep())
+                ) {
                     flag = true;
                 }
             }
@@ -124,11 +131,10 @@ public class AuctionService {
     }
 
     private void fetchAuctionRoom(Long auctionRoomId) {
-        Optional<AuctionRoomWSDTO> auctionRoomDTO =
-            auctionRoomRepository.findById(auctionRoomId).map(auctionRoomWSMapper::toDto);
-        if(auctionRoomDTO.isPresent()) {
+        Optional<AuctionRoomWSDTO> auctionRoomDTO = auctionRoomRepository.findById(auctionRoomId).map(auctionRoomWSMapper::toDto);
+        if (auctionRoomDTO.isPresent()) {
             AuctionRoomWSDTO auctionRoom = auctionRoomDTO.get();
-            if(auctionRoom.getEndTime().isAfter(Instant.now())) {
+            if (auctionRoom.getEndTime().isAfter(Instant.now())) {
                 ongoingAuctionMap.put(auctionRoom.getId(), auctionRoom);
                 Timer timer = new Timer();
                 TimerTask task = new TimerTask() {
@@ -138,13 +144,15 @@ public class AuctionService {
                         WinningBidDTO winningBidDTO = new WinningBidDTO();
                         winningBidDTO.setPaymentStatus(PaymentStatus.UNPAID);
                         winningBidDTO.setBid(auctionRoom.getBids().get(auctionRoom.getBids().size() - 1));
-                        WinningBid winningBid= winningBidRepository.save(winningBidMapper.toEntity(winningBidDTO));
-                        WinningBidResponseDTO winningBidResponseDTO= new WinningBidResponseDTO();
+                        winningBidDTO.setAuctionRoom(auctionRoom);
+                        WinningBid winningBid = winningBidRepository.save(winningBidMapper.toEntity(winningBidDTO));
+                        WinningBidResponseDTO winningBidResponseDTO = new WinningBidResponseDTO();
                         winningBidResponseDTO.setWinningBidDTO(winningBidMapper.toDto(winningBid));
                         messageTemplate.convertAndSend("/topic/auctionRoom/" + auctionRoomDTO.get().getId(), winningBidResponseDTO);
                     }
                 };
                 timer.schedule(task, Date.from(auctionRoomDTO.get().getEndTime()));
+                //                timer.schedule(task, Date.from(Instant.now().plusSeconds(120)));
             }
         }
     }

@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -35,14 +37,14 @@ public class AuctionRoom extends AbstractAuditingEntity<Long> {
     @Column(name = "price_step")
     private Float priceStep;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "auctionRoom")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "auctionRoom")
     @JsonIgnoreProperties(value = { "user", "auctionRoom", "winningBid" }, allowSetters = true)
     private Set<Bid> bids = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.EAGER)
     private LicensePlate licensePlate;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "rel_auction_room__user",
         joinColumns = @JoinColumn(name = "auction_room_id"),
