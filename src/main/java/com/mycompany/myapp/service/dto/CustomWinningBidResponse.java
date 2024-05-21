@@ -81,17 +81,23 @@ public class CustomWinningBidResponse {
         this.finalPrice = finalPrice;
     }
 
+    public CustomWinningBidResponse(String plateNumber, LicensePlateStatus status, String vehicleType, String province, float finalPrice) {
+        this.plateNumber = plateNumber;
+        this.status = status;
+        this.vehicleType = vehicleType;
+        this.province = province;
+        this.finalPrice = finalPrice;
+    }
+
     public CustomWinningBidResponse() {}
 
     public CustomWinningBidResponse licenseToCustom(LicensePlateDTO licensePlateDTO, float finalPrice) {
-        return new CustomWinningBidResponse(
-            licensePlateDTO.getId(),
-            licensePlateDTO.getPlateNumber(),
-            licensePlateDTO.getStatus(),
-            licensePlateDTO.getVehicleType(),
-            licensePlateDTO.getProvince(),
-            finalPrice
-        );
+        this.setPlateNumber(licensePlateDTO.getPlateNumber());
+        this.setStatus(licensePlateDTO.getStatus());
+        this.setVehicleType(licensePlateDTO.getVehicleType());
+        this.setProvince(licensePlateDTO.getProvince());
+        this.setFinalPrice(finalPrice);
+        return this;
     }
 
     @Override
