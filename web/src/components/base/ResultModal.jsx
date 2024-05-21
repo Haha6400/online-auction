@@ -60,6 +60,7 @@ export default function ResultModal({ type, close }) {
                 Vui lòng khoảng 2-5 ngày để xác minh thanh toán.
               </>
             )}
+            {type === "PAYMENT_CONFIRM_SUCCESS" && "Xác minh thanh toán thành công"}
           </Typography>
         </Box>
 
@@ -67,8 +68,8 @@ export default function ResultModal({ type, close }) {
           <Grid item xs={12}>
             <Button
               variant="contained"
-              sx={{ width: "100%", background: "#079455" }}
-              style={{ background: "#529290" }}
+              sx={{ width: "100%", background: "primary" }}
+              style={{ background: "primary" }}
               onClick={close}
             >
               Đóng

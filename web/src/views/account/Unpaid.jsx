@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-
+import axios from 'axios';
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 
@@ -13,7 +13,7 @@ import Paper from "@mui/material/Paper";
 
 import Search from "@mui/icons-material/Search";
 import ManageSearchIcon from "@mui/icons-material/ManageSearch";
-import VisibilityIcon from "@mui/icons-material/Visibility";
+import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import AddCardIcon from '@mui/icons-material/AddCard';
 import {
     OutlinedInput,
@@ -37,38 +37,30 @@ export default function Unpaid() {
 
     const [openPaymentModal, setOpenPaymentModal] = useState(false);
 
-    const [licensePlates, setLicensePlates] = useState([]);
+    const [licensePlatesUNPAID, setLicensePlatesUNPAID] = useState([]);
+    const [licensePlatesWAITING, setLicensePlatesWAITING] = useState([]);
 
     const [selectedAutionRoom, setSelectedAutionRoom] = useState(null);
 
     const togglePaymentMdal = () => {
         setOpenPaymentModal(!openPaymentModal);
     };
-    const fetchLicensePlates = async (userId) => {
-        const res = await getAllAuctionRoom();
+    const fetchLicensePlates = async () => {
+        const resUnpaid = await axios.get(`http://localhost:8080/api/winning-bids/self/all?filter=unpaid`, {
+            headers: { Authorization: `Bearer ${idToken}` }
+        })
+        const resWaiting = await axios.get(`http://localhost:8080/api/winning-bids/self/all?filter=waiting_confirm`, {
+            headers: { Authorization: `Bearer ${idToken}` }
+        })
 
-        const comingAuctionRooms = res.filter(
-            (auctionRoom) => {
-                return auctionRoom.users.some(user => user.id === userId)
-                // && auctionRoom.winner
-                // && new Date(auctionRoom.startTime) < new Date() //TODO: Enabled if data is prepared & using winning bid instead of auction room
-            }
-        );
+        const unpaidAuctionRooms = resUnpaid.data
+        const waitingAuctionRooms = resWaiting.data
 
-        setLicensePlates(
-            comingAuctionRooms.map((auctionRoom) => {
-                return {
-                    ...auctionRoom,
-                    startTime: formatTime(new Date(auctionRoom.startTime)),
-                    endTime: formatTime(new Date(auctionRoom.endTime)),
-                };
-            }),
-        );
+        setLicensePlatesUNPAID(unpaidAuctionRooms);
+        setLicensePlatesWAITING(waitingAuctionRooms);
     };
     useEffect(() => {
-        if (auth.user) {
-            fetchLicensePlates(auth.user.id);
-        }
+        fetchLicensePlates();
     }, []);
 
     return (
@@ -101,46 +93,82 @@ export default function Unpaid() {
                                 sx={{ fontWeight: 600, whiteSpace: "nowrap" }}
                                 align="center"
                             >
-                                Thời gian đấu giá
+                                Giá kết thúc
                             </TableCell>
                             <TableCell sx={{ fontWeight: 600 }}></TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {licensePlates.map((auctionRoom, index) => (
-                            <TableRow key={auctionRoom.id}>
-                                <TableCell align="center">{index + 1}</TableCell>
-                                <TableCell align="center">{auctionRoom.licensePlate['plateNumber']}</TableCell>
-                                <TableCell align="center">{auctionRoom.licensePlate['province']}</TableCell>
-                                <TableCell align="center">{auctionRoom.licensePlate['vehicleType']}</TableCell>
-                                <TableCell align="center">{auctionRoom.startTime}</TableCell>
-                                <TableCell>
-                                    <Button
-                                        onClick={() => {
-                                            if (idToken) {
-                                                setSelectedAutionRoom(auctionRoom)
-                                                togglePaymentMdal();
-                                            }
-                                        }}
-                                        variant="contained"
-                                        color="primary"
-                                        size="small"
-                                        sx={{
-                                            whiteSpace: "nowrap",
-                                            backgroundColor: "primary",
-                                            color: "white",
-                                        }}
-                                        startIcon={<AddCardIcon style={{ fontSize: 14 }} />}
-                                    >
-                                        Thanh toán
-                                    </Button>
-                                </TableCell>
-                            </TableRow>
-                        ))}
+                        {licensePlatesWAITING && (
+                            <>
+                                {licensePlatesWAITING.map((auctionRoom, index) => (
+                                    <TableRow key={auctionRoom.id}>
+                                        <TableCell align="center">{index + 1}</TableCell>
+                                        <TableCell align="center">{auctionRoom.plateNumber}</TableCell>
+                                        <TableCell align="center">{auctionRoom.province}</TableCell>
+                                        <TableCell align="center">{auctionRoom.vehicleType}</TableCell>
+                                        <TableCell align="center">{new Intl.NumberFormat("vi-VN", {
+                                            style: "currency",
+                                            currency: "VND",
+                                        }).format(auctionRoom.finalPrice)}</TableCell>
+                                        <TableCell>
+                                            <Button
+                                                disabled
+                                                variant="contained"
+                                                size="small"
+                                                sx={{
+                                                    whiteSpace: "nowrap",
+                                                }}
+                                                startIcon={<HourglassBottomIcon style={{ fontSize: 14 }} />}
+                                            >
+                                                Đang xác minh...
+                                            </Button>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </>
+                        )}
+                        {licensePlatesUNPAID && (
+                            <>
+                                {licensePlatesUNPAID.map((auctionRoom, index) => (
+                                    <TableRow key={auctionRoom.id}>
+                                        <TableCell align="center">{index + 1}</TableCell>
+                                        <TableCell align="center">{auctionRoom.plateNumber}</TableCell>
+                                        <TableCell align="center">{auctionRoom.province}</TableCell>
+                                        <TableCell align="center">{auctionRoom.vehicleType}</TableCell>
+                                        <TableCell align="center">{new Intl.NumberFormat("vi-VN", {
+                                            style: "currency",
+                                            currency: "VND",
+                                        }).format(auctionRoom.finalPrice)}</TableCell>
+                                        <TableCell>
+                                            <Button
+                                                onClick={() => {
+                                                    if (idToken) {
+                                                        setSelectedAutionRoom(auctionRoom)
+                                                        togglePaymentMdal();
+                                                    }
+                                                }}
+                                                variant="contained"
+                                                color="primary"
+                                                size="small"
+                                                sx={{
+                                                    whiteSpace: "nowrap",
+                                                    backgroundColor: "primary",
+                                                    color: "white",
+                                                }}
+                                                startIcon={<AddCardIcon style={{ fontSize: 14 }} />}
+                                            >
+                                                Thanh toán
+                                            </Button>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </>
+                        )}
                     </TableBody>
                 </Table>
             </TableContainer>
-            {licensePlates.length === 0 && (
+            {licensePlatesUNPAID.length === 0 && licensePlatesWAITING.length === 0 && (
                 <Box
                     sx={{
                         display: "flex",

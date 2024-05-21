@@ -97,7 +97,6 @@ export default function Create(props) {
         const licensePlate = {
             "id": licensePlateID
         }
-
         const values = {
             'initialPrice': data.get('initialPrice'),
             'startTime': dayjs(startTime, 'HH:mm DD/MM/YYYY').toISOString(),

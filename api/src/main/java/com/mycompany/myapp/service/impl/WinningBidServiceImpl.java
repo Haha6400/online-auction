@@ -22,7 +22,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Service Implementation for managing {@link com.mycompany.myapp.domain.WinningBid}.
+ * Service Implementation for managing
+ * {@link com.mycompany.myapp.domain.WinningBid}.
  */
 @Service
 @Transactional
@@ -39,11 +40,10 @@ public class WinningBidServiceImpl implements WinningBidService {
     private List<CustomWinningBidResponse> result;
 
     public WinningBidServiceImpl(
-        WinningBidRepository winningBidRepository,
-        WinningBidMapper winningBidMapper,
-        UserRepository userRepository,
-        AuctionRoomRepository auctionRoomRepository
-    ) {
+            WinningBidRepository winningBidRepository,
+            WinningBidMapper winningBidMapper,
+            UserRepository userRepository,
+            AuctionRoomRepository auctionRoomRepository) {
         this.winningBidRepository = winningBidRepository;
         this.winningBidMapper = winningBidMapper;
         this.userRepository = userRepository;
@@ -75,21 +75,22 @@ public class WinningBidServiceImpl implements WinningBidService {
         log.debug("Request to partially update WinningBid : {}", winningBidDTO);
 
         return winningBidRepository
-            .findById(id)
-            .map(existingWinningBid -> {
-                winningBidMapper.partialUpdate(existingWinningBid, winningBidDTO);
+                .findById(id)
+                .map(existingWinningBid -> {
+                    winningBidMapper.partialUpdate(existingWinningBid, winningBidDTO);
 
-                return existingWinningBid;
-            })
-            .map(winningBidRepository::save)
-            .map(winningBidMapper::toDto);
+                    return existingWinningBid;
+                })
+                .map(winningBidRepository::save)
+                .map(winningBidMapper::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<WinningBidDTO> findAll() {
         log.debug("Request to get all WinningBids");
-        return winningBidRepository.findAll().stream().map(winningBidMapper::toDto).collect(Collectors.toCollection(LinkedList::new));
+        return winningBidRepository.findAll().stream().map(winningBidMapper::toDto)
+                .collect(Collectors.toCollection(LinkedList::new));
     }
 
     @Override
@@ -109,10 +110,10 @@ public class WinningBidServiceImpl implements WinningBidService {
     public List<CustomWinningBidResponse> findAllWinningLicenseByUsers(UserDTO userDTO) {
         result = new ArrayList<>();
         List<WinningBidDTO> tmp = winningBidRepository
-            .findAllByBid_User(userRepository.findOneById(userDTO.getId()))
-            .stream()
-            .map(winningBidMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
+                .findAllByBid_User(userRepository.findOneById(userDTO.getId()))
+                .stream()
+                .map(winningBidMapper::toDto)
+                .collect(Collectors.toCollection(LinkedList::new));
         for (WinningBidDTO w : tmp) {
             result.add(setCustomLicense(w));
         }
@@ -123,11 +124,11 @@ public class WinningBidServiceImpl implements WinningBidService {
     public List<CustomWinningBidResponse> findAllWinningLicenseByStatus(UserDTO userDTO, PaymentStatus paymentStatus) {
         result = new ArrayList<>();
         List<WinningBidDTO> tmp = winningBidRepository
-            .findAllByBid_User(userRepository.findOneById(userDTO.getId()))
-            .stream()
-            .filter(winningBid -> winningBid.getPaymentStatus() == paymentStatus)
-            .map(winningBidMapper::toDto)
-            .collect(Collectors.toCollection(LinkedList::new));
+                .findAllByBid_User(userRepository.findOneById(userDTO.getId()))
+                .stream()
+                .filter(winningBid -> winningBid.getPaymentStatus() == paymentStatus)
+                .map(winningBidMapper::toDto)
+                .collect(Collectors.toCollection(LinkedList::new));
 
         for (WinningBidDTO w : tmp) {
             result.add(setCustomLicense(w));
@@ -139,6 +140,7 @@ public class WinningBidServiceImpl implements WinningBidService {
         BidDTO bid = winningBidDTO.getBid();
         float finalPrice = bid.getPriceBeforeBidding() + bid.getPriceStep() * bid.getNumberOfPriceStep();
         CustomWinningBidResponse customWinningBidResponse = new CustomWinningBidResponse();
+        customWinningBidResponse.setId(winningBidDTO.getId());
         return customWinningBidResponse.licenseToCustom(winningBidDTO.getAuctionRoom().getLicensePlate(), finalPrice);
     }
 }

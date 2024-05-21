@@ -13,8 +13,13 @@ import PaidIcon from "@mui/icons-material/Paid";
 import DescriptionIcon from "@mui/icons-material/Description";
 import { useAuth } from "../../hooks/AuthProvider";
 import ResultModal from "../base/ResultModal";
+import { useNavigate } from "react-router-dom";
 
 export default function PayAction({ title, auctionRoom, close }) {
+    const [idToken, setIdToken] = React.useState(
+        localStorage.getItem("id_token"),
+    );
+    const navigate = useNavigate();
     const [openSuccessModal, setOpenSuccessModal] = React.useState(false);
     const [QRImageData, setQRImageData] = React.useState('');
 
@@ -23,14 +28,19 @@ export default function PayAction({ title, auctionRoom, close }) {
         setOpenSuccessModal(!openSuccessModal);
 
     };
-    const handleConfirmButton = async (id) => { //Return true if account user can not register
-        axios.patch(`http://localhost:8080/api/winning-bids/${id}`, {
+    const handleConfirmButton = async () => {
+        axios.patch(`http://localhost:8080/api/winning-bids/${auctionRoom.id}`, {
             "paymentStatus": "WAITING_CONFIRM"
+        }, {
+            headers: { Authorization: `Bearer ${idToken}` }
         }).then(() => {
             toggleSuccessModal();
+            setTimeout(() => {
+                window.location.reload();
+            }, 3000);
         }).catch((err) => {
             console.log(err);
-        }); //TODO: Check again
+        });
     }
 
     React.useEffect(() => {
@@ -41,7 +51,7 @@ export default function PayAction({ title, auctionRoom, close }) {
             "accountNo": "2153883597",
             "accountName": "NGUYEN THI HONG HA",
             "acqId": "970418",
-            "addInfo": `Thanh toán biển số xe ${auctionRoom.licensePlate['plateNumber']}`,
+            "addInfo": `Thanh toán biển số xe ${auctionRoom.plateNumber}`,
             "amount": `${auctionRoom.finalPrice}`,
             "template": "print"
         }
@@ -68,7 +78,7 @@ export default function PayAction({ title, auctionRoom, close }) {
                     color="text.secondary"
                     sx={{ fontWeight: 700, fontSize: 20, textAlign: "center", mb: 2 }}
                 >
-                    {title} {auctionRoom.licensePlate['plateNumber']}
+                    {title} {auctionRoom.plateNumber}
                 </Typography>
 
                 <Grid container spacing={0.5} justifyContent="center">

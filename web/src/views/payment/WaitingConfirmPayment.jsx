@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-
+import axios from 'axios';
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 
@@ -24,11 +24,6 @@ import {
     Typography,
 } from "@mui/material";
 import PaymentDialog from "../../components/common/PaymentDialog";
-import { LPStatus } from "../../utils/constants/LicensePlate";
-import { getAllAuctionRoom } from "../../service/user/licensePlateAPI";
-import { formatTime } from "../../utils/formatter";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../hooks/AuthProvider";
 
 export default function WaitingConfirmPayment() {
     const [idToken, setIdToken] = useState(
@@ -46,24 +41,18 @@ export default function WaitingConfirmPayment() {
         setOpenAuctionModal(!openAuctionModal);
     };
     const fetchLicensePlates = async () => {
-        const res = await getAllAuctionRoom();
+        const res = await axios.get(`http://localhost:8080/api/winning-bids`, {
+            headers: { Authorization: `Bearer ${idToken}` }
+        })
 
-        const comingAuctionRooms = res.filter(
+        let comingAuctionRooms = res.data
+        comingAuctionRooms = comingAuctionRooms.filter(
             (auctionRoom) => {
-                return new Date(auctionRoom.startTime) < new Date()
-                // && auctionRoom.users.some(user => user.id === userId)
+                return auctionRoom.paymentStatus != "PAID"
             }
         );
-
-        setLicensePlates(
-            comingAuctionRooms.map((auctionRoom) => {
-                return {
-                    ...auctionRoom,
-                    startTime: formatTime(new Date(auctionRoom.startTime)),
-                    endTime: formatTime(new Date(auctionRoom.endTime)),
-                };
-            }),
-        );
+        console.log("comingAuctionRooms", comingAuctionRooms)
+        setLicensePlates(comingAuctionRooms);
     };
     useEffect(() => {
         fetchLicensePlates();
@@ -99,7 +88,7 @@ export default function WaitingConfirmPayment() {
                                 sx={{ fontWeight: 600, whiteSpace: "nowrap" }}
                                 align="center"
                             >
-                                Thời gian đấu giá
+                                Trạng thái
                             </TableCell>
                             <TableCell sx={{ fontWeight: 600 }}></TableCell>
                         </TableRow>
@@ -108,19 +97,29 @@ export default function WaitingConfirmPayment() {
                         {licensePlates.map((auctionRoom, index) => (
                             <TableRow key={auctionRoom.id}>
                                 <TableCell align="center">{index + 1}</TableCell>
-                                <TableCell align="center">{auctionRoom.licensePlate['plateNumber']}</TableCell>
-                                <TableCell align="center">{auctionRoom.licensePlate['province']}</TableCell>
-                                <TableCell align="center">{auctionRoom.licensePlate['vehicleType']}</TableCell>
+                                <TableCell align="center">{auctionRoom.auctionRoom.licensePlate['plateNumber']}</TableCell>
+                                <TableCell align="center">{auctionRoom.auctionRoom.licensePlate['province']}</TableCell>
+                                <TableCell align="center">{auctionRoom.auctionRoom.licensePlate['vehicleType']}</TableCell>
 
                                 <TableCell sx={{ whiteSpace: "nowrap" }} align="center">
-                                    {auctionRoom.startTime}
+                                    {auctionRoom.paymentStatus == "UNPAID" && (
+                                        <>
+                                            Chưa thanh toán
+                                        </>)}
+                                    {auctionRoom.paymentStatus == "WAITING_CONFIRM" && (
+                                        <>
+                                            Chờ xác nhận
+                                        </>)}
                                 </TableCell>
 
                                 <TableCell>
                                     <Button
                                         onClick={() => {
                                             if (idToken) {
-                                                setSelectedAutionRoom(auctionRoom)
+                                                setSelectedAutionRoom({
+                                                    ...auctionRoom.auctionRoom,
+                                                    winningBidId: auctionRoom.id
+                                                });
                                                 toggleAuctionViewMdal();
                                             }
                                         }}
@@ -171,6 +170,7 @@ export default function WaitingConfirmPayment() {
                         title="XÁC NHẬN THANH TOÁN"
                         auctionRoom={selectedAutionRoom}
                         close={toggleAuctionViewMdal}
+                        fetchLicensePlates={fetchLicensePlates}
                     />
                 )}
             </Dialog>

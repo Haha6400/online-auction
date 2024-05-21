@@ -20,65 +20,37 @@ import { useAuth } from "../../hooks/AuthProvider";
 import ResultModal from "../base/ResultModal";
 
 
-export default function PaymentDialog({ title, auctionRoom, close }) {
-    const [accountUser, setAccountUser] = React.useState({});
+export default function PaymentDialog({ title, auctionRoom, close, fetchLicensePlates }) {
     const [idToken, setIdToken] = React.useState(
         localStorage.getItem("id_token"),
     );
     const [openSuccessModal, setOpenSuccessModal] = React.useState(false);
-    const [openFailModal, setOpenFailModal] = React.useState(false);
-    const auth = useAuth();
 
     const [paymentMethod, setPaymentMethod] = React.useState();
-
+    const toggleSuccessModal = () => {
+        setOpenSuccessModal(!openSuccessModal);
+    };
     const handlePaymentMethodChange = (event) => {
         setPaymentMethod(event.target.value);
     };
 
-    const handleSubmit = async (id) => {
-        // setOpenSuccessModal(!openSuccessModal);
-        // console.log("id", id)
-        // axios.patch(`http://localhost:8080/api/license-plates/${id}`, {
-        //     "id": id,
-        //     "status": "PAYMENT_COMPLETED",
-        // },
-        //     {
-        //         headers: { Authorization: `Bearer ${idToken}` }
-        //     })
+    const handleSubmit = async () => {
+        toggleSuccessModal();
+        axios.patch(`http://localhost:8080/api/winning-bids/${auctionRoom.winningBidId}`, {
+            "paymentStatus": "PAID"
+        }, {
+            headers: { Authorization: `Bearer ${idToken}` }
+        }).then(() => {
+            console.log("Success");
+            fetchLicensePlates();
+        }).catch((err) => {
+            console.log(err);
+        });
     };
-
-
-    const toggleSuccessModal = () => {
-        setOpenSuccessModal(!openSuccessModal);
-        axios.patch(`http://localhost:8080/api/auction-rooms/register/${auctionRoom.id}`, {},
-            {
-                headers: { Authorization: `Bearer ${idToken}` }
-            })
-    };
-    const toggleFailModal = () => {
-        setOpenFailModal(!openFailModal);
-    };
-
-    const handleRegisterButton = async () => { //Return true if account user can not register
-        let registerCheck = false;
-        if (auctionRoom.users.length > 0) {
-
-            registerCheck = auctionRoom.users.some(user => {
-                console.log(user.id === accountUser.id)
-                return user.id === accountUser.id
-            });
-        }
-        if (registerCheck) toggleFailModal()
-        else {
-            toggleSuccessModal();
-        }
-    }
 
     React.useEffect(() => {
-        if (auth.user) {
-            setAccountUser(auth.user);
-        }
-    }, [auth.user]);
+        console.log("auctionRoom", auctionRoom)
+    }, []);
 
     return (
         <Container component="main">
@@ -334,16 +306,7 @@ export default function PaymentDialog({ title, auctionRoom, close }) {
                             <Stack>
                                 <Typography>Người trúng</Typography>
                                 <Typography sx={{ fontWeight: 600 }}>
-                                    {auctionRoom.winner && (
-                                        <>
-                                            {auctionRoom.winner['fullName']}
-                                        </>
-                                    )}
-                                    {!auctionRoom.winner && (
-                                        <>
-                                            ...
-                                        </>
-                                    )}
+                                    {auctionRoom.winner ? auctionRoom.winner['fullName'] : '...'}
 
                                 </Typography>
 
@@ -396,10 +359,13 @@ export default function PaymentDialog({ title, auctionRoom, close }) {
                                         backgroundColor: "primary",
                                         color: "white",
                                     }}
-                                    onClick={handleSubmit(auctionRoom.licensePlate['id'])}
+                                    onClick={handleSubmit}
                                 >
                                     Xác nhận
                                 </Button>
+                                <Dialog open={openSuccessModal} onClose={toggleSuccessModal}>
+                                    <ResultModal type="PAYMENT_CONFIRM_SUCCESS" close={toggleSuccessModal} />
+                                </Dialog>
                             </Grid>
 
                         </>

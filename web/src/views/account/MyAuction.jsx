@@ -70,7 +70,7 @@ export default function MyAuction() {
         const comingAuctionRooms = res.filter(
             (auctionRoom) => {
                 return auctionRoom.users.some(user => user.id === userId)
-                // && new Date(auctionRoom.startTime) < new Date() //TODO: Enabled if data is prepared
+                    && new Date(auctionRoom.startTime) < new Date()
             }
         );
 

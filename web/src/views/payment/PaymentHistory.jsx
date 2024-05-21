@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-
+import axios from 'axios';
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 
@@ -31,6 +31,9 @@ import { formatTime } from "../../utils/formatter";
 import { useNavigate } from "react-router-dom";
 
 export default function PaymentHistory() {
+    const [idToken, setIdToken] = useState(
+        localStorage.getItem("id_token"),
+    );
     const [LPSearchInput, setLPSearchInput] = useState("");
     const [province, setProvince] = useState("");
     const [vehicleType, setVehicleType] = useState("");
@@ -39,42 +42,26 @@ export default function PaymentHistory() {
 
     const [licensePlates, setLicensePlates] = useState([]);
 
-    const [currentLP, setCurrentLP] = useState({});
-
-    const navigate = useNavigate();
-
-    const filteredLicensePlates = licensePlates
-        ? licensePlates.filter((licensePlate) => {
-            const plate = licensePlate.licensePlate
-            const matchesLPprovince = !province || plate.province === province;
-            const matchesVehicleType =
-                !vehicleType || plate.vehicleType === vehicleType;
-            const matchesPlateNumber =
-                !LPSearchInput ||
-                plate.plateNumber.toLowerCase().includes(LPSearchInput.toLowerCase());
-            return matchesLPprovince && matchesVehicleType && matchesPlateNumber;
-        })
-        : [];
+    const [selectedAutionRoom, setSelectedAutionRoom] = useState(null);
 
     const toggleAuctionRegisterMdal = () => {
         setOpenAuctionRegisterModal(!openAuctionRegisterModal);
     };
 
     const fetchLicensePlates = async () => {
-        const res = await getAllAuctionRoom();
-        const comingAuctionRooms = res.filter(
-            (auctionRoom) => new Date(auctionRoom.startTime) < new Date(),
-        );
+        const res = await axios.get(`http://localhost:8080/api/winning-bids`, {
+            headers: { Authorization: `Bearer ${idToken}` }
+        })
 
-        setLicensePlates(
-            comingAuctionRooms.map((auctionRoom) => {
-                return {
-                    ...auctionRoom,
-                    'startTime': formatTime(new Date(auctionRoom.startTime)),
-                    'endTime': formatTime(new Date(auctionRoom.endTime))
-                };
-            }),
+        let comingAuctionRooms = res.data
+        comingAuctionRooms = comingAuctionRooms.filter(
+            (auctionRoom) => {
+                return auctionRoom.paymentStatus == "PAID"
+            }
         );
+        console.log("comingAuctionRooms", comingAuctionRooms)
+        setLicensePlates(comingAuctionRooms);
+
     };
 
     useEffect(() => {
@@ -116,62 +103,6 @@ export default function PaymentHistory() {
                         setLPSearchInput(event.target.value);
                     }}
                 />
-                <FormControl sx={{ minWidth: 150, marginY: 2 }} size="small">
-                    <Select
-                        autoWidth
-                        displayEmpty
-                        value={province}
-                        onChange={(event) => {
-                            setProvince(event.target.value);
-                        }}
-                        sx={{
-                            width: 210,
-                            border: "1px solid #015433",
-                            borderRadius: 3,
-                        }}
-                    >
-                        <MenuItem sx={{ borderRadius: 0, width: 250 }} value="">
-                            Chọn tỉnh/thành phố
-                        </MenuItem>
-                        {Object.keys(LPprovinces).map((key) => (
-                            <MenuItem
-                                key={key}
-                                sx={{ borderRadius: 0, width: 250 }}
-                                value={LPprovinces[key]}
-                            >
-                                {LPprovinces[key]}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-                <FormControl sx={{ minWidth: 150, marginY: 2 }} size="small">
-                    <Select
-                        autoWidth
-                        displayEmpty
-                        value={vehicleType}
-                        onChange={(event) => {
-                            setVehicleType(event.target.value);
-                        }}
-                        sx={{
-                            width: 210,
-                            border: "1px solid #015433",
-                            borderRadius: 3,
-                        }}
-                    >
-                        <MenuItem sx={{ borderRadius: 0, width: 250 }} value="">
-                            Chọn loại xe
-                        </MenuItem>
-                        {Object.keys(LPtype).map((key) => (
-                            <MenuItem
-                                key={key}
-                                sx={{ borderRadius: 0, width: 250 }}
-                                value={LPtype[key]}
-                            >
-                                {LPtype[key]}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
             </Box>
 
             <TableContainer
@@ -203,29 +134,33 @@ export default function PaymentHistory() {
                                 sx={{ fontWeight: 600, whiteSpace: "nowrap" }}
                                 align="center"
                             >
-                                Thời gian đấu giá
+                                Giá cuối cùng
                             </TableCell>
                             <TableCell sx={{ fontWeight: 600 }}></TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {filteredLicensePlates.map((licensePlate, index) => (
-                            <TableRow key={licensePlate.id}>
+                        {licensePlates.map((auctionRoom, index) => (
+                            <TableRow key={auctionRoom.id}>
                                 <TableCell align="center">{index + 1}</TableCell>
-                                <TableCell align="center">{licensePlate.licensePlate['plateNumber']}</TableCell>
-                                <TableCell align="center">{licensePlate.licensePlate['province']}</TableCell>
-                                <TableCell align="center">{licensePlate.licensePlate['vehicleType']}</TableCell>
-
+                                <TableCell align="center">{auctionRoom.auctionRoom.licensePlate['plateNumber']}</TableCell>
+                                <TableCell align="center">{auctionRoom.auctionRoom.licensePlate['province']}</TableCell>
+                                <TableCell align="center">{auctionRoom.auctionRoom.licensePlate['vehicleType']}</TableCell>
                                 <TableCell sx={{ whiteSpace: "nowrap" }} align="center">
 
-                                    {licensePlate.startTime}
+                                    {auctionRoom.auctionRoom.finalPrice ? auctionRoom.auctionRoom.finalPrice : ''}
                                 </TableCell>
 
                                 <TableCell>
                                     <Button
                                         onClick={() => {
-                                            setCurrentLP(licensePlate);
-                                            toggleAuctionRegisterMdal();
+                                            if (idToken) {
+                                                setSelectedAutionRoom({
+                                                    ...auctionRoom.auctionRoom,
+                                                    winningBidId: auctionRoom.id
+                                                });
+                                                toggleAuctionRegisterMdal();
+                                            }
                                         }}
                                         variant="contained"
                                         color="primary"
@@ -245,7 +180,7 @@ export default function PaymentHistory() {
                     </TableBody>
                 </Table>
             </TableContainer>
-            {filteredLicensePlates.length === 0 && (
+            {licensePlates.length === 0 && (
                 <Box
                     sx={{
                         display: "flex",
@@ -269,11 +204,14 @@ export default function PaymentHistory() {
                 open={openAuctionRegisterModal}
                 onClose={toggleAuctionRegisterMdal}
             >
-                <PaymentDialog
-                    title="XEM LỊCH SỬ ĐẤU GIÁ"
-                    auctionRoom={currentLP}
-                    close={toggleAuctionRegisterMdal}
-                />
+                {selectedAutionRoom && (
+                    <PaymentDialog
+                        title="XEM LỊCH SỬ ĐẤU GIÁ"
+                        auctionRoom={selectedAutionRoom}
+                        close={toggleAuctionRegisterMdal}
+                    />
+                )}
+
             </Dialog>
         </>
     );

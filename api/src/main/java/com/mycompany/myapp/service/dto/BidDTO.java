@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
 
+import org.springframework.stereotype.Component;
+
 /**
  * A DTO for the {@link com.mycompany.myapp.domain.Bid} entity.
  */
@@ -105,13 +107,13 @@ public class BidDTO {
     @Override
     public String toString() {
         return "BidDTO{" +
-            "id=" + getId() +
-            ", eventTime='" + getEventTime() + "'" +
-            ", priceBeforeBidding=" + getPriceBeforeBidding() +
-            ", priceStep=" + getPriceStep() +
-            ", numberOfPriceStep=" + getNumberOfPriceStep() +
-            ", user=" + getUser() +
-            ", auctionRoom=" + getAuctionRoom() +
-            "}";
+                "id=" + getId() +
+                ", eventTime='" + getEventTime() + "'" +
+                ", priceBeforeBidding=" + getPriceBeforeBidding() +
+                ", priceStep=" + getPriceStep() +
+                ", numberOfPriceStep=" + getNumberOfPriceStep() +
+                ", user=" + getUser() +
+                ", auctionRoom=" + getAuctionRoom() +
+                "}";
     }
 }

@@ -66,13 +66,12 @@ public class CustomWinningBidResponse {
     }
 
     public CustomWinningBidResponse(
-        Long id,
-        String plateNumber,
-        LicensePlateStatus status,
-        String vehicleType,
-        String province,
-        float finalPrice
-    ) {
+            Long id,
+            String plateNumber,
+            LicensePlateStatus status,
+            String vehicleType,
+            String province,
+            float finalPrice) {
         this.id = id;
         this.plateNumber = plateNumber;
         this.status = status;
@@ -81,17 +80,17 @@ public class CustomWinningBidResponse {
         this.finalPrice = finalPrice;
     }
 
-    public CustomWinningBidResponse() {}
+    public CustomWinningBidResponse() {
+    }
 
     public CustomWinningBidResponse licenseToCustom(LicensePlateDTO licensePlateDTO, float finalPrice) {
-        return new CustomWinningBidResponse(
-            licensePlateDTO.getId(),
-            licensePlateDTO.getPlateNumber(),
-            licensePlateDTO.getStatus(),
-            licensePlateDTO.getVehicleType(),
-            licensePlateDTO.getProvince(),
-            finalPrice
-        );
+
+        this.setPlateNumber(licensePlateDTO.getPlateNumber());
+        this.setStatus(licensePlateDTO.getStatus());
+        this.setVehicleType(licensePlateDTO.getVehicleType());
+        this.setProvince(licensePlateDTO.getProvince());
+        this.setFinalPrice(finalPrice);
+        return this;
     }
 
     @Override
@@ -119,11 +118,11 @@ public class CustomWinningBidResponse {
     @Override
     public String toString() {
         return "LicensePlateDTO{" +
-            "id=" + getId() +
-            ", plateNumber='" + getPlateNumber() + "'" +
-            ", status='" + getStatus() + "'" +
-            ", vehicleType='" + getVehicleType() + "'" +
-            ", province='" + getProvince() + "'" +
-            "}";
+                "id=" + getId() +
+                ", plateNumber='" + getPlateNumber() + "'" +
+                ", status='" + getStatus() + "'" +
+                ", vehicleType='" + getVehicleType() + "'" +
+                ", province='" + getProvince() + "'" +
+                "}";
     }
 }
