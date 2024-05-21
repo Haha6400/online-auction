@@ -1,7 +1,7 @@
 package com.mycompany.myapp.web.websocket.dto;
 
-import me.danhpb.myauction.service.dto.WinningBidDTO;
-import me.danhpb.myauction.web.websocket.dto.enumeration.AuctionResponseType;
+import com.mycompany.myapp.service.dto.WinningBidDTO;
+import com.mycompany.myapp.web.websocket.dto.enumeration.AuctionResponseType;
 
 public class WinningBidResponseDTO extends AuctionResponseDTO{
 

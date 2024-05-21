@@ -1,7 +1,8 @@
 package com.mycompany.myapp.web.websocket.dto;
 
-import me.danhpb.myauction.service.dto.BidDTO;
-import me.danhpb.myauction.web.websocket.dto.enumeration.AuctionResponseType;
+
+import com.mycompany.myapp.service.dto.BidDTO;
+import com.mycompany.myapp.web.websocket.dto.enumeration.AuctionResponseType;
 
 public class UpdateBidResponseDTO extends AuctionResponseDTO {
     private BidDTO bid;
