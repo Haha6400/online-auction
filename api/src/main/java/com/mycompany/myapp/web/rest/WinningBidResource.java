@@ -67,7 +67,7 @@ public class WinningBidResource {
     /**
      * {@code PUT  /winning-bids/:id} : Updates an existing winningBid.
      *
-     * @param id the id of the winningBidDTO to save.
+     * @param id            the id of the winningBidDTO to save.
      * @param winningBidDTO the winningBidDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated winningBidDTO,
      * or with status {@code 400 (Bad Request)} if the winningBidDTO is not valid,
@@ -100,7 +100,7 @@ public class WinningBidResource {
     /**
      * {@code PATCH  /winning-bids/:id} : Partial updates given fields of an existing winningBid, field will ignore if it is null
      *
-     * @param id the id of the winningBidDTO to save.
+     * @param id            the id of the winningBidDTO to save.
      * @param winningBidDTO the winningBidDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated winningBidDTO,
      * or with status {@code 400 (Bad Request)} if the winningBidDTO is not valid,
@@ -170,6 +170,8 @@ public class WinningBidResource {
             return winningBidService.findAllWinningLicenseByStatus(userService.getCurrentUserDTO().get(), PaymentStatus.PAID);
         } else if ("unpaid".equals(filter)) {
             return winningBidService.findAllWinningLicenseByStatus(userService.getCurrentUserDTO().get(), PaymentStatus.UNPAID);
+        } else if ("waiting confirm".equals(filter)) {
+            return winningBidService.findAllWinningLicenseByStatus(userService.getCurrentUserDTO().get(), PaymentStatus.WAITING_CONFIRM);
         } else if ("past_due".equals(filter)) {
             return winningBidService.findAllWinningLicenseByStatus(userService.getCurrentUserDTO().get(), PaymentStatus.PAST_DUE);
         }
