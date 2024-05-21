@@ -60,6 +60,7 @@ public class AuctionRoomServiceImpl implements AuctionRoomService {
         ) {
             throw new RuntimeException("License Plate is in progress");
         } else {
+            auctionRoomDTO.setPriceStep(2000000F);
             AuctionRoom auctionRoom = auctionRoomMapper.toEntity(auctionRoomDTO);
             licensePlateService.setStatus(auctionRoomDTO.getLicensePlate().getId(), LicensePlateStatus.AWAITING_AUCTION);
             auctionRoom = auctionRoomRepository.save(auctionRoom);
