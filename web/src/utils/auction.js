@@ -11,9 +11,9 @@ let alreadyConnectedOnce = false;
 const createConnection = () =>
   new Promise((resolve) => (connectedPromise = resolve));
 
-const auctionRoomId = 1500;
+// const auctionRoomId = 1500;
 
-export const subscribe = (onSendBid1, onSendBid2) => {
+export const subscribe = (onSendBid1, onSendBid2, auctionRoomId) => {
   connection.then(() => {
     subscriber = stompClient.subscribe(
       `/user/topic/auctionRoom/${auctionRoomId}`,
@@ -33,7 +33,12 @@ export const subscribe = (onSendBid1, onSendBid2) => {
   });
 };
 
-export const sendBid = (priceBeforeBidding, priceStep, numberOfPriceStep) => {
+export const sendBid = (
+  priceBeforeBidding,
+  priceStep,
+  numberOfPriceStep,
+  auctionRoomId,
+) => {
   connection?.then(() => {
     stompClient?.send(
       "/topic/bid",

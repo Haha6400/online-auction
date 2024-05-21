@@ -7,7 +7,7 @@ import { Button, Grid, Stack } from "@mui/material";
 
 import { formatPrice } from "../../../utils/formatter";
 
-export default function WinningModal({ auctioningLP, close }) {
+export default function WinningModal({ winningPrice, auctioningLP, close }) {
   return (
     <Container component="main">
       <Stack spacing={3} alignItems="center" sx={{ margin: 3 }}>
@@ -44,18 +44,18 @@ export default function WinningModal({ auctioningLP, close }) {
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <Typography>Giá trúng đấu giá</Typography>
             <Typography sx={{ fontWeight: 700, color: "red" }}>
-              {formatPrice(100000000)}
+              {formatPrice(winningPrice)}
             </Typography>
           </Box>
-          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          {/* <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <Typography>Bằng chữ</Typography>
             <Typography sx={{ fontWeight: 700, color: "red" }}>
               Một trăm triệu đồng
             </Typography>
-          </Box>
-          <Typography sx={{ fontWeight: 700 }}>
+          </Box> */}
+          {/* <Typography sx={{ fontWeight: 700 }}>
             Biên bản cuộc đấu giá sẽ được gửi về "Tài liệu của tôi"
-          </Typography>
+          </Typography> */}
         </Stack>
 
         <Grid container sx={{ mt: 3 }}>
