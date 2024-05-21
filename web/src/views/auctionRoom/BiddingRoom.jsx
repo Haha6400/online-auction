@@ -82,7 +82,7 @@ export default function BiddingRoom() {
       time = Date.parse(endTime) - Date.now();
       if (time <= 0) {
         // setOpenWinningModal(true);
-        setOpenLosingModal(true);
+        // setOpenLosingModal(true);
         return;
       }
     } else {
@@ -109,6 +109,7 @@ export default function BiddingRoom() {
         (data) => {
           setBidData2(data);
         },
+        roomId,
       );
     }, 1000);
   }, []);
@@ -131,7 +132,7 @@ export default function BiddingRoom() {
         setPriceStep(auctionInfo.priceStep);
 
         console.log(auctionInfo.licensePlate);
-        setAuctioningLP(auctionInfo.licensePlate);
+        setAuctioningLP(auctionInfo.licensePlate.plateNumber);
 
         console.log(auctionInfo.bids);
         setBids(auctionInfo.bids);
@@ -141,6 +142,16 @@ export default function BiddingRoom() {
         let temp = [...bids];
         temp.push(JSON.parse(bidData2?.body).bid);
         setBids(temp);
+      } else if (JSON.parse(bidData2?.body).type === "WINNING_BID") {
+        console.log(JSON.parse(bidData2?.body).winningBidDTO.bid.user);
+        if (
+          JSON.parse(bidData2?.body).winningBidDTO.bid.user.id ===
+          accountUser.id
+        ) {
+          setOpenWinningModal(true);
+        } else {
+          setOpenLosingModal(true);
+        }
       }
     } catch (err) {
       console.log(err);
@@ -563,9 +574,9 @@ export default function BiddingRoom() {
                         style={{ background: "#079455", borderRadius: 20 }}
                         onClick={() => {
                           if (currentPrice) {
-                            sendBid(currentPrice, priceStep, countStep);
+                            sendBid(currentPrice, priceStep, countStep, roomId);
                           } else {
-                            sendBid(initialPrice, priceStep, countStep);
+                            sendBid(initialPrice, priceStep, countStep, roomId);
                           }
                           setCountStep(1);
                         }}
@@ -586,7 +597,11 @@ export default function BiddingRoom() {
       <Footer />
 
       <Dialog open={openWinningModal} onClose={toggleWinningModal}>
-        <WinningModal auctioningLP={auctioningLP} close={toggleWinningModal} />
+        <WinningModal
+          winningPrice={currentPrice}
+          auctioningLP={auctioningLP}
+          close={toggleWinningModal}
+        />
       </Dialog>
 
       <Dialog open={openLosingModal} onClose={toggleLosingModal}>

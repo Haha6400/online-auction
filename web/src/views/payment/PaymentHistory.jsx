@@ -194,9 +194,9 @@ export default function PaymentHistory() {
                     }}
                 >
                     <ManageSearchIcon style={{ fontSize: 70 }} />
-                    <Typography sx={{ fontWeight: "600" }}>
+                    {/* <Typography sx={{ fontWeight: "600" }}>
                         Không tìm thấy biển số phù hợp
-                    </Typography>
+                    </Typography> */}
                 </Box>
             )}
 

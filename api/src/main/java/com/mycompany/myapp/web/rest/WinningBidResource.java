@@ -73,6 +73,7 @@ public class WinningBidResource {
      * {@code PUT  /winning-bids/:id} : Updates an existing winningBid.
      *
      * @param id            the id of the winningBidDTO to save.
+     * @param id            the id of the winningBidDTO to save.
      * @param winningBidDTO the winningBidDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
      *         the updated winningBidDTO,
@@ -109,6 +110,7 @@ public class WinningBidResource {
      * {@code PATCH  /winning-bids/:id} : Partial updates given fields of an
      * existing winningBid, field will ignore if it is null
      *
+     * @param id            the id of the winningBidDTO to save.
      * @param id            the id of the winningBidDTO to save.
      * @param winningBidDTO the winningBidDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body

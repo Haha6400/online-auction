@@ -84,6 +84,12 @@ public class CustomWinningBidResponse {
     }
 
     public CustomWinningBidResponse licenseToCustom(LicensePlateDTO licensePlateDTO, float finalPrice) {
+        this.setPlateNumber(licensePlateDTO.getPlateNumber());
+        this.setStatus(licensePlateDTO.getStatus());
+        this.setVehicleType(licensePlateDTO.getVehicleType());
+        this.setProvince(licensePlateDTO.getProvince());
+        this.setFinalPrice(finalPrice);
+        return this;
 
         this.setPlateNumber(licensePlateDTO.getPlateNumber());
         this.setStatus(licensePlateDTO.getStatus());
