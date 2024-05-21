@@ -139,8 +139,7 @@ public class WinningBidServiceImpl implements WinningBidService {
         BidDTO bid = winningBidDTO.getBid();
         float finalPrice = bid.getPriceBeforeBidding() + bid.getPriceStep() * bid.getNumberOfPriceStep();
         CustomWinningBidResponse customWinningBidResponse = new CustomWinningBidResponse();
-        customWinningBidResponse.licenseToCustom(winningBidDTO.getAuctionRoom().getLicensePlate(), finalPrice);
         customWinningBidResponse.setId(winningBidDTO.getId());
-        return customWinningBidResponse;
+        return customWinningBidResponse.licenseToCustom(winningBidDTO.getAuctionRoom().getLicensePlate(), finalPrice);
     }
 }
