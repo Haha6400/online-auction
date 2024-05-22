@@ -1,0 +1,30 @@
+{
+  "annotations": {
+    "changelogDate": "20240517065901"
+  },
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "plateNumber",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "LicensePlateStatus",
+      "fieldValues": "NOT_YET_AUCTIONED,AWAITING_AUCTION,AUCTION_FAILED,AUCTION_COMPLETED"
+    },
+    {
+      "fieldName": "vehicleType",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "province",
+      "fieldType": "String"
+    }
+  ],
+  "name": "LicensePlate",
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

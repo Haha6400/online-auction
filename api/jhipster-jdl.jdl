@@ -1,0 +1,59 @@
+entity LicensePlate {  
+    plateNumber String  
+    status LicensePlateStatus  
+    vehicleType String  
+    province String  
+}  
+  
+enum LicensePlateStatus {  
+    NOT_YET_AUCTIONED,  
+    AWAITING_AUCTION,  
+    AUCTION_FAILED,  
+    AUCTION_COMPLETED,
+}  
+  
+entity AuctionRoom {
+	description String
+    startTime Instant  
+    endTime Instant  
+    initialPrice Float  
+    priceStep Float  
+}  
+  
+entity Bid {  
+    eventTime Instant  
+    priceBeforeBidding Float  
+    priceStep Float  
+    numberOfPriceStep Float  
+}  
+  
+entity WinningBid {  
+    paymentStatus PaymentStatus  
+}  
+  
+enum PaymentStatus {  
+    UNPAID, PAID, PAST_DUE  
+}  
+  
+relationship OneToOne {  
+    WinningBid{bid} to Bid
+    WinningBid to AuctionRoom
+}  
+
+
+relationship ManyToOne {  
+    AuctionRoom{licensePlate} to LicensePlate  
+   	Bid{user(login)} to User with builtInEntity
+}
+
+relationship ManyToMany {
+	AuctionRoom{user(login)} to User with builtInEntity
+}
+  
+relationship OneToMany {  
+    AuctionRoom{bids} to Bid  
+}  
+  
+service all with serviceImpl  
+  
+dto * with mapstruct
