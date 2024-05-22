@@ -90,13 +90,6 @@ public class CustomWinningBidResponse {
         this.setProvince(licensePlateDTO.getProvince());
         this.setFinalPrice(finalPrice);
         return this;
-
-        this.setPlateNumber(licensePlateDTO.getPlateNumber());
-        this.setStatus(licensePlateDTO.getStatus());
-        this.setVehicleType(licensePlateDTO.getVehicleType());
-        this.setProvince(licensePlateDTO.getProvince());
-        this.setFinalPrice(finalPrice);
-        return this;
     }
 
     @Override

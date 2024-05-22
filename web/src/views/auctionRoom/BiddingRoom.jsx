@@ -387,7 +387,7 @@ export default function BiddingRoom() {
                                   fontWeight: "700",
                                 }}
                               >
-                                {bid.user.id}
+                                {bid.user.login}
                               </Typography>
                             </Box>
                           </Box>
